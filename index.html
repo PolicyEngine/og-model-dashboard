@@ -1,0 +1,1382 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OG-UK Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --pe-color-primary-50:  #E6FFFA;
+      --pe-color-primary-100: #B2F5EA;
+      --pe-color-primary-200: #81E6D9;
+      --pe-color-primary-300: #4FD1C5;
+      --pe-color-primary-400: #38B2AC;
+      --pe-color-primary-500: #319795;
+      --pe-color-primary-600: #2C7A7B;
+      --pe-color-primary-700: #285E61;
+      --pe-color-primary-800: #234E52;
+      --pe-color-primary-900: #1D4044;
+      --pe-color-gray-50:  #F9FAFB;
+      --pe-color-gray-100: #F2F4F7;
+      --pe-color-gray-200: #E2E8F0;
+      --pe-color-gray-300: #D1D5DB;
+      --pe-color-gray-400: #9CA3AF;
+      --pe-color-gray-500: #6B7280;
+      --pe-color-gray-600: #4B5563;
+      --pe-color-gray-700: #344054;
+      --pe-color-gray-800: #1F2937;
+      --pe-color-gray-900: #101828;
+      --pe-color-bg-primary: #ffffff;
+      --pe-color-bg-secondary: #F2F4F7;
+      --pe-color-border-light: #E2E8F0;
+      --pe-color-text-inverse: #ffffff;
+
+      --bg-diagram: var(--pe-color-gray-50);
+      --bg-card: var(--pe-color-bg-primary);
+      --grid-color: rgba(40,94,97,0.06);
+      --accent: var(--pe-color-primary-700);
+      --accent-light: rgba(40,94,97,0.1);
+      --accent-mid: rgba(40,94,97,0.2);
+      --text-dark: var(--pe-color-gray-900);
+      --text-mid: var(--pe-color-gray-600);
+      --text-light: var(--pe-color-gray-400);
+      --border: var(--pe-color-border-light);
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background: var(--pe-color-gray-50);
+      color: var(--pe-color-gray-800);
+      line-height: 1.5;
+    }
+    a { color: var(--pe-color-primary-600); transition: opacity 150ms ease; text-decoration: underline; text-underline-offset: 2px; }
+    a:hover { opacity: 0.8; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* App shell */
+    .app-shell {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--pe-color-gray-50), var(--pe-color-bg-secondary), var(--pe-color-gray-50));
+    }
+    .app-shell::before {
+      content:""; position: fixed; inset:0; opacity: 0.015; pointer-events:none; z-index:0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* Sticky header */
+    .title-row {
+      position: sticky; top: 0; z-index: 100;
+      background: color-mix(in srgb, var(--pe-color-primary-700) 94%, transparent);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 2px 12px color-mix(in srgb, var(--pe-color-gray-900) 16%, transparent);
+    }
+    .title-row-inner {
+      max-width: 1400px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px; gap: 24px;
+    }
+    .title-row h1 {
+      font-size: clamp(1.05rem, 2.5vw, 1.4rem);
+      font-weight: 700; letter-spacing: -0.03em; line-height: 1.1;
+      color: var(--pe-color-text-inverse);
+    }
+    .title-row-sub {
+      font-size: 0.85rem; color: color-mix(in srgb, #fff 75%, transparent);
+      font-weight: 500;
+    }
+
+    /* Main content */
+    .main-content {
+      position: relative; z-index: 1;
+      max-width: 1400px; margin: 0 auto;
+      padding: 32px 32px 48px;
+    }
+    .intro-text {
+      font-size: 1.05rem; line-height: 1.65;
+      color: var(--pe-color-gray-600); margin-bottom: 8px;
+      animation: fadeIn 0.4s ease-out;
+    }
+    .intro-text strong { color: var(--pe-color-gray-800); }
+
+    /* Tab bar */
+    .tab-bar {
+      display: flex; flex-wrap: wrap;
+      border-bottom: 2px solid var(--pe-color-gray-200);
+      margin: 24px 0 28px; width: fit-content;
+    }
+    .tab-button {
+      margin-bottom: -2px; border: none;
+      border-bottom: 2px solid transparent; background: transparent;
+      padding: 14px 22px; font-size: 1.05rem; font-weight: 500;
+      color: var(--pe-color-gray-500);
+      cursor: pointer; transition: all 200ms ease;
+      white-space: nowrap; font-family: inherit;
+    }
+    .tab-button:hover { color: var(--pe-color-gray-800); background: var(--pe-color-bg-primary); }
+    .tab-button.active {
+      color: var(--pe-color-primary-700);
+      border-bottom-color: var(--pe-color-primary-600);
+      font-weight: 600;
+    }
+    .tab-panel { display: none; animation: fadeIn 0.4s ease-out; }
+    .tab-panel.active { display: block; }
+
+    /* Section card */
+    .section-card {
+      background: var(--pe-color-bg-primary);
+      border: 1px solid var(--pe-color-border-light);
+      border-radius: 24px;
+      box-shadow: 0 10px 24px color-mix(in srgb, var(--pe-color-gray-900) 8%, transparent);
+      padding: 28px 32px;
+      margin-bottom: 24px;
+    }
+    .section-heading {
+      font-size: 1.35rem; font-weight: 700;
+      color: var(--pe-color-gray-900);
+      margin: 0 0 10px 0; letter-spacing: -0.02em;
+    }
+    .section-description {
+      font-size: 0.97rem; color: var(--pe-color-gray-600);
+      margin-bottom: 20px; line-height: 1.7;
+    }
+    .section-description strong { color: var(--pe-color-gray-800); }
+
+    /* ===== Methodology tab: scrollytelling (freeze-box) ===== */
+    .meth-intro { margin-bottom: 16px; }
+    .meth-intro h2 {
+      font-size: 1.5rem; font-weight: 700; color: var(--pe-color-gray-900);
+      margin: 0 0 6px 0; letter-spacing: -0.02em;
+    }
+    .meth-intro .subtitle {
+      font-size: 0.95rem; color: var(--pe-color-gray-500);
+      margin-bottom: 18px; line-height: 1.6;
+    }
+    .meth-intro p {
+      font-size: 0.95rem; line-height: 1.7; color: var(--pe-color-gray-600);
+      margin-bottom: 10px;
+    }
+
+    /* Workflow phases — flat, no container box */
+    .workflow-phases { margin: 20px 0 32px; }
+    .workflow-phases h3 {
+      font-size: 0.7rem; font-weight: 600; color: var(--pe-color-gray-500);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+    .phases-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      column-gap: 28px; row-gap: 24px;
+      position: relative;
+    }
+    .phase-col {
+      padding: 0 4px 0 0; position: relative;
+      display: block; text-decoration: none; color: inherit;
+      transition: opacity 150ms ease;
+    }
+    .phase-col:hover { opacity: 0.72; }
+    .phase-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: transparent; border: 1.5px solid var(--accent);
+      font-size: 0.72rem; font-weight: 700; color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .phase-label {
+      font-size: 0.9rem; font-weight: 700; color: var(--pe-color-gray-900);
+      margin-bottom: 6px; letter-spacing: -0.01em;
+    }
+    .phase-desc {
+      font-size: 0.82rem; color: var(--pe-color-gray-600);
+      line-height: 1.55; margin-bottom: 10px;
+    }
+    .phase-items { list-style: none; padding: 0; margin: 0; }
+    .phase-items li {
+      font-size: 0.78rem; color: var(--pe-color-gray-500);
+      padding: 2px 0; display: flex; align-items: baseline; gap: 8px;
+      line-height: 1.5;
+    }
+    .phase-items li::before {
+      content: ''; display: inline-block;
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--accent); opacity: 0.55;
+      flex-shrink: 0; position: relative; top: -2px;
+    }
+    .phase-arrow { display: none; }
+
+    /* Scrollytelling layout */
+    .scrollytelling-container {
+      display: flex; gap: 36px; position: relative; margin: 24px 0;
+    }
+    .scrolly-narrative { flex: 1; min-width: 0; }
+    .scrolly-sticky {
+      flex: 0 0 460px;
+      position: sticky; top: 90px;
+      height: fit-content; align-self: flex-start;
+    }
+    .narrative-step {
+      min-height: 90vh; padding: 36px 0;
+      opacity: 0.28; transition: opacity 0.5s ease;
+      scroll-margin-top: 90px;
+    }
+    .narrative-step.active { opacity: 1; }
+    .narrative-step:first-child { padding-top: 0; }
+    .narrative-step:last-child { min-height: auto; padding-bottom: 100px; }
+    .step-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px; }
+    .step-number {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; background: var(--accent); color: #fff;
+      border-radius: 50%; font-size: 0.95rem; font-weight: 700; flex-shrink: 0;
+    }
+    .step-title {
+      font-size: 1.2rem; font-weight: 600; color: var(--text-dark);
+      letter-spacing: -0.01em;
+    }
+    .step-diagram {
+      background: var(--bg-diagram);
+      background-image: radial-gradient(circle, var(--grid-color) 1px, transparent 1px);
+      background-size: 20px 20px;
+      border-radius: 12px; padding: 24px 28px; margin-bottom: 22px;
+      border: 1px solid var(--border);
+      display: flex; justify-content: center; align-items: center;
+      overflow-x: auto; cursor: pointer; position: relative;
+      transition: all 0.2s ease;
+    }
+    .step-diagram:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 20px rgba(40,94,97,0.15);
+    }
+    .step-diagram:hover .expand-hint { opacity: 1; }
+    .expand-hint {
+      position: absolute; bottom: 10px; right: 14px;
+      background: var(--accent); color: #fff;
+      padding: 4px 10px; border-radius: 5px;
+      font-size: 0.65rem;
+      font-weight: 500; opacity: 0; transition: opacity 0.2s; pointer-events: none;
+    }
+    .step-content p {
+      font-size: 0.95rem; line-height: 1.7; margin-bottom: 14px;
+      color: var(--pe-color-gray-600);
+    }
+    .step-content strong { color: var(--pe-color-gray-800); font-weight: 600; }
+    .sub-heading {
+      font-size: 0.95rem; font-weight: 700; color: var(--pe-color-gray-900);
+      letter-spacing: -0.01em;
+      margin-top: 22px; margin-bottom: 8px;
+    }
+    .sub-heading:first-child { margin-top: 0; }
+
+    /* Sticky panel (the "freeze-box") */
+    .example-panel {
+      background: var(--bg-card); border-radius: 14px; overflow: hidden;
+      box-shadow: 0 1px 3px rgba(40,94,97,0.08), 0 8px 24px rgba(40,94,97,0.12);
+      border: 2px solid var(--accent);
+    }
+    .example-header {
+      background: var(--bg-diagram); padding: 14px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .example-title {
+      font-size: 0.85rem; font-weight: 600; color: var(--text-dark);
+    }
+    .example-badge {
+      background: var(--accent); color: #fff;
+      padding: 4px 11px; border-radius: 6px;
+      font-size: 0.68rem; font-weight: 600;
+    }
+    .example-body {
+      padding: 18px 22px 22px;
+      min-height: 420px; max-height: 75vh; overflow-y: auto;
+      background: var(--bg-diagram);
+    }
+    .example-section { margin-bottom: 14px; }
+    .example-section:last-child { margin-bottom: 0; }
+    .example-section-title {
+      font-size: 0.7rem; font-weight: 600; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 6px; display: flex; align-items: center; gap: 8px;
+    }
+    .example-section-title::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .example-output {
+      background: var(--bg-card); border-radius: 8px; padding: 12px 14px;
+      font-size: 0.78rem;
+      border: 1px solid var(--border);
+    }
+    .example-output-line {
+      display: flex; align-items: flex-start; gap: 10px;
+      color: var(--text-mid); margin: 0 -6px; padding: 3px 6px; border-radius: 4px;
+      transition: background 0.15s;
+    }
+    .example-output-line:hover { background: var(--accent-light); }
+    .example-output-line .icon { flex-shrink: 0; font-weight: 600; }
+    .example-output-line.accent { color: var(--accent); }
+    .example-output-line.success { color: #059669; }
+
+    .math-block-dark {
+      background: #fff; border: 1px solid var(--border); border-radius: 8px;
+      padding: 14px 18px; margin: 8px 0;
+      overflow-x: auto; text-align: center;
+    }
+    .math-block-dark .katex { color: var(--text-dark); font-size: 1rem; }
+    .math-label {
+      font-size: 0.65rem; font-weight: 600; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 6px; text-align: left;
+    }
+
+    /* Modal */
+    .diagram-modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999; padding: 40px; cursor: zoom-out;
+    }
+    .diagram-modal-overlay.hidden { display: none; }
+    .diagram-modal-content {
+      background: var(--bg-diagram);
+      background-image: radial-gradient(circle, var(--grid-color) 1px, transparent 1px);
+      background-size: 20px 20px;
+      border-radius: 16px; padding: 32px 40px 40px;
+      max-width: 95vw; max-height: 90vh; overflow: auto;
+      position: relative; cursor: default;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      border: 2px solid var(--accent);
+    }
+    .diagram-modal-close {
+      position: absolute; top: 16px; right: 20px;
+      background: var(--accent); color: #fff; border: none;
+      width: 36px; height: 36px; border-radius: 50%;
+      font-size: 22px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .diagram-modal-close:hover { background: var(--pe-color-primary-800); transform: scale(1.08); }
+    .diagram-modal-title {
+      font-size: 1.1rem; font-weight: 600; color: var(--text-dark);
+      margin-bottom: 20px; padding-right: 50px;
+    }
+    .diagram-modal-diagram { display: flex; justify-content: center; align-items: center; min-width: 700px; }
+    .diagram-modal-diagram svg { width: 100%; height: auto; max-height: 70vh; }
+
+    /* ===== OBR Comparison tab ===== */
+    .comparison-section { margin-bottom: 32px; }
+    .comparison-section h3 {
+      font-size: 1.15rem; font-weight: 700; color: var(--pe-color-gray-900);
+      margin-bottom: 12px; letter-spacing: -0.02em;
+    }
+    .comparison-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.92rem;
+      margin-bottom: 12px;
+      table-layout: fixed;
+    }
+    .comparison-table th {
+      text-align: left;
+      color: var(--pe-color-gray-500);
+      padding: 10px 20px 12px;
+      border-bottom: 2px solid var(--pe-color-gray-800);
+      background: transparent;
+      font-size: 0.68rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.09em;
+    }
+    .comparison-table th:first-child { width: 24%; color: var(--pe-color-gray-400); }
+    .comparison-table th:nth-child(2) { color: var(--pe-color-primary-700); }
+    .comparison-table th:nth-child(3) { color: var(--pe-color-gray-700); }
+    .comparison-table td {
+      padding: 14px 20px;
+      color: var(--pe-color-gray-700);
+      border-bottom: 1px solid var(--pe-color-gray-200);
+      vertical-align: top; line-height: 1.6; font-weight: 400;
+    }
+    .comparison-table tbody tr:nth-child(even) td {
+      background: color-mix(in srgb, var(--pe-color-gray-50) 60%, transparent);
+    }
+    .comparison-table tbody tr:last-child td { border-bottom: none; }
+    .comparison-table tbody tr:hover td { background: var(--pe-color-primary-50); }
+    .comparison-table td:first-child {
+      font-weight: 600; color: var(--pe-color-gray-900);
+    }
+    .comparison-table td:nth-child(2) {
+      border-left: 1px solid var(--pe-color-gray-200);
+    }
+    .comparison-table td:nth-child(3) {
+      border-left: 1px solid var(--pe-color-gray-200);
+    }
+    .comparison-table strong { color: var(--pe-color-gray-900); font-weight: 600; }
+    .key-diff {
+      background: var(--pe-color-primary-50);
+      border-left: 3px solid var(--pe-color-primary-500);
+      padding: 12px 16px; border-radius: 0 8px 8px 0;
+      font-size: 0.9rem; color: var(--pe-color-gray-700); line-height: 1.65;
+      margin-top: 10px;
+    }
+    .key-diff strong { color: var(--pe-color-primary-800); }
+    .unique-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+    }
+    .unique-col h4 {
+      font-size: 0.7rem; font-weight: 600; color: var(--pe-color-gray-500);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+    .unique-col ul {
+      list-style: disc; padding-left: 22px;
+    }
+    .unique-col li {
+      font-size: 0.95rem; color: var(--pe-color-gray-500);
+      line-height: 1.7; margin-bottom: 8px;
+    }
+    .unique-col li strong { color: var(--pe-color-gray-800); }
+    .summary-text {
+      font-size: 0.95rem; color: var(--pe-color-gray-600);
+      line-height: 1.7; margin-bottom: 12px;
+    }
+
+    /* ===== OBR layout: sticky TOC + body ===== */
+    .obr-layout {
+      display: flex; gap: 36px; position: relative; align-items: flex-start;
+    }
+    .obr-toc {
+      flex: 0 0 200px;
+      position: sticky; top: 90px;
+      padding-top: 4px;
+    }
+    .obr-toc-label {
+      font-size: 0.65rem; font-weight: 600; color: var(--pe-color-gray-500);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 12px; padding-left: 14px;
+    }
+    .obr-toc-list {
+      list-style: none; padding: 0; margin: 0;
+      border-left: 2px solid var(--pe-color-gray-200);
+    }
+    .obr-toc-list li a {
+      display: block; padding: 6px 14px;
+      font-size: 0.85rem; color: var(--pe-color-gray-500);
+      text-decoration: none; font-weight: 500;
+      transition: color 150ms ease, border-color 150ms ease;
+      margin-left: -2px; border-left: 2px solid transparent;
+    }
+    .obr-toc-list li a:hover {
+      color: var(--pe-color-gray-800);
+    }
+    .obr-toc-list li a.active {
+      color: var(--pe-color-primary-700);
+      border-left-color: var(--pe-color-primary-600);
+      font-weight: 600;
+    }
+    .obr-body { flex: 1; min-width: 0; }
+    .obr-body > .section-card {
+      background: transparent; border: none; box-shadow: none;
+      border-radius: 0; padding: 0;
+      margin: 0; scroll-margin-top: 90px;
+    }
+    .obr-body > .section-card + .section-card {
+      padding-top: 48px; margin-top: 48px;
+      border-top: 1px solid var(--pe-color-gray-200);
+    }
+
+    .obr-head { margin-bottom: 10px; }
+    .obr-head h3 {
+      font-size: 1.35rem; font-weight: 700;
+      color: var(--pe-color-gray-900);
+      letter-spacing: -0.02em;
+      margin: 0 0 6px 0;
+    }
+    .obr-lede {
+      font-size: 0.95rem; color: var(--pe-color-gray-600);
+      line-height: 1.7; margin-bottom: 20px;
+    }
+
+    .obr-source {
+      font-size: 0.82rem; color: var(--pe-color-gray-500);
+      font-style: italic; text-align: center;
+      margin: 20px 0 8px;
+    }
+
+    /* ===== Results tab (placeholder) ===== */
+    .results-placeholder {
+      text-align: center; padding: 80px 40px;
+    }
+    .results-placeholder .icon {
+      font-size: 3rem; color: var(--pe-color-primary-400);
+      margin-bottom: 16px;
+    }
+    .results-placeholder h2 {
+      font-size: 1.35rem; font-weight: 700; color: var(--pe-color-gray-900);
+      margin-bottom: 10px; letter-spacing: -0.02em;
+    }
+    .results-placeholder p {
+      font-size: 0.95rem; color: var(--pe-color-gray-600); max-width: 520px;
+      line-height: 1.7; margin: 0 auto 8px;
+    }
+
+    /* Footer */
+    .dashboard-footer {
+      margin-top: 48px; padding-top: 28px;
+      border-top: 1px solid var(--pe-color-gray-200);
+      text-align: center; font-size: 0.85rem;
+      color: var(--pe-color-gray-400);
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .scrollytelling-container { flex-direction: column; }
+      .scrolly-sticky { position: relative; top: 0; flex: none; width: 100%; order: -1; margin-bottom: 20px; }
+      .narrative-step { min-height: auto; padding: 24px 0; opacity: 1; }
+    }
+    @media (max-width: 960px) {
+      .obr-layout { flex-direction: column; gap: 16px; }
+      .obr-toc { position: relative; top: 0; flex: none; width: 100%; padding-top: 0; }
+      .obr-toc-list {
+        display: flex; flex-wrap: wrap; gap: 4px;
+        border-left: none; padding: 8px 0;
+      }
+      .obr-toc-list li a {
+        margin-left: 0; border-left: none;
+        padding: 6px 12px; border-radius: 999px;
+        background: var(--pe-color-gray-100);
+      }
+      .obr-toc-list li a.active {
+        background: var(--pe-color-primary-700); color: #fff;
+      }
+      .obr-toc-label { padding-left: 0; }
+      .model-summary-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .title-row-inner { padding: 12px 16px; }
+      .main-content { padding: 24px 16px 32px; }
+      .section-card { padding: 20px; border-radius: 18px; }
+      .tab-button { padding: 12px 14px; font-size: 0.9rem; }
+      .phases-row { grid-template-columns: 1fr 1fr; gap: 18px; }
+      .unique-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ================= STICKY HEADER ================= -->
+  <header class="title-row">
+    <div class="title-row-inner">
+      <h1>OG-UK: Dynamic macroeconomic modelling</h1>
+    </div>
+  </header>
+
+  <!-- ================= MAIN ================= -->
+  <main class="main-content">
+
+    <p class="intro-text">
+      <strong>OG-UK</strong> is the UK calibration of
+      <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a>, an open-source
+      overlapping-generations dynamic general equilibrium framework maintained by the
+      <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a> (PSL).
+      Where a static engine answers <em>who gains and loses today</em>, OG-UK answers what happens as households and firms
+      adjust over time: how GDP, wages, interest rates, investment, and revenue evolve year-by-year along a full transition
+      path after a reform, and how the burden falls across generations.
+    </p>
+    <p class="intro-text">
+      OG-UK is calibrated to UK demographics (UN WPP), national accounts (ONS), and fiscal aggregates (OBR). Tax functions
+      are smooth Gouveia–Strauss forms estimated from UK microdata. The framework supports five tax instruments
+      (income, consumption, wealth, corporate, bequest), multi-industry CES production with public capital, a configurable
+      fiscal closure rule, and parameterised capital mobility.
+    </p>
+    <p class="intro-text">
+      Use the tabs below to explore OG-UK's <strong>methodology</strong>, how it <strong>compares with the OBR's new UK OLG
+      model</strong> (Brzezinski, Hantzsche &amp; Watson, 2025), and forthcoming <strong>simulation results</strong>.
+    </p>
+
+    <!-- Tab bar -->
+    <nav class="tab-bar" role="tablist">
+      <button class="tab-button active" data-tab="methodology" role="tab" aria-selected="true">Methodology</button>
+      <button class="tab-button" data-tab="obr" role="tab" aria-selected="false">OBR model comparison</button>
+      <button class="tab-button" data-tab="results" role="tab" aria-selected="false">Results</button>
+    </nav>
+
+    <!-- ============ METHODOLOGY TAB ============ -->
+    <section class="tab-panel active" id="tab-methodology" role="tabpanel">
+
+      <div class="meth-intro">
+        <h2>Core elements of OG-UK</h2>
+        <p class="subtitle">The eight building blocks of the model, from overlapping cohorts to UK calibration. The panel on the right shows the formal structure for each section as you scroll.</p>
+      </div>
+
+      <!-- Scrollytelling: narrative + sticky freeze-box -->
+      <div class="scrollytelling-container">
+        <div class="scrolly-narrative" id="narrative">
+
+          <!-- STEP 1 -->
+          <div class="narrative-step" data-step="0" id="step-1">
+            <div class="step-header"><div class="step-number">1</div><div class="step-title">The overlapping-generations idea</div></div>
+            <div class="step-diagram" onclick="openModal(0)" id="diagram-0">
+              <svg viewBox="0 0 580 260" width="580" style="max-width:100%;height:auto;">
+                <defs><marker id="arr" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="var(--accent)"/></marker></defs>
+                <text x="290" y="20" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="var(--text-light)" font-weight="600">Overlapping generations at a point in time</text>
+                <g transform="translate(30,40)"><rect x="0" y="10" width="30" height="120" rx="4" fill="var(--accent)" opacity="0.7"/><text x="15" y="155" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--accent)" font-weight="600">young</text><text x="15" y="170" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--text-light)">entering</text><text x="15" y="183" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--text-light)">workforce</text></g>
+                <g transform="translate(75,40)"><rect x="0" y="5" width="30" height="125" rx="4" fill="var(--accent)" opacity="0.6"/></g>
+                <g transform="translate(120,40)"><rect x="0" y="0" width="30" height="130" rx="4" fill="var(--accent)" opacity="0.55"/></g>
+                <g transform="translate(165,40)"><rect x="0" y="5" width="30" height="125" rx="4" fill="var(--accent)" opacity="0.5"/></g>
+                <g transform="translate(210,40)"><rect x="0" y="10" width="30" height="120" rx="4" fill="var(--accent)" opacity="0.48"/><text x="15" y="155" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--accent)" font-weight="600">mid-career</text><text x="15" y="170" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--text-light)">peak</text><text x="15" y="183" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--text-light)">earnings</text></g>
+                <g transform="translate(255,40)"><rect x="0" y="18" width="30" height="112" rx="4" fill="var(--accent)" opacity="0.43"/></g>
+                <g transform="translate(300,40)"><rect x="0" y="28" width="30" height="102" rx="4" fill="var(--accent)" opacity="0.38"/></g>
+                <g transform="translate(345,40)"><rect x="0" y="38" width="30" height="92" rx="4" fill="var(--accent)" opacity="0.33"/></g>
+                <g transform="translate(390,40)"><rect x="0" y="50" width="30" height="80" rx="4" fill="var(--accent)" opacity="0.3"/><text x="15" y="155" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--accent)" font-weight="600">pre-retirement</text><text x="15" y="170" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--text-light)">peak savings</text></g>
+                <g transform="translate(435,40)"><rect x="0" y="65" width="30" height="65" rx="4" fill="var(--accent)" opacity="0.25"/></g>
+                <g transform="translate(480,40)"><rect x="0" y="85" width="30" height="45" rx="4" fill="var(--accent)" opacity="0.2"/><text x="15" y="155" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--accent)" font-weight="600">elderly</text><text x="15" y="170" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--text-light)">drawing</text><text x="15" y="183" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--text-light)">pensions</text></g>
+                <line x1="40" y1="230" x2="510" y2="230" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arr)"/>
+                <text x="290" y="250" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--text-light)">age &rarr;</text>
+              </svg>
+              <div class="expand-hint">Click to expand</div>
+            </div>
+            <div class="step-content">
+              <div class="sub-heading">Many generations coexist</div>
+              <p>The central insight of an overlapping-generations model is that the economy is not populated by a single &ldquo;representative agent.&rdquo; At any moment in time, many generations coexist: young people just entering the labour force, middle-aged workers at peak earnings, and retirees living off savings and pensions. Each generation has a different remaining lifespan, a different stock of accumulated wealth, and therefore a different response to any given policy change.</p>
+              <div class="sub-heading">Age cohorts</div>
+              <p>OG-Core models S economically active age cohorts (typically 80, representing ages 21 to 100). Each period, a new cohort is born and the oldest cohort dies with some probability. The population distribution by age evolves over time with fertility, mortality, and immigration, and eventually reaches a stationary distribution in the long run.</p>
+              <div class="sub-heading">Ability types</div>
+              <p>Within each age cohort, households are further divided into J ability types, each with a distinct permanent labour productivity. High-ability types earn more per hour of work and typically save more. This heterogeneity is essential for capturing how a tax reform affects the income distribution, not just average outcomes.</p>
+            </div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="narrative-step" data-step="1" id="step-2">
+            <div class="step-header"><div class="step-number">2</div><div class="step-title">Household decisions</div></div>
+            <div class="step-diagram" onclick="openModal(1)" id="diagram-1">
+              <svg viewBox="0 0 580 190" width="580" style="max-width:100%;height:auto;">
+                <text x="290" y="20" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="var(--text-light)" font-weight="600">Three components of lifetime utility</text>
+                <rect x="15" y="42" width="160" height="100" rx="10" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="95" y="68" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="var(--accent)" font-weight="700">consumption</text>
+                <text x="95" y="88" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">CRRA utility with</text>
+                <text x="95" y="104" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">risk aversion &sigma;</text>
+                <text x="95" y="130" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--text-light)">composite of I goods</text>
+                <text x="192" y="92" text-anchor="middle" font-family="Roboto, sans-serif" font-size="20" fill="var(--text-light)">&minus;</text>
+                <rect x="210" y="42" width="160" height="100" rx="10" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="290" y="68" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="var(--accent)" font-weight="700">labour disutility</text>
+                <text x="290" y="88" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">elliptical function</text>
+                <text x="290" y="104" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">Inada at both bounds</text>
+                <text x="290" y="130" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--text-light)">always interior solutions</text>
+                <text x="387" y="92" text-anchor="middle" font-family="Roboto, sans-serif" font-size="20" fill="var(--text-light)">+</text>
+                <rect x="404" y="42" width="160" height="100" rx="10" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="484" y="68" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="var(--accent)" font-weight="700">bequests</text>
+                <text x="484" y="88" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">&ldquo;Warm glow&rdquo;</text>
+                <text x="484" y="104" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">weighted by &rho;</text>
+                <text x="484" y="130" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--text-light)">drives wealth distribution</text>
+                <text x="290" y="175" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-light)">maximise discounted sum over remaining lifetime</text>
+              </svg>
+              <div class="expand-hint">Click to expand</div>
+            </div>
+            <div class="step-content">
+              <div class="sub-heading">Three decisions each period</div>
+              <p>Every period, each household makes three decisions: how much to <strong>consume</strong>, how many hours to <strong>work</strong>, and how much to <strong>save</strong> for the future. These choices are made to maximise expected lifetime utility, subject to a budget constraint.</p>
+              <div class="sub-heading">Consumption utility</div>
+              <p>Consumption utility follows a CRRA (constant relative risk aversion) function, where the risk aversion parameter governs how strongly households prefer smooth consumption over time. Before entering this function, individual consumption goods are aggregated using a Stone-Geary Cobb-Douglas form that accounts for minimum subsistence levels.</p>
+              <div class="sub-heading">Labour disutility</div>
+              <p>Labour disutility uses an elliptical function rather than a standard power function. This ensures that the marginal cost of working goes to zero when hours are zero (so households always choose to work at least a little) and goes to infinity at the upper bound (so they never hit the ceiling). This avoids computationally expensive occasionally-binding constraint methods.</p>
+              <div class="sub-heading">Bequest utility</div>
+              <p>Bequest utility captures the &ldquo;warm glow&rdquo; from leaving wealth behind upon death. It is weighted by the age-specific mortality probability, so it matters most for older households. The strength of the bequest motive varies by ability type and is calibrated to match the observed wealth distribution.</p>
+              <div class="sub-heading">Budget constraint and Euler equations</div>
+              <p>The household's budget constraint says that each period, income from savings returns, labour earnings, bequests received, government transfers, and pensions must cover consumption (including consumption taxes), income and wealth taxes, and savings carried into the next period.</p>
+              <p>The optimal decisions are characterised by two Euler equations. The labour first-order condition says: work until the after-tax wage equals the marginal disutility. The savings Euler equation says: give up one unit of consumption today only if the discounted, after-tax return makes tomorrow's consumption sufficiently valuable.</p>
+            </div>
+          </div>
+
+          <!-- STEP 3 -->
+          <div class="narrative-step" data-step="2" id="step-3">
+            <div class="step-header"><div class="step-number">3</div><div class="step-title">Firms and production</div></div>
+            <div class="step-diagram" onclick="openModal(2)" id="diagram-2">
+              <svg viewBox="0 0 560 200" width="560" style="max-width:100%;height:auto;">
+                <text x="280" y="20" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="var(--text-light)" font-weight="600">CES production</text>
+                <rect x="20" y="42" width="120" height="60" rx="8" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="80" y="68" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">capital K</text>
+                <text x="80" y="86" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">private + public</text>
+                <rect x="160" y="42" width="120" height="60" rx="8" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="220" y="68" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">labour L</text>
+                <text x="220" y="86" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">efficiency-weighted</text>
+                <rect x="300" y="42" width="120" height="60" rx="8" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="360" y="68" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">TFP Z</text>
+                <text x="360" y="86" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">by industry</text>
+                <line x1="80" y1="102" x2="80" y2="125" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arr)"/>
+                <line x1="220" y1="102" x2="220" y2="125" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arr)"/>
+                <line x1="360" y1="102" x2="360" y2="125" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arr)"/>
+                <rect x="20" y="130" width="400" height="50" rx="10" fill="var(--accent)"/>
+                <text x="220" y="153" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="#fff" font-weight="700">CES aggregator per industry m</text>
+                <text x="220" y="170" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="rgba(255,255,255,0.85)">nests Cobb-Douglas when &epsilon; = 1</text>
+                <line x1="425" y1="155" x2="450" y2="155" stroke="var(--accent)" stroke-width="2" marker-end="url(#arr)"/>
+                <rect x="455" y="130" width="90" height="50" rx="8" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="500" y="153" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">output Y</text>
+                <text x="500" y="170" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">at price p</text>
+              </svg>
+              <div class="expand-hint">Click to expand</div>
+            </div>
+            <div class="step-content">
+              <div class="sub-heading">CES technology</div>
+              <p>The production side of the economy consists of M industries, each populated by perfectly competitive firms. Each firm combines three inputs: <strong>private capital</strong>, <strong>public capital</strong> (government-provided infrastructure), and <strong>labour</strong>. These are combined using a constant elasticity of substitution (CES) technology.</p>
+              <div class="sub-heading">Substitution and productivity</div>
+              <p>The elasticity parameter governs how easily firms can substitute between capital and labour. When it equals one, the function reduces to the familiar Cobb-Douglas form. Total factor productivity can vary across industries and over time, allowing the model to capture sector-specific technological change.</p>
+              <div class="sub-heading">First-order conditions</div>
+              <p>Profit maximisation yields the standard first-order conditions: the <strong>wage equals the marginal product of labour</strong>, and the <strong>rental rate of capital</strong> equals the after-tax marginal product of capital, accounting for depreciation, tax deductions, and investment tax credits.</p>
+              <div class="sub-heading">Public capital rents</div>
+              <p>A distinctive feature of OG-Core is that <strong>public capital generates economic rents</strong>: since firms cannot deduct the cost of using government infrastructure, the returns from public capital flow to private capital owners through an augmented rate of return.</p>
+            </div>
+          </div>
+
+          <!-- STEP 4 -->
+          <div class="narrative-step" data-step="3" id="step-4">
+            <div class="step-header"><div class="step-number">4</div><div class="step-title">Government</div></div>
+            <div class="step-diagram" onclick="openModal(3)" id="diagram-3">
+              <svg viewBox="0 0 580 210" width="580" style="max-width:100%;height:auto;">
+                <text x="290" y="20" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="var(--text-light)" font-weight="600">Government budget constraint</text>
+                <rect x="15" y="42" width="180" height="85" rx="10" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.25)" stroke-width="1.5"/>
+                <text x="105" y="64" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="#059669" font-weight="700">revenue</text>
+                <text x="105" y="84" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">Income + consumption +</text>
+                <text x="105" y="100" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">wealth + corporate + bequest</text>
+                <text x="105" y="118" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="#059669">+ new debt D(t+1)</text>
+                <text x="215" y="85" text-anchor="middle" font-family="Roboto, sans-serif" font-size="20" fill="var(--accent)" font-weight="700">=</text>
+                <rect x="235" y="42" width="330" height="85" rx="10" fill="rgba(239,146,68,0.06)" stroke="rgba(239,146,68,0.2)" stroke-width="1.5"/>
+                <text x="400" y="64" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="#c2410c" font-weight="700">spending</text>
+                <text x="400" y="84" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">Debt service + public goods G</text>
+                <text x="400" y="100" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">+ infrastructure I + pensions</text>
+                <text x="400" y="116" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">+ transfers TR + UBI</text>
+                <rect x="80" y="145" width="420" height="50" rx="8" fill="var(--accent-light)" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="5 3"/>
+                <text x="290" y="166" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">Fiscal closure rule</text>
+                <text x="290" y="184" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">After period T(G1): adjust G, TR, or both to stabilise debt/GDP</text>
+              </svg>
+              <div class="expand-hint">Click to expand</div>
+            </div>
+            <div class="step-content">
+              <div class="sub-heading">Revenue and spending</div>
+              <p>The government in OG-Core collects revenue from <strong>five tax instruments</strong>: individual income taxes, consumption taxes, wealth taxes, corporate income taxes, and bequest taxes. It spends on public goods, infrastructure, pensions, lump-sum transfers, and universal basic income. The difference is financed by issuing debt.</p>
+              <div class="sub-heading">Income tax: Gouveia-Strauss functions</div>
+              <p>The income tax is the most complex instrument. OG-Core supports several functional forms for effective and marginal tax rates, estimated from detailed tax-benefit calculations. For OG-UK, we use the <strong>Gouveia-Strauss</strong> specification, which estimates the effective tax rate as a smooth, monotonically increasing function of income and derives the marginal tax rate analytically as its derivative. This is estimated from PolicyEngine UK output on Survey of Personal Incomes microdata.</p>
+              <div class="sub-heading">Other tax instruments</div>
+              <p>The <strong>wealth tax</strong> uses a progressive three-parameter function that can produce anything from zero taxation to smoothly increasing marginal rates. <strong>Consumption taxes</strong> are linear rates that can vary by good, capturing VAT and excise taxes. <strong>Corporate income taxes</strong> are flat rates by industry.</p>
+              <div class="sub-heading">Fiscal closure rule</div>
+              <p>Since debt cannot grow without bound, a <strong>fiscal closure rule</strong> activates after a specified period to gradually bring the debt-to-GDP ratio toward a target. The modeller chooses whether the adjustment falls on government spending, transfers, or some combination of both.</p>
+            </div>
+          </div>
+
+          <!-- STEP 5 -->
+          <div class="narrative-step" data-step="4" id="step-5">
+            <div class="step-header"><div class="step-number">5</div><div class="step-title">Market clearing and equilibrium</div></div>
+            <div class="step-diagram" onclick="openModal(4)" id="diagram-4">
+              <svg viewBox="0 0 560 190" width="560" style="max-width:100%;height:auto;">
+                <text x="280" y="20" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="var(--text-light)" font-weight="600">Four markets must clear simultaneously</text>
+                <rect x="15" y="42" width="255" height="60" rx="8" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="142" y="67" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">Labour market</text>
+                <text x="142" y="87" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">household supply = firm demand</text>
+                <rect x="290" y="42" width="255" height="60" rx="8" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="417" y="67" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">Capital market</text>
+                <text x="417" y="87" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">domestic + foreign savings = demand</text>
+                <rect x="15" y="118" width="255" height="60" rx="8" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="142" y="143" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">Goods markets</text>
+                <text x="142" y="163" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">output = consumption per industry</text>
+                <rect x="290" y="118" width="255" height="60" rx="8" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="417" y="143" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">Debt market</text>
+                <text x="417" y="163" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">domestic + foreign holdings = issuance</text>
+              </svg>
+              <div class="expand-hint">Click to expand</div>
+            </div>
+            <div class="step-content">
+              <div class="sub-heading">Supply equals demand</div>
+              <p>All the pieces above (household decisions, firm production, and government policy) are connected through <strong>market clearing conditions</strong>. For the economy to be in equilibrium, supply must equal demand in every market simultaneously.</p>
+              <div class="sub-heading">Labour and capital markets</div>
+              <p>In the <strong>labour market</strong>, the total efficiency-weighted labour supply from all households across all ages and ability types must equal total firm demand across all industries. In the <strong>capital market</strong>, the total stock of savings (both domestic and foreign) must equal the capital demanded by firms plus government debt. The model is an <strong>open economy</strong>: foreign capital and foreign debt holdings are governed by parameters that control the degree of international capital mobility.</p>
+              <div class="sub-heading">Goods and debt markets</div>
+              <p>For each <strong>goods market</strong>, industry output must equal consumption demand. The final industry clears residually, absorbing investment, government purchases, and any remaining demand. The <strong>debt market</strong> splits government debt between domestic and foreign holders.</p>
+              <div class="sub-heading">What defines an equilibrium</div>
+              <p>An equilibrium is a set of prices (the interest rate, wage, and goods prices) such that all households optimise, all firms optimise, the government budget constraint holds, and all four markets clear. Finding such an equilibrium is a large-scale nonlinear fixed-point problem.</p>
+            </div>
+          </div>
+
+          <!-- STEP 6 -->
+          <div class="narrative-step" data-step="5" id="step-6">
+            <div class="step-header"><div class="step-number">6</div><div class="step-title">How the model is solved</div></div>
+            <div class="step-diagram" onclick="openModal(5)" id="diagram-5">
+              <svg viewBox="0 0 580 190" width="580" style="max-width:100%;height:auto;">
+                <text x="290" y="18" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="var(--text-light)" font-weight="600">Two-stage solution</text>
+                <rect x="15" y="35" width="220" height="120" rx="10" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="125" y="58" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">Stage 1: steady state</text>
+                <text x="125" y="78" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">outer: guess prices</text>
+                <text x="125" y="95" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">inner: solve Euler equations</text>
+                <text x="125" y="112" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">aggregate and check</text>
+                <text x="125" y="129" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">iterate to convergence</text>
+                <path d="M55 155 Q55 172 125 172 Q195 172 195 155" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 3"/>
+                <rect x="96" y="163" width="58" height="14" fill="#fff"/>
+                <text x="125" y="174" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--pe-color-gray-500)" font-weight="500">fixed-point</text>
+                <line x1="240" y1="95" x2="295" y2="95" stroke="var(--accent)" stroke-width="2" marker-end="url(#arr)"/>
+                <text x="267" y="85" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--pe-color-gray-500)" font-weight="500">converged</text>
+                <rect x="305" y="35" width="210" height="120" rx="10" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="410" y="58" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">Stage 2: transition</text>
+                <text x="410" y="78" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">guess time paths</text>
+                <text x="410" y="95" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">solve all cohorts</text>
+                <text x="410" y="112" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">update paths</text>
+                <text x="410" y="129" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">iterate for all t = 1..T</text>
+                <path d="M345 155 Q345 172 410 172 Q475 172 475 155" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 3"/>
+                <rect x="378" y="163" width="64" height="14" fill="#fff"/>
+                <text x="410" y="174" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--pe-color-gray-500)" font-weight="500">TPI iteration</text>
+                <line x1="520" y1="95" x2="545" y2="95" stroke="var(--accent)" stroke-width="2" marker-end="url(#arr)"/>
+                <rect x="550" y="60" width="28" height="70" rx="6" fill="var(--accent)"/>
+                <text x="564" y="92" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="#fff" font-weight="600">OUT</text>
+                <text x="564" y="105" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="#fff" font-weight="600">PUT</text>
+              </svg>
+              <div class="expand-hint">Click to expand</div>
+            </div>
+            <div class="step-content">
+              <div class="sub-heading">Two-stage approach</div>
+              <p>Finding equilibrium is a two-stage computational problem. The model first solves for the long-run steady state, then computes the transition path from today's economy to that steady state.</p>
+              <div class="sub-heading">Stage 1: Steady state</div>
+              <p>The model first finds the long-run equilibrium where all variables are constant (after removing trend growth). This uses a nested fixed-point algorithm. The <em>outer loop</em> guesses a vector of aggregate prices and quantities. The <em>inner loop</em> takes these as given and solves the Euler equations for every combination of ability type and age. Because each type is independent, they can be solved <strong>in parallel</strong>. After solving all households, the algorithm aggregates their decisions, computes firm demands, checks the government budget, and derives new guesses. It iterates until convergence.</p>
+              <div class="sub-heading">Stage 2: Transition path (TPI)</div>
+              <p>Starting from today's economy, the model then solves for how the economy evolves toward the steady state over T periods. The <em>Time Path Iteration</em> (TPI) method guesses entire time paths for all prices and quantities, solves every cohort's lifetime decisions given those paths (with <strong>rational expectations</strong> about future prices), checks whether the implied paths match the guesses, and iterates. This is what produces year-by-year projections.</p>
+            </div>
+          </div>
+
+          <!-- STEP 7 -->
+          <div class="narrative-step" data-step="6" id="step-7">
+            <div class="step-header"><div class="step-number">7</div><div class="step-title">Calibrating for the United Kingdom</div></div>
+            <div class="step-diagram" onclick="openModal(6)" id="diagram-6">
+              <svg viewBox="0 0 580 195" width="580" style="max-width:100%;height:auto;">
+                <text x="290" y="20" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="var(--text-light)" font-weight="600">Data sources for OG-UK</text>
+                <rect x="15" y="42" width="125" height="60" rx="8" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="77" y="68" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">ONS</text>
+                <text x="77" y="86" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">national accounts</text>
+                <rect x="155" y="42" width="125" height="60" rx="8" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="217" y="68" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">OBR</text>
+                <text x="217" y="86" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">fiscal forecasts</text>
+                <rect x="295" y="42" width="125" height="60" rx="8" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="357" y="68" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">HMRC / GOV.UK</text>
+                <text x="357" y="86" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">tax parameters</text>
+                <rect x="435" y="42" width="130" height="60" rx="8" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="500" y="68" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">PolicyEngine</text>
+                <text x="500" y="86" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">tax functions</text>
+                <line x1="77" y1="102" x2="77" y2="125" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arr)"/>
+                <line x1="217" y1="102" x2="217" y2="125" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arr)"/>
+                <line x1="357" y1="102" x2="357" y2="125" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arr)"/>
+                <line x1="500" y1="102" x2="500" y2="125" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arr)"/>
+                <rect x="15" y="130" width="550" height="50" rx="10" fill="var(--accent)"/>
+                <text x="290" y="153" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="#fff" font-weight="700">OG-UK calibration</text>
+                <text x="290" y="170" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="rgba(255,255,255,0.85)">UK demographics, fiscal parameters, tax functions, institutional structure</text>
+              </svg>
+              <div class="expand-hint">Click to expand</div>
+            </div>
+            <div class="step-content">
+              <div class="sub-heading">From theory to UK data</div>
+              <p>OG-Core provides the theoretical framework. To make it a model of the <em>UK</em> economy, every parameter must be calibrated to UK data. This is what the OG-UK calibration layer does.</p>
+              <div class="sub-heading">Macroeconomic parameters</div>
+              <p>Macroeconomic parameters are drawn from the ONS national accounts and the OBR's Economic and Fiscal Outlook: the debt-to-GDP ratio, the revenue-to-GDP ratio, government spending shares, and growth rates. The state pension age is set to match current UK rules. Demographics use the UN World Population Prospects data for the United Kingdom.</p>
+              <div class="sub-heading">Tax function estimation</div>
+              <p>Tax functions are estimated from PolicyEngine UK. Rather than hard-coding the UK income tax schedule, the model estimates smooth <strong>Gouveia-Strauss</strong> functions that capture the effective relationship between income and taxes across the entire population. This approach naturally incorporates the interaction of income tax, National Insurance, and the personal allowance taper.</p>
+              <div class="sub-heading">Real-world mapping</div>
+              <p>Model outputs are expressed in abstract units. To translate them into pound-sterling figures, OG-UK anchors the model's steady-state GDP to the ONS figure and scales all other variables proportionally. This allows results to be presented as changes in billions of pounds, a format that is directly interpretable by policymakers and the public.</p>
+            </div>
+          </div>
+
+          <!-- STEP 8 -->
+          <div class="narrative-step" data-step="7" id="step-8">
+            <div class="step-header"><div class="step-number">8</div><div class="step-title">What this enables</div></div>
+            <div class="step-diagram" onclick="openModal(7)" id="diagram-7">
+              <svg viewBox="0 0 580 190" width="580" style="max-width:100%;height:auto;">
+                <text x="290" y="20" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="var(--text-light)" font-weight="600">Static vs dynamic analysis</text>
+                <rect x="15" y="42" width="240" height="135" rx="10" fill="var(--bg-diagram)" stroke="var(--border)" stroke-width="1.5"/>
+                <text x="135" y="66" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--text-light)" font-weight="700">static (before)</text>
+                <text x="135" y="86" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">household-level impacts</text>
+                <text x="135" y="104" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">fixed wages, prices, GDP</text>
+                <text x="135" y="122" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">no behavioural response</text>
+                <text x="135" y="140" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">immediate effects only</text>
+                <text x="135" y="165" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--text-light)">PolicyEngine static analysis</text>
+                <line x1="260" y1="110" x2="295" y2="110" stroke="var(--accent)" stroke-width="2" marker-end="url(#arr)"/>
+                <text x="277" y="100" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--accent)">+OG-UK</text>
+                <rect x="300" y="42" width="265" height="135" rx="10" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+                <text x="432" y="66" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--accent)" font-weight="700">dynamic (now)</text>
+                <text x="432" y="86" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">economy-wide effects</text>
+                <text x="432" y="104" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">endogenous wages, r, GDP</text>
+                <text x="432" y="122" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">labour + savings responses</text>
+                <text x="432" y="140" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">30+ year transition paths</text>
+                <text x="432" y="165" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--text-light)">PolicyEngine + OG-UK</text>
+              </svg>
+              <div class="expand-hint">Click to expand</div>
+            </div>
+            <div class="step-content">
+              <div class="sub-heading">Two complementary views</div>
+              <p>Together with a static microsimulation engine, OG-UK supports two complementary views of any UK tax or benefit reform. Static analysis provides the detailed distributional picture: which households gain, which lose, and by how much. OG-UK provides the macroeconomic picture: what happens to GDP, investment, government revenue, interest rates, and wages as the economy adjusts over time.</p>
+              <div class="sub-heading">Why both views matter</div>
+              <p>The two perspectives can tell very different stories. A reform that raises significant revenue in a static analysis may raise less in practice, because higher tax rates reduce labour supply and investment, shrinking the tax base. Conversely, a reform that costs revenue upfront might partly pay for itself over time through increased economic activity. OG-UK captures these dynamics.</p>
+              <div class="sub-heading">Year-by-year transition paths</div>
+              <p>The transition path is particularly valuable. Rather than just comparing two long-run steady states, it shows the <strong>year-by-year adjustment</strong>: how GDP dips in the first few years, how interest rates respond, when revenue stabilises. These time paths can be mapped onto OBR forecast horizons.</p>
+            </div>
+          </div>
+
+        </div><!-- end scrolly-narrative -->
+
+        <!-- RIGHT: Sticky freeze-box -->
+        <aside class="scrolly-sticky">
+          <div class="example-panel" id="sticky-panel">
+            <div class="example-header">
+              <span class="example-title" id="panel-title">Overlapping generations</span>
+              <span class="example-badge" id="panel-badge">Step 1</span>
+            </div>
+            <div class="example-body" id="panel-body"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ OBR COMPARISON TAB ============ -->
+    <section class="tab-panel" id="tab-obr" role="tabpanel">
+      <div class="obr-layout">
+
+        <!-- Sticky TOC -->
+        <aside class="obr-toc">
+          <div class="obr-toc-label">Contents</div>
+          <ol class="obr-toc-list">
+            <li><a href="#obr-overview">Overview</a></li>
+            <li><a href="#obr-1">Production</a></li>
+            <li><a href="#obr-2">Households</a></li>
+            <li><a href="#obr-3">Bequests</a></li>
+            <li><a href="#obr-4">Tax system</a></li>
+            <li><a href="#obr-5">Government</a></li>
+            <li><a href="#obr-6">Open economy</a></li>
+            <li><a href="#obr-7">Solution method</a></li>
+            <li><a href="#obr-8">Calibration</a></li>
+          </ol>
+        </aside>
+
+        <div class="obr-body">
+
+          <!-- Overview / hero -->
+          <div class="section-card" id="obr-overview">
+            <div class="obr-head"><h3>Overview</h3></div>
+            <p class="obr-lede">
+              This tab compares <strong>OG-UK</strong> — the UK calibration of
+              <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a>, maintained by the
+              <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a> —
+              with the <strong>OBR UK OLG</strong> model described in
+              <a href="assets/obr-working-paper-22.pdf" target="_blank" rel="noreferrer">Working Paper No. 22</a>
+              (Brzezinski, Hantzsche &amp; Watson, April 2025). The two models occupy complementary niches:
+              <strong>OG-UK</strong> is structurally rich and traces full year-by-year transition paths, while
+              <strong>OBR UK OLG</strong> is tightly calibrated to UK fiscal institutions and steady-state outcomes.
+            </p>
+            <table class="comparison-table">
+              <thead><tr><th>Dimension</th><th>OG-UK strength</th><th>OBR UK OLG strength</th></tr></thead>
+              <tbody>
+                <tr><td>Transition dynamics</td><td>Full year-by-year paths</td><td>Steady-state only</td></tr>
+                <tr><td>UK institutional detail</td><td>Smooth approximations</td><td>Explicit bands and rates</td></tr>
+                <tr><td>Within-cohort inequality</td><td>Permanent types</td><td>Stochastic earnings</td></tr>
+                <tr><td>Production structure</td><td>Multi-sector CES</td><td>Single-sector Cobb-Douglas</td></tr>
+                <tr><td>Tax instruments</td><td>5 instruments</td><td>3 instruments (more detailed)</td></tr>
+                <tr><td>Fiscal policy levers</td><td>G, TR, UBI, I<sub>g</sub></td><td>RBI, age-dependent transfers</td></tr>
+                <tr><td>Openness</td><td>Open-source, Python</td><td>MATLAB, closed toolkit</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 1. Production -->
+          <div class="section-card" id="obr-1">
+            <div class="obr-head"><h3>Production technology</h3></div>
+            <p class="obr-lede">How each model represents firms — the technology for combining capital and labour, and whether production is a single aggregate or split across multiple industries.</p>
+          <table class="comparison-table">
+            <thead><tr><th></th><th>OG-UK</th><th>OBR UK OLG</th></tr></thead>
+            <tbody>
+              <tr><td>Production function</td><td>CES (nests Cobb-Douglas as special case)</td><td>Cobb-Douglas only</td></tr>
+              <tr><td>Industries</td><td>M industries (multi-sector)</td><td>Single sector</td></tr>
+              <tr><td>Public capital</td><td>Yes — generates rents to private capital</td><td>No</td></tr>
+              <tr><td>Capital share</td><td>Configurable per industry</td><td>α = 0.33</td></tr>
+              <tr><td>Labour input</td><td>Efficiency-weighted across permanent types</td><td>Efficiency-weighted by age + stochastic shocks</td></tr>
+              <tr><td>TFP</td><td>Varies by industry and over time</td><td>Normalised to 1, with labour-augmenting growth g = 1.2%</td></tr>
+              <tr><td>Depreciation</td><td>Configurable per industry</td><td>δ = 5%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+          <!-- 2. Household heterogeneity -->
+          <div class="section-card" id="obr-2">
+            <div class="obr-head"><h3>Household heterogeneity</h3></div>
+            <p class="obr-lede">How households differ within each age cohort, and the utility function they maximise. The core structural difference: OG-UK uses <strong>permanent ability types</strong> assigned at birth, while the OBR model uses <strong>stochastic earnings shocks</strong> each period — the latter naturally generates precautionary savings and within-cohort inequality that evolves over the lifecycle.</p>
+            <table class="comparison-table">
+            <thead><tr><th></th><th>OG-UK</th><th>OBR UK OLG</th></tr></thead>
+            <tbody>
+              <tr><td>Within-cohort variation</td><td>J <strong>permanent ability types</strong> (deterministic)</td><td><strong>Stochastic earnings shocks</strong> (AR(1) persistent + i.i.d. transitory)</td></tr>
+              <tr><td>Income inequality driver</td><td>Fixed type assignment at birth</td><td>Random shocks each period (ρ<sup>z</sup> = 0.9, σ<sub>z</sub> = 0.05, σ<sub>e</sub> = 0.7)</td></tr>
+              <tr><td>Precautionary savings</td><td>Not a primary channel</td><td>Yes — driven by earnings uncertainty</td></tr>
+              <tr><td>Utility function</td><td>CRRA on consumption; elliptical labour disutility</td><td>Cobb-Douglas over consumption and leisure (non-separable)</td></tr>
+              <tr><td>Labour disutility</td><td><strong>Elliptical function</strong> — always interior solutions</td><td>Implicit in Cobb-Douglas composite — corner solutions possible</td></tr>
+              <tr><td>Risk aversion parameter</td><td>σ on consumption only</td><td>σ₂ = 2 on consumption-leisure composite</td></tr>
+              <tr><td>Consumption aggregation</td><td>Stone-Geary Cobb-Douglas (subsistence levels, I goods)</td><td>Single consumption good</td></tr>
+              <tr><td>Age range</td><td>S cohorts (typically 80, ages 21–100)</td><td>81 cohorts (ages 20–100)</td></tr>
+              <tr><td>Discount factor</td><td>β<sub>j</sub> varies by ability type</td><td>β = 0.99 (uniform)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+          <!-- 3. Bequest motive -->
+          <div class="section-card" id="obr-3">
+            <div class="obr-head"><h3>Bequest motive</h3></div>
+            <p class="obr-lede">How wealth is transferred across generations at death — whether bequests are a deliberate utility-generating choice, an accident of mortality, or some combination.</p>
+            <table class="comparison-table">
+            <thead><tr><th></th><th>OG-UK</th><th>OBR UK OLG</th></tr></thead>
+            <tbody>
+              <tr><td>Motive</td><td>"Warm glow" weighted by mortality probability ρ<sub>s</sub></td><td>"Warm glow" with target level, kicks in at age j* = 91</td></tr>
+              <tr><td>Varies by type</td><td>Yes — χ<sup>b</sup><sub>j</sub> calibrated per ability type</td><td>Uniform (φ₁ = 10, φ₂ = 4.55)</td></tr>
+              <tr><td>Distribution</td><td>To surviving households</td><td>Equal distribution to ages 55–75</td></tr>
+              <tr><td>Accidental bequests</td><td>Included</td><td>Included — from those dying before j*</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+          <!-- 4. Tax system -->
+          <div class="section-card" id="obr-4">
+            <div class="obr-head"><h3>Tax system</h3></div>
+            <p class="obr-lede">Which taxes each model captures, and whether they are represented as <strong>smooth estimated functions</strong> (OG-UK) or the actual <strong>UK bands and thresholds</strong> (OBR). The OBR approach makes specific policy levers — "raise the basic rate by 1pp" — directly simulable; OG-UK's approach is more general but less directly tied to specific policy levers.</p>
+            <table class="comparison-table">
+            <thead><tr><th></th><th>OG-UK</th><th>OBR UK OLG</th></tr></thead>
+            <tbody>
+              <tr><td>Income tax</td><td><strong>Gouveia-Strauss smooth functions</strong> estimated from PolicyEngine microdata</td><td><strong>Explicit UK tax bands</strong> (3 thresholds: £12,570 / £50,270 / £125,140; rates: 20% / 40% / 45%)</td></tr>
+              <tr><td>National Insurance</td><td>Folded into income tax functions</td><td><strong>Modelled separately</strong> with own thresholds (£12,570 / £50,270) and rates (8% / 2%)</td></tr>
+              <tr><td>Consumption tax</td><td>Linear rates, can vary by good</td><td>Effective VAT rate τ<sup>c</sup> = 9.3%</td></tr>
+              <tr><td>Wealth tax</td><td>Progressive 3-parameter function</td><td>Not modelled</td></tr>
+              <tr><td>Corporate tax</td><td>Flat rate by industry</td><td>Not modelled</td></tr>
+              <tr><td>Bequest tax</td><td>On inherited wealth</td><td>Not modelled</td></tr>
+              <tr><td>Pension tax relief</td><td>Not explicitly modelled</td><td><strong>Explicitly modelled</strong> — employee (5%) and employer (3%) contributions exempt from income tax up to annual allowance</td></tr>
+              <tr><td>Pension withdrawal tax</td><td>Not explicitly modelled</td><td><strong>Explicitly modelled</strong> via pshare parameter on asset drawdowns</td></tr>
+              <tr><td>Total tax instruments</td><td><strong>5 types</strong></td><td><strong>3 types</strong> (income tax, NICs, VAT)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+          <!-- 5. Government and fiscal policy -->
+          <div class="section-card" id="obr-5">
+            <div class="obr-head"><h3>Government &amp; fiscal policy</h3></div>
+            <p class="obr-lede">How the government collects revenue, spends, and closes its budget. The fiscal closure rule — which item adjusts to keep debt sustainable — is an important modelling choice that determines who bears the long-run burden of any reform.</p>
+            <table class="comparison-table">
+            <thead><tr><th></th><th>OG-UK</th><th>OBR UK OLG</th></tr></thead>
+            <tbody>
+              <tr><td>Budget constraint</td><td>Revenue + new debt = debt service + G + I<sub>g</sub> + pensions + TR + UBI</td><td>Revenue = welfare transfers + RBI + debt service (growth-adjusted)</td></tr>
+              <tr><td>Fiscal closure rule</td><td><strong>Configurable</strong>: adjust G, TR, or combination after period T<sub>G1</sub></td><td><strong>Residual Budgetary Item (RBI)</strong> adjusts to stabilise debt/GDP at 100%</td></tr>
+              <tr><td>Debt target</td><td>Configurable</td><td>Fixed at 100% of GDP</td></tr>
+              <tr><td>Public investment</td><td>Explicit (I<sub>g</sub> contributes to public capital stock)</td><td>Not modelled as productive</td></tr>
+              <tr><td>UBI</td><td>Available as policy lever</td><td>Not available</td></tr>
+              <tr><td>Welfare transfers</td><td>Lump-sum TR</td><td><strong>Age-dependent</strong> transfers (γ<sup>j</sup> scaling) calibrated to OBR welfare spending projections</td></tr>
+              <tr><td>State pension</td><td>Part of transfers</td><td><strong>Explicitly modelled</strong> as age-dependent welfare transfer from state pension age onwards</td></tr>
+              <tr><td>Spending categories</td><td>G (public goods) + I<sub>g</sub> (infrastructure) + pensions + TR + UBI</td><td>Welfare transfers + residual non-interest spending (G⁰)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+          <!-- 6. Open economy -->
+          <div class="section-card" id="obr-6">
+            <div class="obr-head"><h3>Open economy</h3></div>
+            <p class="obr-lede">How foreign capital and foreign holdings of government debt enter each model, and how this determines whether interest rates are set globally or domestically.</p>
+            <table class="comparison-table">
+            <thead><tr><th></th><th>OG-UK</th><th>OBR UK OLG</th></tr></thead>
+            <tbody>
+              <tr><td>Approach</td><td><strong>Parameterised capital mobility</strong> (ζ<sub>K</sub> for capital, ζ<sub>D</sub> for debt)</td><td><strong>Binary switch</strong>: fully open (r = 5% exogenous) or fully closed (r endogenous)</td></tr>
+              <tr><td>Foreign capital</td><td>Continuous degree of openness</td><td>Either all or nothing</td></tr>
+              <tr><td>Net foreign assets</td><td>Derived from capital mobility parameters</td><td>NFA residually determined in open economy</td></tr>
+              <tr><td>Interest rate</td><td>Endogenous (influenced by openness parameters)</td><td>Either fixed at 5% (open) or MPK − δ (closed)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+          <!-- 7. Solution method -->
+          <div class="section-card" id="obr-7">
+            <div class="obr-head"><h3>Solution method</h3></div>
+            <p class="obr-lede">The computational strategy each model uses to find equilibrium. The critical difference: OG-UK solves <strong>Euler equations</strong> and computes full <strong>transition paths</strong>, so it can show how the economy adjusts year by year (e.g. GDP dips in years 1–5 and recovers by year 15). The OBR model uses <strong>Value Function Iteration</strong> and compares long-run steady states only, without modelling the path between them.</p>
+            <table class="comparison-table">
+            <thead><tr><th></th><th>OG-UK</th><th>OBR UK OLG</th></tr></thead>
+            <tbody>
+              <tr><td>Approach</td><td><strong>Euler equation</strong> — solve first-order conditions directly</td><td><strong>Value Function Iteration</strong> (Kirkby VFI toolkit)</td></tr>
+              <tr><td>Transition dynamics</td><td><strong>Yes</strong> — full Time Path Iteration (TPI), year-by-year</td><td><strong>No</strong> — steady-state comparisons only</td></tr>
+              <tr><td>Expectations</td><td>Rational expectations over full transition path</td><td>Rational expectations within steady state</td></tr>
+              <tr><td>Software</td><td>Python (open-source, GitHub)</td><td>MATLAB (Kirkby VFI toolkit)</td></tr>
+              <tr><td>Parallelisation</td><td>By ability type (inner loop)</td><td>GPU/CPU via VFI toolkit</td></tr>
+              <tr><td>Runtime</td><td>Longer (full transition path)</td><td>&lt;2 min (steady state), &lt;5 min (scenarios)</td></tr>
+              <tr><td>State space</td><td>Continuous (Euler equations)</td><td>Discretised (value function on grid over assets and earnings shocks)</td></tr>
+              <tr><td>Open-source</td><td>Yes</td><td>No (uses third-party VFI toolkit)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+          <!-- 8. Calibration -->
+          <div class="section-card" id="obr-8">
+            <div class="obr-head"><h3>Calibration</h3></div>
+            <p class="obr-lede">The data sources, macro anchors, and growth assumptions each model uses to turn its abstract framework into a quantitative model of the UK economy.</p>
+            <table class="comparison-table">
+            <thead><tr><th></th><th>OG-UK</th><th>OBR UK OLG</th></tr></thead>
+            <tbody>
+              <tr><td>Demographics</td><td>UN World Population Prospects (country 826)</td><td>ONS mortality statistics</td></tr>
+              <tr><td>Earnings profiles</td><td>Estimated from microdata via ability types</td><td>ONS ASHE (age-specific κ<sup>j</sup>) + HMRC earnings distribution</td></tr>
+              <tr><td>Tax functions</td><td>Estimated from PolicyEngine on SPI microdata</td><td>Directly from HMRC/GOV.UK parameters</td></tr>
+              <tr><td>Macro anchoring</td><td>ONS GDP level (model units → £)</td><td>OBR March 2024 EFO (scaling parameter S = 19.81 for GDP per person = £35,100)</td></tr>
+              <tr><td>Fiscal targets</td><td>Configurable</td><td>Calibrated to March 2024 EFO</td></tr>
+              <tr><td>Population growth</td><td>From UN WPP</td><td>n = 0.75% (OBR forecast)</td></tr>
+              <tr><td>Productivity growth</td><td>Configurable</td><td>g = 1.2% (OBR assessment)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+          <p class="obr-source">Source: OBR Working Paper No. 22, "A new UK overlapping generations model" (April 2025). OG-Core documentation and OG-UK calibration code.</p>
+
+        </div><!-- /obr-body -->
+      </div><!-- /obr-layout -->
+    </section>
+
+    <!-- ============ RESULTS TAB ============ -->
+    <section class="tab-panel" id="tab-results" role="tabpanel">
+      <div class="section-card">
+        <div class="results-placeholder">
+          <div class="icon">&#9698;</div>
+          <h2>Results coming soon</h2>
+          <p>Simulation results, transition paths, and distributional analyses will be added to this tab.</p>
+          <p>Expect GDP, wages, interest rates, revenue, debt dynamics, and generational welfare — mapped across OBR forecast horizons.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="dashboard-footer">
+      OG-UK · the UK calibration of <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a>, maintained by the <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a>
+    </footer>
+
+  </main>
+</div>
+
+<!-- Diagram modal (zoom) -->
+<div class="diagram-modal-overlay hidden" id="modal" onclick="closeModal(event)">
+  <div class="diagram-modal-content" onclick="event.stopPropagation()">
+    <button class="diagram-modal-close" onclick="document.getElementById('modal').classList.add('hidden')">&times;</button>
+    <div class="diagram-modal-title" id="modal-title"></div>
+    <div class="diagram-modal-diagram" id="modal-diagram"></div>
+  </div>
+</div>
+
+<script>
+// ============ TAB SWITCHING ============
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabPanels = document.querySelectorAll('.tab-panel');
+tabButtons.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.tab;
+    tabButtons.forEach((b) => { b.classList.toggle('active', b === btn); b.setAttribute('aria-selected', b === btn ? 'true' : 'false'); });
+    tabPanels.forEach((p) => p.classList.toggle('active', p.id === 'tab-' + target));
+    // Re-render the sticky panel when entering methodology (KaTeX may need a refresh)
+    if (target === 'methodology') { renderPanel(currentStep); }
+  });
+});
+
+// ============ OBR TOC SCROLLSPY ============
+(function() {
+  const tocLinks = document.querySelectorAll('.obr-toc-list li a');
+  const sections = Array.from(document.querySelectorAll('[id^="obr-"]'));
+  if (!tocLinks.length || !sections.length) return;
+  function update() {
+    const offset = 140;
+    let active = sections[0];
+    for (const s of sections) {
+      if (s.getBoundingClientRect().top <= offset) active = s;
+    }
+    const activeId = '#' + active.id;
+    tocLinks.forEach((a) => a.classList.toggle('active', a.getAttribute('href') === activeId));
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+// ============ SCROLLYTELLING (freeze-box) ============
+const panelData = [
+  { title: 'Overlapping generations', badge: 'Step 1', sections: [
+    { label: 'Population structure', type: 'math', equations: [
+      { label: 'Age cohorts', tex: 's = E+1, \\ldots, E+S \\quad \\text{(economically active)}' },
+      { label: 'Ability types', tex: 'j = 1, \\ldots, J \\quad \\text{with probability } \\lambda_j' },
+      { label: 'Population', tex: '\\omega_{s,t} \\;\\text{evolves with fertility, mortality, immigration}' },
+    ]},
+    { label: 'Heterogeneity', type: 'output', lines: [
+      { icon: '\\(\\to\\)', text: 'Each type has own \\(\\beta_j\\), \\(\\chi^b_j\\), \\(e_{j,s}\\)', cls: 'info' },
+      { icon: '\\(\\to\\)', text: 'Productivity \\(e_{j,s}\\) varies by age and type', cls: 'info' },
+      { icon: '\\(\\to\\)', text: 'Type assigned at birth, permanent', cls: 'info' },
+    ]}
+  ]},
+  { title: 'Household decisions', badge: 'Step 2', sections: [
+    { label: 'Utility components', type: 'math', equations: [
+      { label: 'Consumption', tex: 'u(c) = \\frac{c^{\\,1-\\sigma}}{1-\\sigma}' },
+      { label: 'Labour disutility', tex: '\\chi^n_s \\cdot g(n) \\quad \\text{(elliptical)}' },
+      { label: 'Bequest motive', tex: '\\chi^b_j \\cdot \\rho_s \\cdot \\frac{b\'^{\\,1-\\sigma}}{1-\\sigma}' },
+    ]},
+    { label: 'Euler equations', type: 'math', equations: [
+      { label: 'Labour FOC', tex: '\\chi^n_s g\'(n) = w\\,e_{j,s}(1-\\tau\'_{\\text{lab}})\\,u\'(c)' },
+      { label: 'Savings Euler', tex: 'u\'(c_t) = \\beta_j(1-\\rho_s)(1+r_{p,t+1}(1-\\tau\'_{\\text{cap}}))\\,u\'(c_{t+1})' },
+    ]}
+  ]},
+  { title: 'Firms & production', badge: 'Step 3', sections: [
+    { label: 'Technology', type: 'math', equations: [
+      { label: 'CES production', tex: 'Y_m = Z_m\\bigl[\\gamma K_m^\\rho + \\gamma_g K_{g,m}^\\rho + (1\\!-\\!\\gamma\\!-\\!\\gamma_g)(e^{g_y t}L_m)^\\rho\\bigr]^{1/\\rho}' },
+      { label: 'Wage', tex: 'w = p_m \\cdot \\text{MPL}_m' },
+      { label: 'Rental rate', tex: 'r = (1-\\tau^{\\text{corp}})\\,p_m\\,\\text{MPK}_m - \\delta + \\tau^{\\text{corp}}\\delta^\\tau + \\tau^{\\text{inv}}\\delta' },
+    ]},
+    { label: 'Features', type: 'output', lines: [
+      { icon: '\\(\\to\\)', text: '\\(M\\) industries, perfect competition', cls: 'info' },
+      { icon: '\\(\\to\\)', text: 'Public capital \\(K_g\\) generates rents', cls: 'info' },
+      { icon: '\\(\\to\\)', text: 'Nests Cobb-Douglas when \\(\\varepsilon \\to 1\\)', cls: 'info' },
+    ]}
+  ]},
+  { title: 'Government', badge: 'Step 4', sections: [
+    { label: 'Budget constraint', type: 'math', equations: [
+      { label: '', tex: 'D_{t+1} + \\text{Rev}_t = (1+r_{\\text{gov}})D_t + G + I_g + \\text{Pen} + TR + UBI' },
+    ]},
+    { label: 'Tax instruments', type: 'output', lines: [
+      { icon: '1', text: 'Income: Gouveia-Strauss from PolicyEngine', cls: 'accent' },
+      { icon: '2', text: 'Consumption: VAT + excise', cls: 'info' },
+      { icon: '3', text: 'Wealth: progressive 3-parameter', cls: 'info' },
+      { icon: '4', text: 'Corporate: flat rate by industry', cls: 'info' },
+      { icon: '5', text: 'Bequest: on inherited wealth', cls: 'info' },
+    ]}
+  ]},
+  { title: 'Market clearing', badge: 'Step 5', sections: [
+    { label: 'Equilibrium conditions', type: 'math', equations: [
+      { label: 'Labour', tex: '\\sum_{s,j} \\omega_s \\lambda_j e_{j,s} n_{j,s} = \\sum_m L_m' },
+      { label: 'Capital', tex: 'K = K^d + K^f \\quad (\\text{open economy: } \\zeta_K)' },
+      { label: 'Goods', tex: 'Y_m = C_m \\;\\; (m < M)' },
+      { label: 'Debt', tex: 'D = D^d + D^f \\quad (\\text{foreign share: } \\zeta_D)' },
+    ]},
+  ]},
+  { title: 'Solution method', badge: 'Step 6', sections: [
+    { label: 'Two-stage algorithm', type: 'math', equations: [
+      { label: 'Outer loop', tex: '\\mathbf{x} = \\{\\bar{r}_p, \\bar{r}, \\bar{w}, \\{\\bar{p}_m\\}, \\overline{BQ}, \\overline{TR}, \\text{factor}\\}' },
+      { label: 'Inner loop', tex: '\\text{Solve } 2JS \\text{ Euler equations } \\forall (j,s)' },
+      { label: 'Convergence', tex: '\\|\\mathbf{x}^{(i\')} - \\mathbf{x}^{(i)}\\| \\leq \\text{toler}_{\\text{ss}}' },
+      { label: 'TPI', tex: '\\text{Guess } \\{\\mathbf{x}_t\\}_{t=1}^T \\to \\text{solve all cohorts} \\to \\text{iterate}' },
+    ]},
+  ]},
+  { title: 'UK calibration', badge: 'Step 7', sections: [
+    { label: 'GS tax function', type: 'math', equations: [
+      { label: 'Effective tax rate', tex: '\\text{ETR}(y) = \\phi_0 - \\phi_1(Ay + B)^{-\\phi_2}' },
+      { label: 'Marginal (analytical)', tex: '\\text{MTR}(y) = \\frac{d}{dy}[y \\cdot \\text{ETR}(y)]' },
+    ]},
+    { label: 'Data sources', type: 'output', lines: [
+      { icon: '\\(\\to\\)', text: 'ONS: GDP, national accounts anchor', cls: 'info' },
+      { icon: '\\(\\to\\)', text: 'OBR: fiscal forecasts, debt target', cls: 'info' },
+      { icon: '\\(\\to\\)', text: 'HMRC/GOV.UK: tax rates, SPA', cls: 'info' },
+      { icon: '\\(\\to\\)', text: 'UN WPP: demographics (country 826)', cls: 'info' },
+      { icon: '\\(\\to\\)', text: 'PolicyEngine: tax function estimation', cls: 'info' },
+    ]}
+  ]},
+  { title: 'Static vs dynamic', badge: 'Step 8', sections: [
+    { label: 'What OG-UK adds', type: 'output', lines: [
+      { icon: '+', text: 'endogenous GDP, wages, interest rates', cls: 'accent' },
+      { icon: '+', text: 'labour supply and savings responses', cls: 'accent' },
+      { icon: '+', text: 'year-by-year transition paths', cls: 'accent' },
+      { icon: '+', text: 'generational incidence (age-varying impacts)', cls: 'accent' },
+      { icon: '+', text: 'fiscal sustainability projections', cls: 'accent' },
+    ]},
+    { label: 'Active development', type: 'output', lines: [
+      { icon: '\\(\\to\\)', text: 'Multi-industry calibration', cls: 'info' },
+      { icon: '\\(\\to\\)', text: 'Tax function refinement', cls: 'info' },
+      { icon: '\\(\\to\\)', text: 'OBR-grounded transition charts', cls: 'info' },
+    ]}
+  ]}
+];
+
+let currentStep = 0;
+const steps = document.querySelectorAll('.narrative-step');
+const panelTitle = document.getElementById('panel-title');
+const panelBadge = document.getElementById('panel-badge');
+const panelBody = document.getElementById('panel-body');
+
+function renderPanel(idx) {
+  const d = panelData[idx];
+  if (!d) return;
+  panelTitle.textContent = d.title;
+  panelBadge.textContent = d.badge;
+  let html = '';
+  for (const sec of d.sections) {
+    html += `<div class="example-section">`;
+    html += `<div class="example-section-title">${sec.label}</div>`;
+    if (sec.type === 'math') {
+      for (const eq of sec.equations) {
+        html += `<div class="math-block-dark">`;
+        if (eq.label) html += `<div class="math-label">${eq.label}</div>`;
+        html += `<span class="katex-render" data-tex="${eq.tex.replace(/"/g, '&quot;')}"></span>`;
+        html += `</div>`;
+      }
+    } else if (sec.type === 'output') {
+      html += `<div class="example-output">`;
+      for (const line of sec.lines) {
+        html += `<div class="example-output-line ${line.cls}"><span class="icon">${line.icon}</span><span>${line.text}</span></div>`;
+      }
+      html += `</div>`;
+    }
+    html += `</div>`;
+  }
+  panelBody.innerHTML = html;
+  panelBody.querySelectorAll('.katex-render').forEach(el => {
+    try { if (window.katex) katex.render(el.dataset.tex, el, { displayMode: true, throwOnError: false }); }
+    catch(e) { el.textContent = el.dataset.tex; }
+  });
+  if (typeof renderMathInElement === 'function') {
+    renderMathInElement(panelBody, {
+      delimiters: [{ left: '\\(', right: '\\)', display: false }, { left: '$$', right: '$$', display: true }],
+      throwOnError: false
+    });
+  }
+}
+
+function updateActiveStep() {
+  let active = 0;
+  const offset = window.innerHeight * 0.33;
+  steps.forEach((step, i) => {
+    const rect = step.getBoundingClientRect();
+    if (rect.top < offset) active = i;
+  });
+  if (active !== currentStep) {
+    currentStep = active;
+    steps.forEach((s, i) => s.classList.toggle('active', i === active));
+    renderPanel(active);
+  }
+}
+window.addEventListener('scroll', updateActiveStep, { passive: true });
+
+// ============ DIAGRAM MODAL ============
+function openModal(stepIdx) {
+  const diagramEl = document.getElementById('diagram-' + stepIdx);
+  const svg = diagramEl.querySelector('svg');
+  if (!svg) return;
+  const titles = ['Overlapping generations', 'Lifetime utility components', 'CES production',
+    'Government budget', 'Market clearing', 'Two-stage solution',
+    'UK data sources', 'Static vs dynamic analysis'];
+  document.getElementById('modal-title').textContent = titles[stepIdx];
+  document.getElementById('modal-diagram').innerHTML = svg.outerHTML;
+  const modalSvg = document.querySelector('#modal-diagram svg');
+  if (modalSvg) { modalSvg.style.width = '100%'; modalSvg.style.maxWidth = '900px'; }
+  document.getElementById('modal').classList.remove('hidden');
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) document.getElementById('modal').classList.add('hidden');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('modal').classList.add('hidden'); });
+
+// ============ BOOT ============
+document.addEventListener('DOMContentLoaded', function() {
+  if (steps[0]) steps[0].classList.add('active');
+  function initKaTeX() {
+    if (typeof renderMathInElement === 'function') {
+      renderMathInElement(document.body, {
+        delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\(', right: '\\)', display: false }],
+        throwOnError: false
+      });
+      renderPanel(0);
+    } else { setTimeout(initKaTeX, 100); }
+  }
+  initKaTeX();
+});
+</script>
+</body>
+</html>
