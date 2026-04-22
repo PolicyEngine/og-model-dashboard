@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
   <style>
     :root {
       --pe-color-primary-50:  #E6FFFA;
@@ -505,21 +506,242 @@
       margin: 20px 0 8px;
     }
 
-    /* ===== Results tab (placeholder) ===== */
-    .results-placeholder {
-      text-align: center; padding: 80px 40px;
+    /* ===== Results tab ===== */
+    .results-headline {
+      padding: 4px 4px 18px;
+      margin-bottom: 4px;
     }
-    .results-placeholder .icon {
-      font-size: 3rem; color: var(--pe-color-primary-400);
-      margin-bottom: 16px;
+    .results-headline .intro-list {
+      margin: 6px 0 14px; padding-left: 22px;
+      font-size: 0.97rem; color: var(--pe-color-gray-600);
+      line-height: 1.75;
     }
-    .results-placeholder h2 {
-      font-size: 1.35rem; font-weight: 700; color: var(--pe-color-gray-900);
-      margin-bottom: 10px; letter-spacing: -0.02em;
+    .results-headline .intro-list li { margin-bottom: 4px; }
+    .results-headline .intro-list strong { color: var(--pe-color-gray-800); }
+    .results-reform-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-radius: 999px;
+      background: var(--accent-light); color: var(--accent);
+      font-size: 0.78rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 14px;
     }
-    .results-placeholder p {
-      font-size: 0.95rem; color: var(--pe-color-gray-600); max-width: 520px;
-      line-height: 1.7; margin: 0 auto 8px;
+    .results-reform-badge .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--pe-color-primary-500);
+    }
+    .results-note {
+      margin-top: 14px; padding: 12px 16px;
+      background: var(--pe-color-gray-50);
+      border-left: 3px solid var(--pe-color-primary-400);
+      border-radius: 6px;
+      font-size: 0.86rem; color: var(--pe-color-gray-600);
+      line-height: 1.6;
+    }
+    .results-note code {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+      font-size: 0.82rem; background: #fff;
+      padding: 1px 6px; border-radius: 4px;
+      border: 1px solid var(--pe-color-border-light);
+    }
+
+    /* Macro impact table */
+    .impact-table-wrap { overflow-x: auto; margin-top: 6px; }
+    .impact-table {
+      width: 100%; border-collapse: collapse; font-size: 0.92rem;
+    }
+    .impact-table th, .impact-table td {
+      padding: 12px 14px; text-align: right;
+      border-bottom: 1px solid var(--pe-color-gray-100);
+    }
+    .impact-table th:first-child, .impact-table td:first-child {
+      text-align: left; color: var(--pe-color-gray-700); font-weight: 500;
+    }
+    .impact-table thead th {
+      font-size: 0.72rem; font-weight: 600;
+      color: var(--pe-color-gray-500);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      border-bottom: 2px solid var(--pe-color-gray-200);
+    }
+    .impact-table tbody tr:hover { background: var(--pe-color-gray-50); }
+    .impact-table .num {
+      font-variant-numeric: tabular-nums;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+      font-size: 0.88rem;
+    }
+    .impact-table .delta-pos { color: #0d7a63; }
+    .impact-table .delta-neg { color: #b03a3a; }
+    .impact-rate-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 16px; padding: 12px 14px;
+      background: var(--accent-light); border-radius: 10px;
+      font-size: 0.92rem;
+    }
+    .impact-rate-row .label { color: var(--pe-color-gray-700); font-weight: 500; }
+    .impact-rate-row .val {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+      font-weight: 600; color: var(--accent);
+    }
+
+    /* Transition path chart */
+    .tpi-chart-wrap {
+      margin-top: 6px;
+      background: var(--pe-color-gray-50);
+      border-radius: 14px; padding: 18px 14px 10px;
+    }
+    .tpi-chart { width: 100%; height: auto; display: block; }
+    .tpi-legend {
+      display: flex; flex-wrap: wrap; gap: 14px 22px;
+      justify-content: center; padding: 10px 6px 2px;
+      font-size: 0.82rem; color: var(--pe-color-gray-600);
+    }
+    .tpi-legend .item { display: inline-flex; align-items: center; gap: 6px; }
+    .tpi-legend .swatch {
+      width: 14px; height: 3px; border-radius: 2px;
+    }
+
+    /* Results toolbar (single-select dropdowns) */
+    .results-toolbar {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      align-items: center;
+      margin: 6px 0 18px;
+    }
+
+    /* Custom select */
+    .select { position: relative; display: inline-flex; }
+    .select-button {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 7px 12px 7px 14px; border-radius: 10px;
+      font: inherit; font-size: 0.86rem;
+      background: #fff; color: var(--pe-color-gray-800);
+      border: 1px solid var(--pe-color-gray-200);
+      cursor: pointer;
+      transition: border-color 120ms, box-shadow 120ms, background 120ms;
+    }
+    .select-button:hover { border-color: var(--pe-color-primary-300); }
+    .select-button[aria-expanded="true"] {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+    .select-label {
+      font-size: 0.7rem; font-weight: 700;
+      color: var(--pe-color-gray-500);
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .select-value { font-weight: 600; color: var(--pe-color-gray-800); }
+    .select-caret {
+      display: inline-block; margin-left: 2px;
+      font-size: 0.7rem; color: var(--pe-color-gray-500);
+      transition: transform 120ms ease;
+    }
+    .select-button[aria-expanded="true"] .select-caret { transform: rotate(180deg); }
+    .select-menu {
+      position: absolute; top: calc(100% + 6px); left: 0;
+      min-width: 100%; z-index: 40;
+      list-style: none; padding: 6px; margin: 0;
+      background: #fff;
+      border: 1px solid var(--pe-color-border-light);
+      border-radius: 12px;
+      box-shadow: 0 16px 40px rgba(16,24,40,0.12);
+      max-height: 320px; overflow-y: auto;
+    }
+    .select-menu[hidden] { display: none; }
+    .select-option {
+      padding: 8px 12px; border-radius: 7px;
+      font-size: 0.88rem; color: var(--pe-color-gray-700);
+      cursor: pointer; white-space: nowrap;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 18px;
+    }
+    .select-option:hover { background: var(--pe-color-gray-100); }
+    .select-option[aria-selected="true"] {
+      background: var(--accent-light);
+      color: var(--accent); font-weight: 600;
+    }
+    .select-option[aria-selected="true"]::after {
+      content: "\2713"; font-size: 0.78rem;
+    }
+
+    /* Static per-section legend (sits below the panel grid, outside Plotly) */
+    .plot-legend {
+      margin: 22px 2px 0;
+      display: flex; flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 34px;
+      font-size: 0.82rem; color: var(--pe-color-gray-600);
+    }
+    .legend-group {
+      display: flex; flex-wrap: wrap; align-items: center;
+      gap: 6px 20px;
+    }
+    .legend-group + .legend-group::before {
+      content: ""; display: inline-block; width: 1px; height: 14px;
+      background: var(--pe-color-gray-200); margin-right: 6px;
+      align-self: center;
+    }
+    .legend-item {
+      display: inline-flex; align-items: center; gap: 8px;
+      white-space: nowrap;
+    }
+    .legend-line {
+      display: inline-block; width: 24px; height: 0;
+      border-top-width: 2.5px; border-top-style: solid;
+      border-top-color: #4B5563;
+      vertical-align: middle;
+    }
+    .legend-line.dashed { border-top-style: dashed; }
+    .legend-line.dotted { border-top-style: dotted; border-top-width: 1.8px; }
+    .legend-line.grey   { border-top-color: #95a5a6; }
+    .legend-line.gold   { border-top-color: #b8860b; }
+
+    /* Plotly panel grid — always a single big panel fills the card */
+    .panel-grid {
+      display: block;
+      margin-top: 6px;
+    }
+    .panel-cell {
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+    .panel-cell .plot {
+      width: 100%; height: 460px;
+    }
+    .panel-note {
+      font-size: 0.82rem; color: var(--pe-color-gray-500);
+      margin-top: 8px; font-style: italic;
+    }
+    @media (max-width: 700px) {
+      .panel-cell .plot { height: 360px; }
+    }
+
+    /* Calibration figures */
+    .calib-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 18px; margin-top: 8px;
+    }
+    .calib-fig {
+      border: 1px solid var(--pe-color-border-light);
+      border-radius: 14px; overflow: hidden;
+      background: #fff;
+      display: flex; flex-direction: column;
+    }
+    .calib-fig img {
+      width: 100%; height: auto; display: block;
+      background: #fff;
+    }
+    .calib-fig figcaption {
+      padding: 12px 14px;
+      font-size: 0.82rem; color: var(--pe-color-gray-600);
+      line-height: 1.5;
+      border-top: 1px solid var(--pe-color-gray-100);
+    }
+    .calib-fig figcaption strong {
+      display: block; color: var(--pe-color-gray-800);
+      font-size: 0.88rem; margin-bottom: 3px;
+    }
+    @media (max-width: 960px) {
+      .calib-grid { grid-template-columns: 1fr; }
     }
 
     /* Footer */
@@ -570,7 +792,7 @@
   <!-- ================= STICKY HEADER ================= -->
   <header class="title-row">
     <div class="title-row-inner">
-      <h1>OG-UK: Dynamic macroeconomic modelling</h1>
+      <h1>PolicyEngine Macro: Overlapping-generations model</h1>
     </div>
   </header>
 
@@ -578,30 +800,34 @@
   <main class="main-content">
 
     <p class="intro-text">
-      <strong>OG-UK</strong> is the UK calibration of
-      <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a>, an open-source
-      overlapping-generations dynamic general equilibrium framework maintained by the
-      <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a> (PSL).
-      Where a static engine answers <em>who gains and loses today</em>, OG-UK answers what happens as households and firms
-      adjust over time: how GDP, wages, interest rates, investment, and revenue evolve year-by-year along a full transition
-      path after a reform, and how the burden falls across generations.
+      <strong>PolicyEngine Macro</strong> is the macroeconomic arm of
+      <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a>. Where the static engine
+      answers <em>who gains and loses today</em>, the macro model answers <em>what happens as the economy adjusts</em>
+      &mdash; how GDP, wages, interest rates, investment and tax revenue evolve year by year after a reform, and how
+      the burden falls across generations.
     </p>
     <p class="intro-text">
-      OG-UK is calibrated to UK demographics (UN WPP), national accounts (ONS), and fiscal aggregates (OBR). Tax functions
-      are smooth Gouveia–Strauss forms estimated from UK microdata. The framework supports five tax instruments
-      (income, consumption, wealth, corporate, bequest), multi-industry CES production with public capital, a configurable
-      fiscal closure rule, and parameterised capital mobility.
+      It is powered by <strong>OG-UK</strong>, the UK calibration of
+      <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a> &mdash; an open-source
+      overlapping-generations general equilibrium framework maintained by the
+      <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a> (PSL). Demographics
+      come from the UN World Population Prospects, national accounts from the ONS and fiscal aggregates from the OBR;
+      tax functions are estimated on PolicyEngine microdata. The framework handles five tax instruments (income,
+      consumption, wealth, corporate, bequest), multi-industry CES production with public capital, a configurable
+      fiscal closure rule and parameterised capital mobility.
     </p>
     <p class="intro-text">
-      Use the tabs below to explore OG-UK's <strong>methodology</strong>, how it <strong>compares with the OBR's new UK OLG
-      model</strong> (Brzezinski, Hantzsche &amp; Watson, 2025), and forthcoming <strong>simulation results</strong>.
+      The tabs below walk through the <strong>method</strong>, set it alongside the <strong>OBR's new UK OLG model</strong>
+      (Brzezinski, Hantzsche &amp; Watson, 2025), show the <strong>code</strong> that runs it, and work through an
+      <strong>example</strong> reform simulation end to end.
     </p>
 
     <!-- Tab bar -->
     <nav class="tab-bar" role="tablist">
-      <button class="tab-button active" data-tab="methodology" role="tab" aria-selected="true">Methodology</button>
-      <button class="tab-button" data-tab="obr" role="tab" aria-selected="false">OBR model comparison</button>
-      <button class="tab-button" data-tab="results" role="tab" aria-selected="false">Results</button>
+      <button class="tab-button active" data-tab="methodology" role="tab" aria-selected="true">Method</button>
+      <button class="tab-button" data-tab="obr" role="tab" aria-selected="false">OBR comparison</button>
+      <button class="tab-button" data-tab="code" role="tab" aria-selected="false">Code</button>
+      <button class="tab-button" data-tab="results" role="tab" aria-selected="false">Example</button>
     </nav>
 
     <!-- ============ METHODOLOGY TAB ============ -->
@@ -936,36 +1162,20 @@
     <section class="tab-panel" id="tab-obr" role="tabpanel">
       <div class="obr-layout">
 
-        <!-- Sticky TOC -->
-        <aside class="obr-toc">
-          <div class="obr-toc-label">Contents</div>
-          <ol class="obr-toc-list">
-            <li><a href="#obr-overview">Overview</a></li>
-            <li><a href="#obr-1">Production</a></li>
-            <li><a href="#obr-2">Households</a></li>
-            <li><a href="#obr-3">Bequests</a></li>
-            <li><a href="#obr-4">Tax system</a></li>
-            <li><a href="#obr-5">Government</a></li>
-            <li><a href="#obr-6">Open economy</a></li>
-            <li><a href="#obr-7">Solution method</a></li>
-            <li><a href="#obr-8">Calibration</a></li>
-          </ol>
-        </aside>
-
         <div class="obr-body">
 
           <!-- Overview / hero -->
           <div class="section-card" id="obr-overview">
             <div class="obr-head"><h3>Overview</h3></div>
             <p class="obr-lede">
-              This tab compares <strong>OG-UK</strong> — the UK calibration of
+              This tab is a <strong>side-by-side comparison</strong> of the two UK overlapping-generations macro models: <strong>OG-UK</strong> &mdash; the UK calibration of
               <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a>, maintained by the
-              <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a> —
-              with the <strong>OBR UK OLG</strong> model described in
-              <a href="assets/obr-working-paper-22.pdf" target="_blank" rel="noreferrer">Working Paper No. 22</a>
-              (Brzezinski, Hantzsche &amp; Watson, April 2025). The two models occupy complementary niches:
-              <strong>OG-UK</strong> is structurally rich and traces full year-by-year transition paths, while
-              <strong>OBR UK OLG</strong> is tightly calibrated to UK fiscal institutions and steady-state outcomes.
+              <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a> &mdash; and the <strong>OBR UK OLG</strong> model described in
+              <a href="assets/obr-working-paper-22.pdf" target="_blank" rel="noreferrer">Working Paper No.&nbsp;22</a>
+              (Brzezinski, Hantzsche &amp; Watson, April&nbsp;2025).
+            </p>
+            <p class="obr-lede">
+              The sections below walk through how each model treats production, households, bequests, the tax system, government, the open economy, and the solution method &amp; calibration &mdash; so you can see where the two approaches agree, where they differ, and when to reach for one over the other. The two models occupy complementary niches: OG-UK is structurally rich and traces full year-by-year transition paths, while OBR UK OLG is tightly calibrated to UK fiscal institutions and steady-state outcomes.
             </p>
             <table class="comparison-table">
               <thead><tr><th>Dimension</th><th>OG-UK strength</th><th>OBR UK OLG strength</th></tr></thead>
@@ -1013,7 +1223,6 @@
               <tr><td>Labour disutility</td><td><strong>Elliptical function</strong> — always interior solutions</td><td>Implicit in Cobb-Douglas composite — corner solutions possible</td></tr>
               <tr><td>Risk aversion parameter</td><td>σ on consumption only</td><td>σ₂ = 2 on consumption-leisure composite</td></tr>
               <tr><td>Consumption aggregation</td><td>Stone-Geary Cobb-Douglas (subsistence levels, I goods)</td><td>Single consumption good</td></tr>
-              <tr><td>Age range</td><td>S cohorts (typically 80, ages 21–100)</td><td>81 cohorts (ages 20–100)</td></tr>
               <tr><td>Discount factor</td><td>β<sub>j</sub> varies by ability type</td><td>β = 0.99 (uniform)</td></tr>
             </tbody>
           </table>
@@ -1029,7 +1238,6 @@
               <tr><td>Motive</td><td>"Warm glow" weighted by mortality probability ρ<sub>s</sub></td><td>"Warm glow" with target level, kicks in at age j* = 91</td></tr>
               <tr><td>Varies by type</td><td>Yes — χ<sup>b</sup><sub>j</sub> calibrated per ability type</td><td>Uniform (φ₁ = 10, φ₂ = 4.55)</td></tr>
               <tr><td>Distribution</td><td>To surviving households</td><td>Equal distribution to ages 55–75</td></tr>
-              <tr><td>Accidental bequests</td><td>Included</td><td>Included — from those dying before j*</td></tr>
             </tbody>
           </table>
         </div>
@@ -1037,22 +1245,13 @@
           <!-- 4. Tax system -->
           <div class="section-card" id="obr-4">
             <div class="obr-head"><h3>Tax system</h3></div>
-            <p class="obr-lede">Which taxes each model captures, and whether they are represented as <strong>smooth estimated functions</strong> (OG-UK) or the actual <strong>UK bands and thresholds</strong> (OBR). The OBR approach makes specific policy levers — "raise the basic rate by 1pp" — directly simulable; OG-UK's approach is more general but less directly tied to specific policy levers.</p>
-            <table class="comparison-table">
-            <thead><tr><th></th><th>OG-UK</th><th>OBR UK OLG</th></tr></thead>
-            <tbody>
-              <tr><td>Income tax</td><td><strong>Gouveia-Strauss smooth functions</strong> estimated from PolicyEngine microdata</td><td><strong>Explicit UK tax bands</strong> (3 thresholds: £12,570 / £50,270 / £125,140; rates: 20% / 40% / 45%)</td></tr>
-              <tr><td>National Insurance</td><td>Folded into income tax functions</td><td><strong>Modelled separately</strong> with own thresholds (£12,570 / £50,270) and rates (8% / 2%)</td></tr>
-              <tr><td>Consumption tax</td><td>Linear rates, can vary by good</td><td>Effective VAT rate τ<sup>c</sup> = 9.3%</td></tr>
-              <tr><td>Wealth tax</td><td>Progressive 3-parameter function</td><td>Not modelled</td></tr>
-              <tr><td>Corporate tax</td><td>Flat rate by industry</td><td>Not modelled</td></tr>
-              <tr><td>Bequest tax</td><td>On inherited wealth</td><td>Not modelled</td></tr>
-              <tr><td>Pension tax relief</td><td>Not explicitly modelled</td><td><strong>Explicitly modelled</strong> — employee (5%) and employer (3%) contributions exempt from income tax up to annual allowance</td></tr>
-              <tr><td>Pension withdrawal tax</td><td>Not explicitly modelled</td><td><strong>Explicitly modelled</strong> via pshare parameter on asset drawdowns</td></tr>
-              <tr><td>Total tax instruments</td><td><strong>5 types</strong></td><td><strong>3 types</strong> (income tax, NICs, VAT)</td></tr>
-            </tbody>
-          </table>
-        </div>
+            <p class="obr-lede">
+              <strong>OG-UK</strong> estimates smooth parametric tax functions (Gouveia&ndash;Strauss, DEP or linear) from microdata generated by <strong>PolicyEngine UK</strong>, an open-source microsimulation of the UK income-tax and NICs rulebook. Income tax and NICs are folded into these estimated functions; consumption, wealth, corporate and bequest taxes are modelled separately on top. Any reform PolicyEngine can represent &mdash; rate, threshold or allowance changes &mdash; flows straight through by re-estimating on post-reform microdata.
+            </p>
+            <p class="obr-lede">
+              The <strong>OBR UK OLG</strong> model instead hard-codes the statutory UK schedule directly: income tax as explicit bands (PA &pound;12,570, HRT &pound;50,270, ART &pound;125,140 at 20&nbsp;/&nbsp;40&nbsp;/&nbsp;45%); NICs as a separate instrument (&pound;12,570 / &pound;50,270 at 8&nbsp;/&nbsp;2%); VAT as an effective 9.3%; pension relief and drawdown taxation modelled explicitly. A lever like "+1&nbsp;pp basic rate from 2027&ndash;28" is then one-parameter simulable &mdash; at the cost of less flexibility for reforms that reshape the schedule.
+            </p>
+          </div>
 
           <!-- 5. Government and fiscal policy -->
           <div class="section-card" id="obr-5">
@@ -1065,7 +1264,6 @@
               <tr><td>Fiscal closure rule</td><td><strong>Configurable</strong>: adjust G, TR, or combination after period T<sub>G1</sub></td><td><strong>Residual Budgetary Item (RBI)</strong> adjusts to stabilise debt/GDP at 100%</td></tr>
               <tr><td>Debt target</td><td>Configurable</td><td>Fixed at 100% of GDP</td></tr>
               <tr><td>Public investment</td><td>Explicit (I<sub>g</sub> contributes to public capital stock)</td><td>Not modelled as productive</td></tr>
-              <tr><td>UBI</td><td>Available as policy lever</td><td>Not available</td></tr>
               <tr><td>Welfare transfers</td><td>Lump-sum TR</td><td><strong>Age-dependent</strong> transfers (γ<sup>j</sup> scaling) calibrated to OBR welfare spending projections</td></tr>
               <tr><td>State pension</td><td>Part of transfers</td><td><strong>Explicitly modelled</strong> as age-dependent welfare transfer from state pension age onwards</td></tr>
               <tr><td>Spending categories</td><td>G (public goods) + I<sub>g</sub> (infrastructure) + pensions + TR + UBI</td><td>Welfare transfers + residual non-interest spending (G⁰)</td></tr>
@@ -1088,42 +1286,16 @@
           </table>
         </div>
 
-          <!-- 7. Solution method -->
+          <!-- 7. Solution method & calibration -->
           <div class="section-card" id="obr-7">
-            <div class="obr-head"><h3>Solution method</h3></div>
-            <p class="obr-lede">The computational strategy each model uses to find equilibrium. The critical difference: OG-UK solves <strong>Euler equations</strong> and computes full <strong>transition paths</strong>, so it can show how the economy adjusts year by year (e.g. GDP dips in years 1–5 and recovers by year 15). The OBR model uses <strong>Value Function Iteration</strong> and compares long-run steady states only, without modelling the path between them.</p>
-            <table class="comparison-table">
-            <thead><tr><th></th><th>OG-UK</th><th>OBR UK OLG</th></tr></thead>
-            <tbody>
-              <tr><td>Approach</td><td><strong>Euler equation</strong> — solve first-order conditions directly</td><td><strong>Value Function Iteration</strong> (Kirkby VFI toolkit)</td></tr>
-              <tr><td>Transition dynamics</td><td><strong>Yes</strong> — full Time Path Iteration (TPI), year-by-year</td><td><strong>No</strong> — steady-state comparisons only</td></tr>
-              <tr><td>Expectations</td><td>Rational expectations over full transition path</td><td>Rational expectations within steady state</td></tr>
-              <tr><td>Software</td><td>Python (open-source, GitHub)</td><td>MATLAB (Kirkby VFI toolkit)</td></tr>
-              <tr><td>Parallelisation</td><td>By ability type (inner loop)</td><td>GPU/CPU via VFI toolkit</td></tr>
-              <tr><td>Runtime</td><td>Longer (full transition path)</td><td>&lt;2 min (steady state), &lt;5 min (scenarios)</td></tr>
-              <tr><td>State space</td><td>Continuous (Euler equations)</td><td>Discretised (value function on grid over assets and earnings shocks)</td></tr>
-              <tr><td>Open-source</td><td>Yes</td><td>No (uses third-party VFI toolkit)</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-          <!-- 8. Calibration -->
-          <div class="section-card" id="obr-8">
-            <div class="obr-head"><h3>Calibration</h3></div>
-            <p class="obr-lede">The data sources, macro anchors, and growth assumptions each model uses to turn its abstract framework into a quantitative model of the UK economy.</p>
-            <table class="comparison-table">
-            <thead><tr><th></th><th>OG-UK</th><th>OBR UK OLG</th></tr></thead>
-            <tbody>
-              <tr><td>Demographics</td><td>UN World Population Prospects (country 826)</td><td>ONS mortality statistics</td></tr>
-              <tr><td>Earnings profiles</td><td>Estimated from microdata via ability types</td><td>ONS ASHE (age-specific κ<sup>j</sup>) + HMRC earnings distribution</td></tr>
-              <tr><td>Tax functions</td><td>Estimated from PolicyEngine on SPI microdata</td><td>Directly from HMRC/GOV.UK parameters</td></tr>
-              <tr><td>Macro anchoring</td><td>ONS GDP level (model units → £)</td><td>OBR March 2024 EFO (scaling parameter S = 19.81 for GDP per person = £35,100)</td></tr>
-              <tr><td>Fiscal targets</td><td>Configurable</td><td>Calibrated to March 2024 EFO</td></tr>
-              <tr><td>Population growth</td><td>From UN WPP</td><td>n = 0.75% (OBR forecast)</td></tr>
-              <tr><td>Productivity growth</td><td>Configurable</td><td>g = 1.2% (OBR assessment)</td></tr>
-            </tbody>
-          </table>
-        </div>
+            <div class="obr-head"><h3>Solution method &amp; calibration</h3></div>
+            <p class="obr-lede">
+              Both models are rational-expectations dynamic general equilibrium, but they solve different problems. <strong>OG-UK</strong> solves households' first-order conditions directly via Euler equations and iterates to a full <strong>year-by-year transition path</strong> (Time Path Iteration), so a reform shows up as a complete trajectory rather than a long-run snapshot. <strong>OBR UK OLG</strong> uses <strong>Value Function Iteration</strong> (Kirkby's VFI toolkit) and compares long-run steady states only; it does not model the adjustment path between them. As a consequence OG-UK's state space is continuous and its expectations run over the whole path, while the OBR model discretises assets and stochastic earnings on a grid and forms expectations within each steady state.
+            </p>
+            <p class="obr-lede">
+              Calibration differs mainly in data sources and anchors. <strong>OG-UK</strong> draws demographics from the UN World Population Prospects (country 826), age-earning profiles from microdata via its permanent ability types, and tax functions from PolicyEngine on SPI microdata; macro aggregates are anchored to ONS GDP levels, and fiscal targets and growth assumptions are configurable. <strong>OBR UK OLG</strong> uses ONS mortality statistics for demographics, ONS ASHE plus the HMRC earnings distribution for age-earnings profiles, and HMRC / GOV.UK parameters directly for taxes; it is pinned to the OBR March 2024 EFO &mdash; GDP per person of &pound;35,100 (scaling parameter S&nbsp;=&nbsp;19.81), population growth n&nbsp;=&nbsp;0.75%, productivity growth g&nbsp;=&nbsp;1.2%, and debt / GDP stabilised at 100%.
+            </p>
+          </div>
 
           <p class="obr-source">Source: OBR Working Paper No. 22, "A new UK overlapping generations model" (April 2025). OG-Core documentation and OG-UK calibration code.</p>
 
@@ -1133,18 +1305,102 @@
 
     <!-- ============ RESULTS TAB ============ -->
     <section class="tab-panel" id="tab-results" role="tabpanel">
+
+      <!-- Headline reform (no card) -->
+      <div class="results-headline">
+        <h2 class="section-heading">Example reform: basic rate of income tax, +1&nbsp;pp from 2027&ndash;28</h2>
+        <p class="section-description">
+          A worked OG-UK simulation: what happens to the UK economy if the income-tax basic rate rises by one percentage point from tax year <strong>2027&ndash;28</strong>. Each chart plots the model's 30-year reform path alongside observed history and the OBR's November&nbsp;2025 EFO baseline &mdash; the gap between the two lines from 2027 onwards is the reform effect on that series.
+        </p>
+        <p class="section-description">
+          Three views are available:
+        </p>
+        <ul class="intro-list">
+          <li><strong>Macro aggregates</strong> &mdash; the six headline national-accounts series (consumption, investment, government, tax revenue, debt, GDP).</li>
+          <li><strong>Sector aggregates</strong> &mdash; the percentage reform impact on output, capital and labour, with all eight sectors overlaid.</li>
+          <li><strong>Sector detail</strong> &mdash; any one sector &times; variable cell, with history for context.</li>
+        </ul>
+        <p class="section-description">
+          Pick the view with the dropdown inside each box. In every plot the <strong>solid line</strong> is OBR / ONS outturn stitched to the Nov&nbsp;2025 EFO baseline, and the <strong>dashed line</strong> is OG-UK's reform path.
+        </p>
+      </div>
+
+      <!-- Macro: 6 panels (consumption + 5 others) -->
       <div class="section-card">
-        <div class="results-placeholder">
-          <div class="icon">&#9698;</div>
-          <h2>Results coming soon</h2>
-          <p>Simulation results, transition paths, and distributional analyses will be added to this tab.</p>
-          <p>Expect GDP, wages, interest rates, revenue, debt dynamics, and generational welfare — mapped across OBR forecast horizons.</p>
+        <h2 class="section-heading">Macro aggregates &mdash; the whole economy</h2>
+        <p class="section-description">
+          Six headline series for the UK economy: <strong>consumption, investment, government consumption, tax revenue, debt and GDP</strong>. Flows are shown as a share of GDP (the natural scale for fiscal aggregates); GDP itself is in &pound;bn at current prices. Pick one from the dropdown &mdash; the vertical gap between the solid baseline and the dashed reform path from 2027 onwards is the reform effect on that series.
+        </p>
+        <div class="results-toolbar" data-kind="macro6" data-target="panels-macro6"></div>
+        <div id="panels-macro6" class="panel-grid cols-3" aria-label="Macro panels"></div>
+        <div class="plot-legend">
+          <div class="legend-group">
+            <span class="legend-item"><span class="legend-line"></span>OBR outturn / forecast</span>
+            <span class="legend-item"><span class="legend-line dashed"></span>Reform&nbsp;+1&nbsp;pp basic rate</span>
+          </div>
+          <div class="legend-group">
+            <span class="legend-item"><span class="legend-line dotted grey"></span>Outturn&nbsp;/ forecast boundary (2023)</span>
+            <span class="legend-item"><span class="legend-line dashed gold"></span>Reform start (2027)</span>
+          </div>
         </div>
+      </div>
+
+      <!-- Sector aggregate: 3 panels -->
+      <div class="section-card">
+        <h2 class="section-heading">Impact across sectors</h2>
+        <p class="section-description">
+          The reform's effect on the whole industry mix at once. Pick <strong>output, capital or labour</strong> from the dropdown and the chart overlays all eight sectors, plotted as <strong>percentage change from baseline</strong>. Positive values: the sector is larger under reform than in the baseline. Negative values: smaller. A one-look answer to &ldquo;which sectors move most?&rdquo;
+        </p>
+        <div class="results-toolbar" data-kind="sector3" data-target="panels-sector3"></div>
+        <div id="panels-sector3" class="panel-grid cols-3" aria-label="Sector aggregate panels"></div>
+        <div class="plot-legend">
+          <div class="legend-group">
+            <span class="legend-item"><span class="legend-line" style="border-top-color:#e6194b"></span>Energy</span>
+            <span class="legend-item"><span class="legend-line" style="border-top-color:#3cb44b"></span>Manufacturing</span>
+            <span class="legend-item"><span class="legend-line" style="border-top-color:#ffe119"></span>Construction</span>
+            <span class="legend-item"><span class="legend-line" style="border-top-color:#4363d8"></span>Trade&nbsp;&amp; Transport</span>
+            <span class="legend-item"><span class="legend-line" style="border-top-color:#f58231"></span>Info&nbsp;&amp; Finance</span>
+            <span class="legend-item"><span class="legend-line" style="border-top-color:#911eb4"></span>Real Estate</span>
+            <span class="legend-item"><span class="legend-line" style="border-top-color:#42d4f4"></span>Business Services</span>
+            <span class="legend-item"><span class="legend-line" style="border-top-color:#f032e6"></span>Public&nbsp;&amp; Other</span>
+          </div>
+          <div class="legend-group">
+            <span class="legend-item"><span class="legend-line dashed gold"></span>Reform start (2027)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sector detailed: 24 panels -->
+      <div class="section-card">
+        <h2 class="section-heading">One sector at a time</h2>
+        <p class="section-description">
+          The finest-grained view: any single <strong>sector &times; variable</strong> cell of the economy. Pick a variable (output, capital or labour) and a sector, and the plot shows that cell's full path indexed to 2000&nbsp;=&nbsp;100. Solid = ONS outturn stitched to the OBR Nov&nbsp;2025 EFO baseline; dashed = OG-UK's +1&nbsp;pp basic-rate reform. History gives context for how far off-baseline the reform pushes that sector.
+        </p>
+        <div class="results-toolbar" data-kind="sector24" data-target="panels-sector24"></div>
+        <div id="panels-sector24" class="panel-grid cols-4 sector24" aria-label="Sector detail panels"></div>
+        <div class="plot-legend">
+          <div class="legend-group">
+            <span class="legend-item"><span class="legend-line"></span>ONS outturn / forecast</span>
+            <span class="legend-item"><span class="legend-line dashed"></span>Reform&nbsp;+1&nbsp;pp basic rate</span>
+          </div>
+          <div class="legend-group">
+            <span class="legend-item"><span class="legend-line dotted grey"></span>Outturn&nbsp;/ forecast boundary (2023)</span>
+            <span class="legend-item"><span class="legend-line dashed gold"></span>Reform start (2027)</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============ CODE EXAMPLE TAB ============ -->
+    <section class="tab-panel" id="tab-code" role="tabpanel">
+      <div class="section-card">
+        <!-- content to be added -->
       </div>
     </section>
 
     <footer class="dashboard-footer">
-      OG-UK · the UK calibration of <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a>, maintained by the <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a>
+      <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a> Macro &middot; built on <strong>OG-UK</strong>, the UK calibration of <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a>, maintained by the <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a>
     </footer>
 
   </main>
@@ -1377,6 +1633,304 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   initKaTeX();
 });
+</script>
+
+<script>
+  // ============ Results tab: render Plotly panels from tpi_data.json ============
+  (function () {
+    // Fallback palette only used if a trace has no colour in the JSON
+    const FALLBACK_PALETTE = ['#e6194b','#3cb44b','#ffe119','#4363d8','#f58231','#911eb4','#42d4f4','#f032e6'];
+
+    // --- Panel tagging: derive (var, sector?) from the subplot title ---
+    const MACRO_VAR_MAP = {
+      'consumption':       { tag: 'consumption', label: 'Consumption' },
+      'investment':        { tag: 'investment',  label: 'Investment' },
+      'gov. consumption':  { tag: 'government',  label: 'Government' },
+      'tax revenue':       { tag: 'tax_revenue', label: 'Tax revenue' },
+      'debt':              { tag: 'debt',        label: 'Debt' },
+      'gdp':               { tag: 'gdp',         label: 'GDP' },
+    };
+    const SECTOR_VAR_ORDER = [
+      { tag: 'output',  label: 'Output'  },
+      { tag: 'capital', label: 'Capital' },
+      { tag: 'labour',  label: 'Labour'  },
+    ];
+    const SECTOR_ORDER = [
+      { tag: 'energy',            label: 'Energy'            },
+      { tag: 'manufacturing',     label: 'Manufacturing'     },
+      { tag: 'construction',      label: 'Construction'      },
+      { tag: 'trade_transport',   label: 'Trade & Transport' },
+      { tag: 'info_finance',      label: 'Info & Finance'    },
+      { tag: 'real_estate',       label: 'Real Estate'       },
+      { tag: 'business_services', label: 'Business Services' },
+      { tag: 'public_other',      label: 'Public & Other'    },
+    ];
+
+    function slug(s) {
+      return String(s).toLowerCase().replace(/&/g,'').replace(/[^a-z]+/g,'_').replace(/^_|_$/g,'');
+    }
+    function tagPanel(kind, title) {
+      if (kind === 'macro6') {
+        const key = title.toLowerCase().split('(')[0].trim();
+        const m = MACRO_VAR_MAP[key];
+        return { var: m ? m.tag : slug(key) };
+      }
+      if (kind === 'sector3') {
+        const m = title.match(/Sector\s+([A-Za-z]+)/);
+        return { var: m ? m[1].toLowerCase() : '' };
+      }
+      if (kind === 'sector24') {
+        // "Energy — Output" (em-dash in the source)
+        const parts = title.split(/\s+[—–-]\s+/);
+        return { sector: slug(parts[0] || ''), var: (parts[1] || '').toLowerCase().trim() };
+      }
+      return {};
+    }
+
+    function baseLayout(title) {
+      return {
+        margin: { l: 86, r: 18, t: 18, b: 44 },
+        paper_bgcolor: '#ffffff',
+        plot_bgcolor: '#ffffff',
+        font: { family: 'Inter, Roboto, sans-serif', size: 10, color: '#4B5563' },
+        xaxis: {
+          showgrid: true, gridcolor: '#ececec', zeroline: false,
+          color: '#6B7280', ticks: 'outside', tickfont: { size: 10 },
+          linecolor: '#E2E8F0'
+        },
+        yaxis: {
+          title: {
+            text: title,
+            font: { size: 13, color: '#1F2937', family: 'Inter, Roboto, sans-serif' },
+            standoff: 14
+          },
+          showgrid: true, gridcolor: '#ececec', zeroline: false,
+          color: '#6B7280', tickfont: { size: 10 }, linecolor: '#E2E8F0',
+          automargin: true
+        },
+        showlegend: false,
+        hovermode: 'x unified',
+        shapes: []
+      };
+    }
+
+    function buildShapes(rawShapes) {
+      return (rawShapes || []).map(s => ({
+        type: 'line',
+        xref: 'x', yref: 'paper',
+        x0: s.x0, x1: s.x1, y0: 0, y1: 1,
+        line: {
+          color: s.color || '#95a5a6',
+          width: s.width || 1,
+          dash: s.dash || 'dot'
+        }
+      }));
+    }
+
+    function renderPanels(panels, containerId, kind) {
+      const host = document.getElementById(containerId);
+      if (!host) return;
+      host.innerHTML = '';
+      panels.forEach((panel, idx) => {
+        const cell = document.createElement('div');
+        cell.className = 'panel-cell';
+        const tags = tagPanel(kind, panel.title || '');
+        if (tags.var)    cell.dataset.var = tags.var;
+        if (tags.sector) cell.dataset.sector = tags.sector;
+        const plotDiv = document.createElement('div');
+        plotDiv.className = 'plot';
+        cell.appendChild(plotDiv);
+        host.appendChild(cell);
+
+        // When a trace's name is empty (Plotly pattern for repeated subplot traces),
+        // inherit the name from the trace at the same position in panel 1.
+        const firstNames = panels[0].traces.map(t => t.name);
+        const traces = panel.traces.map((t, i) => {
+          const name = t.name || firstNames[i] || '';
+          return {
+            x: t.x, y: t.y, mode: 'lines', type: 'scatter',
+            name,
+            line: {
+              color: t.color || FALLBACK_PALETTE[i % FALLBACK_PALETTE.length],
+              width: t.width || 2,
+              dash:  t.dash  || 'solid'
+            },
+            hovertemplate: '%{x}: %{y:.2f}<extra>' + name + '</extra>'
+          };
+        });
+
+        const layout = baseLayout(panel.title);
+        layout.shapes = buildShapes(panel.shapes);
+        // Static HTML legend below the grid — never let Plotly draw one.
+        layout.showlegend = false;
+
+        Plotly.newPlot(plotDiv, traces, layout, {
+          displayModeBar: false, responsive: true
+        });
+      });
+    }
+
+    // --- Custom single-select dropdown ---
+    function createSelect(labelText, options, initialValue, onChange) {
+      const el = document.createElement('div');
+      el.className = 'select';
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'select-button';
+      btn.setAttribute('aria-haspopup', 'listbox');
+      btn.setAttribute('aria-expanded', 'false');
+      const lbl = document.createElement('span'); lbl.className = 'select-label'; lbl.textContent = labelText;
+      const val = document.createElement('span'); val.className = 'select-value';
+      const car = document.createElement('span'); car.className = 'select-caret'; car.textContent = '▾';
+      btn.appendChild(lbl); btn.appendChild(val); btn.appendChild(car);
+      el.appendChild(btn);
+
+      const menu = document.createElement('ul');
+      menu.className = 'select-menu';
+      menu.setAttribute('role', 'listbox'); menu.hidden = true;
+
+      let current = initialValue;
+      function setValue(v, emit) {
+        current = v;
+        const opt = options.find(o => o.value === v) || options[0];
+        val.textContent = opt.label;
+        menu.querySelectorAll('.select-option').forEach(li => {
+          li.setAttribute('aria-selected', li.dataset.value === v ? 'true' : 'false');
+        });
+        if (emit) onChange(v);
+      }
+
+      options.forEach(opt => {
+        const li = document.createElement('li');
+        li.className = 'select-option'; li.setAttribute('role', 'option');
+        li.dataset.value = opt.value;
+        const text = document.createElement('span'); text.textContent = opt.label;
+        li.appendChild(text);
+        li.addEventListener('click', (e) => {
+          e.stopPropagation();
+          setValue(opt.value, true);
+          close();
+        });
+        menu.appendChild(li);
+      });
+      el.appendChild(menu);
+
+      function open() {
+        // close any other open menu first
+        document.querySelectorAll('.select-menu').forEach(m => { if (m !== menu) m.hidden = true; });
+        document.querySelectorAll('.select-button').forEach(b => { if (b !== btn) b.setAttribute('aria-expanded', 'false'); });
+        menu.hidden = false;
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      function close() {
+        menu.hidden = true;
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (menu.hidden) open(); else close();
+      });
+      setValue(initialValue, false);
+      return el;
+    }
+
+    // Close any open dropdown on outside click / escape
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.select-menu').forEach(m => m.hidden = true);
+      document.querySelectorAll('.select-button').forEach(b => b.setAttribute('aria-expanded', 'false'));
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.select-menu').forEach(m => m.hidden = true);
+        document.querySelectorAll('.select-button').forEach(b => b.setAttribute('aria-expanded', 'false'));
+      }
+    });
+
+    function applyFilter(kind, targetId, state) {
+      const host = document.getElementById(targetId);
+      if (!host) return;
+      host.querySelectorAll('.panel-cell').forEach(cell => {
+        const v = cell.dataset.var, s = cell.dataset.sector;
+        let show = true;
+        if (state.var && state.var !== 'all' && v) show = show && (v === state.var);
+        if (kind === 'sector24' && state.sector && state.sector !== 'all' && s) {
+          show = show && (s === state.sector);
+        }
+        cell.style.display = show ? '' : 'none';
+      });
+      requestAnimationFrame(() => {
+        host.querySelectorAll('.panel-cell').forEach(cell => {
+          if (cell.style.display !== 'none') {
+            cell.querySelectorAll('.plot').forEach(p => { try { Plotly.Plots.resize(p); } catch (e) {} });
+          }
+        });
+      });
+    }
+
+    function buildToolbars() {
+      document.querySelectorAll('.results-toolbar').forEach(bar => {
+        const kind = bar.dataset.kind;
+        const targetId = bar.dataset.target;
+        bar.innerHTML = '';
+        const state = { var: null, sector: null };
+        const trigger = () => applyFilter(kind, targetId, state);
+
+        if (kind === 'macro6') {
+          const opts = Object.values(MACRO_VAR_MAP).map(v => ({ value: v.tag, label: v.label }));
+          state.var = opts[0].value;
+          bar.appendChild(createSelect('Show', opts, state.var, v => { state.var = v; trigger(); }));
+        } else if (kind === 'sector3') {
+          const opts = SECTOR_VAR_ORDER.map(v => ({ value: v.tag, label: v.label }));
+          state.var = opts[0].value;
+          bar.appendChild(createSelect('Show', opts, state.var, v => { state.var = v; trigger(); }));
+        } else if (kind === 'sector24') {
+          const varOpts = SECTOR_VAR_ORDER.map(v => ({ value: v.tag, label: v.label }));
+          const secOpts = SECTOR_ORDER.map(s => ({ value: s.tag, label: s.label }));
+          state.var = varOpts[0].value;
+          state.sector = secOpts[0].value;
+          bar.appendChild(createSelect('Variable', varOpts, state.var,    v => { state.var = v; trigger(); }));
+          bar.appendChild(createSelect('Sector',   secOpts, state.sector, v => { state.sector = v; trigger(); }));
+        }
+        // initial pass so only the default panel is visible
+        trigger();
+      });
+    }
+
+    function init() {
+      if (typeof Plotly === 'undefined') { setTimeout(init, 100); return; }
+      fetch('assets/tpi_data.json', { cache: 'no-cache' })
+        .then(r => r.json())
+        .then(data => {
+          renderPanels(data.macro6,   'panels-macro6',   'macro6');
+          renderPanels(data.sector3,  'panels-sector3',  'sector3');
+          renderPanels(data.sector24, 'panels-sector24', 'sector24');
+          buildToolbars();
+        })
+        .catch(err => {
+          console.error('Failed to load tpi_data.json', err);
+          ['panels-macro6','panels-sector3','panels-sector24'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = '<div class="panel-note">Could not load results data (' + err.message + ')</div>';
+          });
+        });
+    }
+
+    // Render only when the Results tab becomes visible (avoids Plotly sizing on 0-width)
+    let rendered = false;
+    function maybeRender() {
+      const panel = document.getElementById('tab-results');
+      if (!panel) return;
+      if (panel.classList.contains('active') && !rendered) {
+        rendered = true;
+        init();
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      maybeRender();
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.addEventListener('click', () => setTimeout(maybeRender, 30));
+      });
+    });
+  })();
 </script>
 </body>
 </html>
