@@ -1226,7 +1226,7 @@
                 <text x="432" y="86" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">economy-wide effects</text>
                 <text x="432" y="104" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">endogenous wages, r, GDP</text>
                 <text x="432" y="122" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">labour + savings responses</text>
-                <text x="432" y="140" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">30+ year transition paths</text>
+                <text x="432" y="140" text-anchor="middle" font-family="Roboto, sans-serif" font-size="11" fill="var(--text-mid)">multi-decade transition paths</text>
                 <text x="432" y="165" text-anchor="middle" font-family="Roboto, sans-serif" font-size="10" fill="var(--text-light)">PolicyEngine + OG-UK</text>
               </svg>
               <div class="expand-hint">Click to expand</div>
@@ -1427,7 +1427,7 @@
         </ul>
         <p class="section-description">
           Use the dropdowns inside each box to switch between series. The full transition path runs for
-          30&nbsp;years, so you can see not just the long-run answer but how the economy moves from here to
+          60&nbsp;periods, so you can see not just the long-run answer but how the economy moves from here to
           there.
         </p>
       </div>
@@ -1503,7 +1503,7 @@
     <section class="tab-panel" id="tab-code" role="tabpanel">
 
       <div class="code-intro">
-        <h2>From a few lines of Python to a 30&#8209;year UK forecast</h2>
+        <h2>From a few lines of Python to a full UK transition path</h2>
         <p>
           OG-UK is open source. The simulation that produced the charts in the
           <strong>Example</strong> tab &mdash; and any other reform you might want to try &mdash; is fewer than
@@ -1601,7 +1601,9 @@ print(f"Tax revenue: &#163;{impact.tax_revenue:,.1f}bn  ({impact.tax_revenue_pct
 print(f"Investment:  &#163;{impact.investment:,.1f}bn  ({impact.investment_pct:+.3f}%)")
 print(f"Interest:    {impact.r_baseline:.2%} -&gt; {impact.r_reform:.2%}")</code></pre>
           </div>
-          <p>A typical run takes a couple of minutes on a laptop and prints something like this:</p>
+          <p>A typical run takes a couple of minutes on a laptop. The output below is
+            <em>illustrative</em> &mdash; the format matches <code>run_oguk.py</code>, but actual numbers
+            depend on the calibration date and your data release.</p>
           <div class="terminal-block">
 <pre><span class="term-dim">Solving baseline steady state (age_specific='pooled', 1-sector)...</span>
 <span class="term-dim">  Done in 71.4s</span>
@@ -1628,8 +1630,8 @@ Interest rate:  3.84% -&gt; 3.87%</pre>
           <h3><span class="step-tag">4</span> Run the year-by-year transition path</h3>
           <p>
             The steady state tells you where the economy ends up. The <strong>transition path</strong>
-            tells you how it gets there &mdash; year by year for thirty years. This is what powers the
-            dashed lines in the <strong>Example</strong> tab.
+            tells you how it gets there &mdash; year by year, 60&nbsp;periods by default
+            (configurable). This is what powers the dashed lines in the <strong>Example</strong> tab.
           </p>
           <p>
             Solving the transition is heavier (every cohort&rsquo;s lifetime is solved under rational
@@ -1678,15 +1680,17 @@ for i in range(10):
             <span class="filename">oguk/api.py</span>
 <pre><code class="lang-py">impact = map_transition_to_real_world(base_tp, reform_tp)
 
-impact.years              # [2026, 2027, ..., 2055]
+impact.years              # fiscal-year strings: ["2026-27", ..., "2085-86"]
+impact.gdp                # reform GDP path (&#163;bn, per year)
 impact.gdp_change         # &#163;bn change vs baseline, per year
 impact.tax_revenue_change
 impact.consumption_change
 impact.investment_change
 impact.government_change
 impact.debt_change
-impact.r_baseline         # interest-rate paths
-impact.r_reform</code></pre>
+
+# Interest-rate paths live on the TPI results themselves
+base_tp.r, reform_tp.r    # baseline / reform r(t)</code></pre>
           </div>
           <p>
             Each attribute is a NumPy array indexed by year &mdash; ready for a Plotly chart, a pandas

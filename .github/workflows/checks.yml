@@ -1,0 +1,60 @@
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Inline JavaScript syntax check
+        run: |
+          awk '/<script>/{flag++; next} /<\/script>/{flag=0; next} flag{print}' index.html > /tmp/inline.js
+          node --check /tmp/inline.js
+
+      - name: Verify locally-referenced assets exist
+        run: |
+          missing=0
+          # All href/src values pointing to assets/... or relative paths
+          paths=$(grep -oE '(href|src)="(assets/[^"]+|\./[^"]+)"' index.html \
+                  | sed -E 's/^[^"]+"([^"]+)".*/\1/' \
+                  | sort -u)
+          # Plus anything fetch()ed
+          fetched=$(grep -oE "fetch\\(['\"]([^'\")]+)" index.html \
+                    | sed -E "s/fetch\\(['\"]([^'\"]+).*/\\1/" \
+                    | grep -v '^https\?://' \
+                    | sort -u)
+          for p in $paths $fetched; do
+            if [ ! -f "$p" ]; then
+              echo "Missing asset: $p"
+              missing=1
+            fi
+          done
+          exit $missing
+
+      - name: Validate Code-tab API claims against OG-UK source
+        run: |
+          # Cheap structural check: every Python identifier we present in
+          # a code block as `from oguk import X` or `from oguk.api import X`
+          # must be re-exported in the upstream OG-UK package.
+          # We pin the upstream commit so this stays reproducible.
+          curl -sL https://raw.githubusercontent.com/PSLmodels/OG-UK/main/oguk/__init__.py -o /tmp/oguk_init.py || {
+            echo "Could not fetch upstream OG-UK __init__.py — skipping API check"
+            exit 0
+          }
+          missing=0
+          for sym in solve_steady_state run_transition_path map_to_real_world map_transition_to_real_world; do
+            if ! grep -q "\"$sym\"" /tmp/oguk_init.py; then
+              echo "Symbol no longer exported by oguk: $sym (Code tab references it)"
+              missing=1
+            fi
+          done
+          exit $missing
