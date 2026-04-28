@@ -917,7 +917,7 @@
       it tells the story in pictures. Read <strong>Methodology</strong> for an illustrated walkthrough of how the
       model works. Open <strong>Code</strong> to see the few lines of Python that drive a full simulation. And
       jump to <strong>OBR comparison</strong> if you want a side-by-side with the OBR&rsquo;s new UK OLG model
-      (Brzezinski, Hantzsche &amp; Watson, 2025).
+      (Brzezinski, Hantzsche &amp; Watson, OBR Working Paper No.&nbsp;22, April&nbsp;2025).
     </p>
 
     <!-- Tab bar -->
@@ -1238,6 +1238,17 @@
               <p>The two perspectives can tell very different stories. A reform that raises significant revenue in a static analysis may raise less in practice, because higher tax rates reduce labour supply and investment, shrinking the tax base. Conversely, a reform that costs revenue upfront might partly pay for itself over time through increased economic activity. OG-UK captures these dynamics.</p>
               <div class="sub-heading">Year-by-year transition paths</div>
               <p>The transition path is particularly valuable. Rather than just comparing two long-run steady states, it shows the <strong>year-by-year adjustment</strong>: how GDP dips in the first few years, how interest rates respond, when revenue stabilises. These time paths can be mapped onto OBR forecast horizons.</p>
+
+              <div class="sub-heading">What the model does not capture</div>
+              <p>OG-UK is a structural macro model and inherits the simplifications of that class. The most important caveats for reading its outputs:</p>
+              <ul class="intro-list">
+                <li><strong>Smoothed tax functions, not statutory bands.</strong> Income tax and National Insurance are folded into a single Gouveia&ndash;Strauss function fitted to PolicyEngine-UK output. Reforms that change <em>average</em> liability across the income distribution flow through cleanly; reforms whose mechanism is the kink itself (a new threshold, an allowance taper change) are captured only to the extent the smoothed function shifts.</li>
+                <li><strong>Permanent ability types, no earnings risk.</strong> OG-UK uses J&nbsp;=&nbsp;7 deterministic ability types. There is no idiosyncratic earnings shock within a type, so precautionary savings and earnings-risk-driven inequality are not a channel here. This is a deliberate trade-off &mdash; see the OBR-comparison tab for the alternative.</li>
+                <li><strong>UK as a single entity.</strong> The model calibrates to UK-wide aggregates; there is no England / Scotland / Wales / Northern&nbsp;Ireland breakdown. Devolved tax differentials and reforms with explicit regional incidence cannot be analysed at sub-UK granularity.</li>
+                <li><strong>Reforms are step changes.</strong> A PolicyEngine reform sets parameter values from a start date and they hold thereafter. Phased introductions, sunset clauses or year-on-year indexation changes can be modelled but require explicit scripting; they are not the default.</li>
+                <li><strong>Truncated horizon.</strong> The default 60-period transition assumes the steady state is reached by year 60. Effects that play out over longer horizons collapse into the steady-state anchor.</li>
+              </ul>
+              <p>None of these are model bugs &mdash; they are choices that make the macro accounting tractable. They are worth knowing when reading the Example tab&rsquo;s charts.</p>
             </div>
           </div>
 
@@ -1408,11 +1419,12 @@
       <div class="results-headline">
         <h2 class="section-heading">A worked example: what if the basic rate of income tax went up by 1&nbsp;p?</h2>
         <p class="section-description">
-          To make the model concrete, we run a simple reform: from tax year <strong>2027&ndash;28</strong>, the basic rate
-          of UK income tax rises by one percentage point. Every chart below tells the same story in a different
-          way &mdash; <strong>solid lines</strong> are what the UK economy looks like without the reform (history plus the
-          OBR&rsquo;s November&nbsp;2025 forecast), and <strong>dashed lines</strong> are what OG-UK predicts under the
-          reform. The gap between them, from 2027 onwards, is the model&rsquo;s answer.
+          A <strong>stylised illustration</strong>, not a forecast of any announced policy: from tax year
+          <strong>2027&ndash;28</strong>, the basic rate of UK income tax rises by one percentage point and stays
+          there. Every chart below tells the same story in a different way &mdash; <strong>solid lines</strong>
+          are the UK economy without the reform (history plus the OBR&rsquo;s November&nbsp;2025 forecast),
+          and <strong>dashed lines</strong> are OG-UK&rsquo;s reform path. The gap between them, from 2027
+          onwards, is the model&rsquo;s answer.
         </p>
         <p class="section-description">
           Three views, from broadest to narrowest:
