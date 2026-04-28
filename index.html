@@ -744,6 +744,102 @@
       .calib-grid { grid-template-columns: 1fr; }
     }
 
+    /* ===== Code tab ===== */
+    .code-intro { margin-bottom: 28px; }
+    .code-intro h2 {
+      font-size: 1.5rem; font-weight: 700; color: var(--pe-color-gray-900);
+      margin: 0 0 8px 0; letter-spacing: -0.02em;
+    }
+    .code-intro p {
+      font-size: 0.95rem; line-height: 1.7; color: var(--pe-color-gray-600);
+      margin-bottom: 10px;
+    }
+    .code-intro p strong { color: var(--pe-color-gray-800); }
+    .code-step { margin-bottom: 36px; scroll-margin-top: 90px; }
+    .code-step + .code-step { padding-top: 36px; border-top: 1px solid var(--pe-color-gray-200); }
+    .code-step h3 {
+      font-size: 1.2rem; font-weight: 700; color: var(--pe-color-gray-900);
+      letter-spacing: -0.02em; margin: 0 0 8px 0;
+      display: flex; align-items: baseline; gap: 12px;
+    }
+    .code-step h3 .step-tag {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: transparent; border: 1.5px solid var(--accent);
+      font-size: 0.72rem; font-weight: 700; color: var(--accent);
+      flex-shrink: 0;
+    }
+    .code-step p {
+      font-size: 0.95rem; line-height: 1.7; color: var(--pe-color-gray-600);
+      margin-bottom: 12px;
+    }
+    .code-step p strong { color: var(--pe-color-gray-800); }
+    .code-step p code, .code-intro p code {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+      font-size: 0.84rem; background: var(--pe-color-gray-100);
+      padding: 1px 6px; border-radius: 4px;
+      color: var(--pe-color-primary-800);
+      border: 1px solid var(--pe-color-border-light);
+    }
+
+    .code-block {
+      position: relative;
+      background: #0F172A;
+      border-radius: 12px;
+      padding: 18px 20px 16px;
+      margin: 12px 0 14px;
+      overflow-x: auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(15,23,42,0.18);
+    }
+    .code-block .filename {
+      position: absolute; top: 10px; right: 14px;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+      font-size: 0.7rem; color: #94A3B8;
+      letter-spacing: 0.02em;
+      padding: 2px 8px; border-radius: 4px;
+      background: rgba(148,163,184,0.08);
+      pointer-events: none;
+    }
+    .code-block pre {
+      margin: 0; padding: 0;
+      white-space: pre;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+      font-size: 0.84rem;
+      line-height: 1.65;
+      color: #E2E8F0;
+    }
+    .code-block code { font: inherit; color: inherit; background: none; padding: 0; }
+
+    /* Token colours — calm palette matching the dashboard */
+    .tk-kw  { color: #C4B5FD; }                /* keyword  */
+    .tk-fn  { color: #FDE68A; }                /* function */
+    .tk-cls { color: #93C5FD; }                /* class    */
+    .tk-str { color: #86EFAC; }                /* string   */
+    .tk-num { color: #FCD34D; }                /* number   */
+    .tk-com { color: #64748B; font-style: italic; } /* comment */
+    .tk-flag { color: #F0ABFC; }               /* CLI flag */
+
+    .terminal-block {
+      background: #0B1220;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin: 8px 0 6px;
+      overflow-x: auto;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 3px 12px rgba(11,18,32,0.16);
+    }
+    .terminal-block pre {
+      margin: 0;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      color: #CBD5E1;
+      white-space: pre;
+    }
+    .terminal-block .term-em   { color: #F8FAFC; font-weight: 600; }
+    .terminal-block .term-pos  { color: #86EFAC; }
+    .terminal-block .term-neg  { color: #FCA5A5; }
+    .terminal-block .term-dim  { color: #64748B; }
+
     /* Footer */
     .dashboard-footer {
       margin-top: 48px; padding-top: 28px;
@@ -800,38 +896,40 @@
   <main class="main-content">
 
     <p class="intro-text">
-      <strong>PolicyEngine Macro</strong> is the macroeconomic arm of
-      <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a>. Where the static engine
-      answers <em>who gains and loses today</em>, the macro model answers <em>what happens as the economy adjusts</em>
-      &mdash; how GDP, wages, interest rates, investment and tax revenue evolve year by year after a reform, and how
-      the burden falls across generations.
+      Most tax-and-benefit tools tell you what a reform does to <em>households today</em>. This one asks the next
+      question: <strong>what happens to the economy as a whole, year after year</strong>?
+      If the basic rate of income tax goes up by a penny, do people work less? Save less? Does GDP grow more
+      slowly? When does tax revenue actually settle? Who across the generations bears the cost?
     </p>
     <p class="intro-text">
-      It is powered by <strong>OG-UK</strong>, the UK calibration of
-      <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a> &mdash; an open-source
-      overlapping-generations general equilibrium framework maintained by the
-      <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a> (PSL). Demographics
-      come from the UN World Population Prospects, national accounts from the ONS and fiscal aggregates from the OBR;
-      tax functions are estimated on PolicyEngine microdata. The framework handles five tax instruments (income,
-      consumption, wealth, corporate, bequest), multi-industry CES production with public capital, a configurable
-      fiscal closure rule and parameterised capital mobility.
+      <strong>PolicyEngine Macro</strong> is built to answer those questions. It is the macroeconomic arm of
+      <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a>, powered by
+      <strong>OG-UK</strong> &mdash; the UK calibration of
+      <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a>, an open-source
+      framework maintained by the
+      <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a>. The model is
+      grounded in real UK data: demographics from the UN, national accounts from the ONS, fiscal aggregates from
+      the OBR, and tax rules from PolicyEngine.
     </p>
     <p class="intro-text">
-      The tabs below walk through the <strong>methodology</strong>, set it alongside the <strong>OBR's new UK OLG model</strong>
-      (Brzezinski, Hantzsche &amp; Watson, 2025), show the <strong>code</strong> that runs it, and work through an
-      <strong>example</strong> reform simulation end to end.
+      The four tabs below are designed to be read in order, but each one stands on its own.
+      Start with <strong>Example</strong> if you want to see the model in action on a real UK reform &mdash;
+      it tells the story in pictures. Read <strong>Methodology</strong> for an illustrated walkthrough of how the
+      model works. Open <strong>Code</strong> to see the few lines of Python that drive a full simulation. And
+      jump to <strong>OBR comparison</strong> if you want a side-by-side with the OBR&rsquo;s new UK OLG model
+      (Brzezinski, Hantzsche &amp; Watson, 2025).
     </p>
 
     <!-- Tab bar -->
     <nav class="tab-bar" role="tablist">
-      <button class="tab-button active" data-tab="methodology" role="tab" aria-selected="true">Methodology</button>
-      <button class="tab-button" data-tab="obr" role="tab" aria-selected="false">OBR comparison</button>
+      <button class="tab-button active" data-tab="results" role="tab" aria-selected="true">Example</button>
+      <button class="tab-button" data-tab="methodology" role="tab" aria-selected="false">Methodology</button>
       <button class="tab-button" data-tab="code" role="tab" aria-selected="false">Code</button>
-      <button class="tab-button" data-tab="results" role="tab" aria-selected="false">Example</button>
+      <button class="tab-button" data-tab="obr" role="tab" aria-selected="false">OBR comparison</button>
     </nav>
 
     <!-- ============ METHODOLOGY TAB ============ -->
-    <section class="tab-panel active" id="tab-methodology" role="tabpanel">
+    <section class="tab-panel" id="tab-methodology" role="tabpanel">
 
       <div class="meth-intro">
         <h2>Core elements of OG-UK</h2>
@@ -1304,24 +1402,33 @@
     </section>
 
     <!-- ============ RESULTS TAB ============ -->
-    <section class="tab-panel" id="tab-results" role="tabpanel">
+    <section class="tab-panel active" id="tab-results" role="tabpanel">
 
       <!-- Headline reform (no card) -->
       <div class="results-headline">
-        <h2 class="section-heading">Example reform: basic rate of income tax, +1&nbsp;pp from 2027&ndash;28</h2>
+        <h2 class="section-heading">A worked example: what if the basic rate of income tax went up by 1&nbsp;p?</h2>
         <p class="section-description">
-          A worked OG-UK simulation: what happens to the UK economy if the income-tax basic rate rises by one percentage point from tax year <strong>2027&ndash;28</strong>. Each chart plots the model's 30-year reform path alongside observed history and the OBR's November&nbsp;2025 EFO baseline &mdash; the gap between the two lines from 2027 onwards is the reform effect on that series.
+          To make the model concrete, we run a simple reform: from tax year <strong>2027&ndash;28</strong>, the basic rate
+          of UK income tax rises by one percentage point. Every chart below tells the same story in a different
+          way &mdash; <strong>solid lines</strong> are what the UK economy looks like without the reform (history plus the
+          OBR&rsquo;s November&nbsp;2025 forecast), and <strong>dashed lines</strong> are what OG-UK predicts under the
+          reform. The gap between them, from 2027 onwards, is the model&rsquo;s answer.
         </p>
         <p class="section-description">
-          Three views are available:
+          Three views, from broadest to narrowest:
         </p>
         <ul class="intro-list">
-          <li><strong>Macro aggregates</strong> &mdash; the six headline national-accounts series (consumption, investment, government, tax revenue, debt, GDP).</li>
-          <li><strong>Sector aggregates</strong> &mdash; the percentage reform impact on output, capital and labour, with all eight sectors overlaid.</li>
-          <li><strong>Sector detail</strong> &mdash; any one sector &times; variable cell, with history for context.</li>
+          <li><strong>The whole economy</strong> &mdash; the six headline numbers everyone knows: consumption,
+            investment, government spending, tax revenue, debt and GDP.</li>
+          <li><strong>Industry by industry</strong> &mdash; how output, capital and labour move across the
+            eight sectors of the economy.</li>
+          <li><strong>One sector at a time</strong> &mdash; the finest-grained view, for when you want to look
+            at, say, manufacturing investment in isolation.</li>
         </ul>
         <p class="section-description">
-          Pick the view with the dropdown inside each box. In every plot the <strong>solid line</strong> is OBR / ONS outturn stitched to the Nov&nbsp;2025 EFO baseline, and the <strong>dashed line</strong> is OG-UK's reform path.
+          Use the dropdowns inside each box to switch between series. The full transition path runs for
+          30&nbsp;years, so you can see not just the long-run answer but how the economy moves from here to
+          there.
         </p>
       </div>
 
@@ -1392,10 +1499,241 @@
 
     </section>
 
-    <!-- ============ CODE EXAMPLE TAB ============ -->
+    <!-- ============ CODE TAB ============ -->
     <section class="tab-panel" id="tab-code" role="tabpanel">
+
+      <div class="code-intro">
+        <h2>From a few lines of Python to a 30&#8209;year UK forecast</h2>
+        <p>
+          OG-UK is open source. The simulation that produced the charts in the
+          <strong>Example</strong> tab &mdash; and any other reform you might want to try &mdash; is fewer than
+          fifty lines of Python. This tab walks through the actual code from the
+          <a href="https://github.com/PSLmodels/OG-UK" target="_blank" rel="noreferrer">OG-UK repository</a>:
+          install, define a reform with PolicyEngine, solve, and translate the model&rsquo;s abstract output
+          into pounds. Copy a block, paste, run.
+        </p>
+      </div>
+
       <div class="section-card">
-        <!-- content to be added -->
+
+        <!-- 1. Install -->
+        <div class="code-step" id="code-1">
+          <h3><span class="step-tag">1</span> Install</h3>
+          <p>
+            OG-UK uses <a href="https://docs.astral.sh/uv/" target="_blank" rel="noreferrer">uv</a>, a fast
+            Python package manager. With Python 3.11+ and uv on your machine, three commands are enough:
+          </p>
+          <div class="code-block">
+            <span class="filename">terminal</span>
+<pre><code class="lang-bash">git clone https://github.com/PSLmodels/OG-UK.git
+cd OG-UK
+uv sync</code></pre>
+          </div>
+          <p>
+            One bit of admin: OG-UK pulls the PolicyEngine UK microdata from HuggingFace, so set a token
+            once with read access to <code>policyengine/policyengine-uk-data</code>:
+          </p>
+          <div class="code-block">
+            <span class="filename">terminal</span>
+<pre><code class="lang-bash">export HUGGING_FACE_TOKEN=hf_your_token_here</code></pre>
+          </div>
+          <p>
+            Now <code>uv run python examples/run_oguk.py</code> will solve a baseline and a reform
+            steady state and print the impact in &pound;bn.
+          </p>
+        </div>
+
+        <!-- 2. Define a reform -->
+        <div class="code-step" id="code-2">
+          <h3><span class="step-tag">2</span> Define a reform</h3>
+          <p>
+            Reforms use the <strong>PolicyEngine</strong> API: pick a parameter from the UK
+            tax-and-benefit rule book, give it a new value and a start date. Anything PolicyEngine can
+            represent &mdash; rates, thresholds, allowance tapers, brand-new benefits &mdash; flows
+            straight through.
+          </p>
+          <div class="code-block">
+            <span class="filename">examples/run_oguk.py</span>
+<pre><code class="lang-py">from datetime import datetime
+from policyengine.core import ParameterValue, Policy
+from policyengine.tax_benefit_models.uk import uk_latest
+
+# Reform: raise the basic rate of income tax from 20% to 21%
+basic_rate = uk_latest.get_parameter("gov.hmrc.income_tax.rates.uk[0].rate")
+
+REFORM = Policy(
+    name="Basic rate 21%",
+    parameter_values=[
+        ParameterValue(
+            parameter=basic_rate,
+            value=0.21,
+            start_date=datetime(2026, 1, 1),
+        )
+    ],
+)</code></pre>
+          </div>
+          <p>
+            To simulate a different reform, swap the parameter path and value &mdash; the rest of the
+            pipeline doesn&rsquo;t change.
+          </p>
+        </div>
+
+        <!-- 3. Steady state -->
+        <div class="code-step" id="code-3">
+          <h3><span class="step-tag">3</span> Solve the long-run steady state</h3>
+          <p>
+            The fastest way to see what a reform does. <code>solve_steady_state</code> finds the long-run
+            equilibrium of the UK economy under a given policy: the prices, quantities and tax revenues
+            that emerge once the economy has fully adjusted. Run it once for the baseline, once for the
+            reform; the difference is the answer.
+          </p>
+          <div class="code-block">
+            <span class="filename">examples/run_oguk.py</span>
+<pre><code class="lang-py">from oguk import solve_steady_state, map_to_real_world
+
+baseline = solve_steady_state(start_year=2026)
+reform   = solve_steady_state(start_year=2026, policy=REFORM)
+
+impact = map_to_real_world(baseline, reform)
+
+print(f"GDP:         &#163;{impact.gdp:,.1f}bn  ({impact.gdp_pct:+.3f}%)")
+print(f"Tax revenue: &#163;{impact.tax_revenue:,.1f}bn  ({impact.tax_revenue_pct:+.3f}%)")
+print(f"Investment:  &#163;{impact.investment:,.1f}bn  ({impact.investment_pct:+.3f}%)")
+print(f"Interest:    {impact.r_baseline:.2%} -&gt; {impact.r_reform:.2%}")</code></pre>
+          </div>
+          <p>A typical run takes a couple of minutes on a laptop and prints something like this:</p>
+          <div class="terminal-block">
+<pre><span class="term-dim">Solving baseline steady state (age_specific='pooled', 1-sector)...</span>
+<span class="term-dim">  Done in 71.4s</span>
+<span class="term-dim">Solving reform steady state (age_specific='pooled', 1-sector)...</span>
+<span class="term-dim">  Done in 38.2s</span>
+
+<span class="term-em">Steady state impact (&#163;bn, current prices)</span>
+<span class="term-dim">============================================================</span>
+Variable          Baseline       Reform     Change        %
+<span class="term-dim">------------------------------------------------------------</span>
+GDP                2853.8       2852.6     <span class="term-neg">  -1.2   -0.043%</span>
+Consumption        1819.4       1817.2     <span class="term-neg">  -2.2   -0.121%</span>
+Investment          469.1        466.2     <span class="term-neg">  -2.9   -0.612%</span>
+Government          564.4        565.5     <span class="term-pos">  +1.1   +0.198%</span>
+Tax revenue        1036.4       1051.7     <span class="term-pos"> +15.3   +1.473%</span>
+Debt               2691.4       2691.0     <span class="term-neg">  -0.4   -0.014%</span>
+
+Interest rate:  3.84% -&gt; 3.87%</pre>
+          </div>
+        </div>
+
+        <!-- 4. Transition path -->
+        <div class="code-step" id="code-4">
+          <h3><span class="step-tag">4</span> Run the year-by-year transition path</h3>
+          <p>
+            The steady state tells you where the economy ends up. The <strong>transition path</strong>
+            tells you how it gets there &mdash; year by year for thirty years. This is what powers the
+            dashed lines in the <strong>Example</strong> tab.
+          </p>
+          <p>
+            Solving the transition is heavier (every cohort&rsquo;s lifetime is solved under rational
+            expectations), so OG-UK uses
+            <a href="https://www.dask.org/" target="_blank" rel="noreferrer">Dask</a> to parallelise across
+            CPU cores.
+          </p>
+          <div class="code-block">
+            <span class="filename">examples/run_oguk.py</span>
+<pre><code class="lang-py">from dask.distributed import Client
+from oguk import run_transition_path, map_transition_to_real_world
+
+client = Client(n_workers=2, threads_per_worker=1, memory_limit="2GB")
+
+base_tp, reform_tp = run_transition_path(
+    start_year=2026,
+    policy=REFORM,
+    client=client,
+)
+
+client.close()
+
+impact = map_transition_to_real_world(base_tp, reform_tp)
+
+# First ten years of GDP and tax-revenue impacts
+for i in range(10):
+    print(
+        f"{impact.years[i]}  "
+        f"&#916;GDP {impact.gdp_change[i]:+6.2f}  "
+        f"&#916;Revenue {impact.tax_revenue_change[i]:+6.2f}"
+    )</code></pre>
+          </div>
+        </div>
+
+        <!-- 5. From abstract units to pounds -->
+        <div class="code-step" id="code-5">
+          <h3><span class="step-tag">5</span> From abstract units to pounds</h3>
+          <p>
+            OG-UK solves in dimensionless model units. To translate them into figures a policymaker can
+            read &mdash; billions of pounds, percentages of GDP &mdash; the model&rsquo;s steady-state GDP
+            is anchored to the ONS figure and every other variable is scaled in proportion.
+            <code>map_to_real_world</code> and <code>map_transition_to_real_world</code> handle the
+            translation:
+          </p>
+          <div class="code-block">
+            <span class="filename">oguk/api.py</span>
+<pre><code class="lang-py">impact = map_transition_to_real_world(base_tp, reform_tp)
+
+impact.years              # [2026, 2027, ..., 2055]
+impact.gdp_change         # &#163;bn change vs baseline, per year
+impact.tax_revenue_change
+impact.consumption_change
+impact.investment_change
+impact.government_change
+impact.debt_change
+impact.r_baseline         # interest-rate paths
+impact.r_reform</code></pre>
+          </div>
+          <p>
+            Each attribute is a NumPy array indexed by year &mdash; ready for a Plotly chart, a pandas
+            DataFrame, or whatever else you like.
+          </p>
+        </div>
+
+        <!-- 6. Multi-sector -->
+        <div class="code-step" id="code-6">
+          <h3><span class="step-tag">6</span> Bring in the eight industry sectors</h3>
+          <p>
+            Pass <code>multi_sector=True</code> and the same call returns the breakdown across the
+            eight UK industry sectors (energy, manufacturing, construction, trade &amp; transport, info
+            &amp; finance, real estate, business services, public &amp; other) &mdash; the basis for the
+            <em>industry by industry</em> view in the Example tab.
+          </p>
+          <div class="code-block">
+            <span class="filename">examples/run_oguk.py</span>
+<pre><code class="lang-py">base_tp, reform_tp = run_transition_path(
+    start_year=2026,
+    policy=REFORM,
+    client=client,
+    multi_sector=True,    # 8-sector CES production
+)</code></pre>
+          </div>
+          <p>Sector-level output, capital and labour are returned alongside the macro aggregates.</p>
+        </div>
+
+        <!-- 7. Where to go next -->
+        <div class="code-step" id="code-7">
+          <h3><span class="step-tag">7</span> Where to go next</h3>
+          <p>
+            The <a href="https://github.com/PSLmodels/OG-UK/tree/main/examples" target="_blank" rel="noreferrer">examples directory</a>
+            in the OG-UK repo has more variations to copy:
+          </p>
+          <ul class="intro-list">
+            <li><code>run_oguk.py</code> &mdash; the canonical full pipeline (steady state and TPI).</li>
+            <li><code>run_oguk_fast_tpi.py</code> &mdash; a faster transition with reduced periods (T = 80) for quick iteration.</li>
+            <li><code>run_oguk_fast_sector.py</code> &mdash; the 8-sector calibration that produces the Example-tab charts.</li>
+            <li><code>plot.py</code> &mdash; visualises the estimated tax functions in 3D.</li>
+          </ul>
+          <p>
+            Full API reference and theory documentation:
+            <a href="https://pslmodels.github.io/OG-UK" target="_blank" rel="noreferrer">pslmodels.github.io/OG-UK</a>.
+          </p>
+        </div>
+
       </div>
     </section>
 
@@ -1930,6 +2268,85 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', () => setTimeout(maybeRender, 30));
       });
     });
+  })();
+</script>
+
+<script>
+  // Tiny syntax highlighter for the Code tab.
+  (function () {
+    var PY_KEYWORDS = [
+      'from','import','def','class','as','return','with','in','for','if','elif','else',
+      'lambda','try','except','finally','raise','True','False','None','not','and','or',
+      'is','pass','yield','async','await','global','nonlocal','assert','del','break','continue'
+    ];
+    var PY_KW_RE = new RegExp('\\b(' + PY_KEYWORDS.join('|') + ')\\b', 'g');
+
+    // One Private-Use-Area code-point per token. No collision with digits.
+    var PH_BASE = 0xE100;
+    var PH_RE = /[-]/g;
+
+    function makePh() {
+      var tokens = [];
+      function add(text, cls) {
+        tokens.push('<span class="tk-' + cls + '">' + text + '</span>');
+        return String.fromCharCode(PH_BASE + tokens.length - 1);
+      }
+      function expand(src) {
+        return src.replace(PH_RE, function (c) {
+          return tokens[c.charCodeAt(0) - PH_BASE];
+        });
+      }
+      return { add: add, expand: expand };
+    }
+
+    function highlightPython(src) {
+      var ph = makePh();
+      // Comments first, then strings (so their contents are protected),
+      // then numbers, keywords, function calls, capitalised names.
+      src = src.replace(/#[^\n]*/g, function (m) { return ph.add(m, 'com'); });
+      src = src.replace(/"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'/g, function (m) { return ph.add(m, 'str'); });
+      src = src.replace(/\b\d+(?:\.\d+)?\b/g, function (m) { return ph.add(m, 'num'); });
+      src = src.replace(PY_KW_RE, function (m) { return ph.add(m, 'kw'); });
+      src = src.replace(/\b([A-Za-z_][\w]*)(\s*\()/g, function (_, name, paren) {
+        return ph.add(name, 'fn') + paren;
+      });
+      src = src.replace(/\b[A-Z][\w_]*\b/g, function (m) { return ph.add(m, 'cls'); });
+      return ph.expand(src);
+    }
+
+    function highlightBash(src) {
+      var ph = makePh();
+      src = src.replace(/#[^\n]*/g, function (m) { return ph.add(m, 'com'); });
+      src = src.replace(/"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'/g, function (m) { return ph.add(m, 'str'); });
+      // First non-whitespace token on each line is the command.
+      src = src.replace(/^(\s*)([A-Za-z_][\w-]*)/gm, function (_, ws, cmd) {
+        return ws + ph.add(cmd, 'fn');
+      });
+      // Long and short CLI flags.
+      src = src.replace(/(^|\s)(--?[A-Za-z][\w-]*)/g, function (_, pre, flag) {
+        return pre + ph.add(flag, 'flag');
+      });
+      return ph.expand(src);
+    }
+
+    function run() {
+      document.querySelectorAll('code.lang-py').forEach(function (el) {
+        if (el.dataset.hl) return;
+        el.innerHTML = highlightPython(el.innerHTML);
+        el.dataset.hl = '1';
+      });
+      document.querySelectorAll('code.lang-bash').forEach(function (el) {
+        if (el.dataset.hl) return;
+        el.innerHTML = highlightBash(el.innerHTML);
+        el.dataset.hl = '1';
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', run);
+    } else {
+      run();
+    }
   })();
 </script>
 </body>
