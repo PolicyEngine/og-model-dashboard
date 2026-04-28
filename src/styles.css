@@ -697,6 +697,22 @@
       font-size: 0.82rem; color: var(--pe-color-gray-500);
       margin-top: 8px; font-style: italic;
     }
+
+    /* Two sector cards (Impact across sectors + One sector at a time) sit
+       next to each other on wide screens and stack on narrow ones. */
+    .sector-side-by-side {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .sector-side-by-side > .section-card { margin-bottom: 0; }
+
+    @media (max-width: 1100px) {
+      .sector-side-by-side { grid-template-columns: 1fr; }
+      .sector-side-by-side > .section-card + .section-card { margin-top: 0; }
+    }
+
     @media (max-width: 700px) {
       .panel-cell .plot { height: 360px; }
     }

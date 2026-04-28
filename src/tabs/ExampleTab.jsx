@@ -164,6 +164,7 @@ export default function ExampleTab() {
         <MacroLegend />
       </div>
 
+      <div className="sector-side-by-side">
       {/* Sector aggregate: 3 panels filtered to one */}
       <div className="section-card">
         <h2 className="section-heading">Impact across sectors</h2>
@@ -226,6 +227,7 @@ export default function ExampleTab() {
             <span className="legend-item"><span className="legend-line dashed gold" />Reform start (2027)</span>
           </div>
         </div>
+      </div>
       </div>
     </>
   );
