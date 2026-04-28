@@ -6,48 +6,49 @@ on:
     branches: [main]
 
 jobs:
-  validate:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: '20'
+          bun-version: latest
 
-      - name: Inline JavaScript syntax check
-        run: |
-          awk '/<script>/{flag++; next} /<\/script>/{flag=0; next} flag{print}' index.html > /tmp/inline.js
-          node --check /tmp/inline.js
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
 
-      - name: Verify locally-referenced assets exist
+      - name: Build
+        run: bun run build
+
+      - name: Verify built artifact references the bundle
         run: |
+          test -f dist/index.html
+          grep -q '/assets/index-' dist/index.html
+
+      - name: Verify static-asset references resolve
+        run: |
+          # Anything we link as `/papers/...` etc. must exist under public/.
           missing=0
-          # All href/src values pointing to assets/... or relative paths
-          paths=$(grep -oE '(href|src)="(assets/[^"]+|\./[^"]+)"' index.html \
-                  | sed -E 's/^[^"]+"([^"]+)".*/\1/' \
-                  | sort -u)
-          # Plus anything fetch()ed
-          fetched=$(grep -oE "fetch\\(['\"]([^'\")]+)" index.html \
-                    | sed -E "s/fetch\\(['\"]([^'\"]+).*/\\1/" \
-                    | grep -v '^https\?://' \
+          paths=$(grep -REho 'href="/[^"]+"|src="/[^"]+"' src \
+                    | sed -E 's/^[^"]+"([^"]+)".*/\1/' \
+                    | grep -vE '^/(assets|src)/' \
                     | sort -u)
-          for p in $paths $fetched; do
-            if [ ! -f "$p" ]; then
-              echo "Missing asset: $p"
+          for p in $paths; do
+            f="public${p}"
+            if [ ! -f "$f" ]; then
+              echo "Missing static asset: public${p} (referenced as ${p})"
               missing=1
             fi
           done
           exit $missing
 
-      - name: Validate Code-tab API claims against OG-UK source
+      - name: Verify Code-tab API claims against upstream OG-UK
         run: |
-          # Cheap structural check: every Python identifier we present in
-          # a code block as `from oguk import X` or `from oguk.api import X`
-          # must be re-exported in the upstream OG-UK package.
-          # We pin the upstream commit so this stays reproducible.
+          # Cheap structural check: every oguk symbol cited in the Code tab
+          # must still be re-exported by the upstream package.
           curl -sL https://raw.githubusercontent.com/PSLmodels/OG-UK/main/oguk/__init__.py -o /tmp/oguk_init.py || {
-            echo "Could not fetch upstream OG-UK __init__.py — skipping API check"
+            echo "Could not fetch upstream OG-UK __init__.py — skipping"
             exit 0
           }
           missing=0
