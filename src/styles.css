@@ -760,6 +760,16 @@
     .code-panel-body .terminal-block:first-child { margin-top: 0; }
     .code-panel-body .terminal-block:last-child  { margin-bottom: 0; }
 
+    /* Code-tab steps are short prose; the Methodology 90vh min-height
+       leaves big empty gaps. Let each step size to its content with a
+       bit of breathing room. */
+    .code-narrative .narrative-step {
+      min-height: auto;
+      padding: 40px 0;
+    }
+    .code-narrative .narrative-step:first-child { padding-top: 0; }
+    .code-narrative .narrative-step:last-child  { padding-bottom: 80px; }
+
     .code-block {
       position: relative;
       background: #0F172A;

@@ -303,7 +303,7 @@ export default function CodeTab() {
       </div>
 
       <div className="scrollytelling-container">
-        <div className="scrolly-narrative">
+        <div className="scrolly-narrative code-narrative">
           {STEPS.map((step, i) => (
             <div
               key={i}
