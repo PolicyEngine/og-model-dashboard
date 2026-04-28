@@ -66,16 +66,21 @@ export default function App() {
           ))}
         </nav>
 
-        {TABS.map(({ id, Component }) => (
-          <section
-            key={id}
-            id={`tab-${id}`}
-            className={`tab-panel${id === activeTab ? ' active' : ''}`}
-            role="tabpanel"
-          >
-            <Component openModal={setModal} />
-          </section>
-        ))}
+        {TABS.map(({ id, Component }) => {
+          const isActive = id === activeTab;
+          return (
+            <section
+              key={id}
+              id={`tab-${id}`}
+              className={`tab-panel${isActive ? ' active' : ''}`}
+              role="tabpanel"
+              hidden={!isActive}
+              style={{ display: isActive ? 'block' : 'none' }}
+            >
+              <Component openModal={setModal} />
+            </section>
+          );
+        })}
 
         <footer className="dashboard-footer">
           <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a> Macro · built

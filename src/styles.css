@@ -754,7 +754,13 @@
       border: 1px solid var(--pe-color-border-light);
     }
 
-    /* Code-tab sticky panel — code blocks sit flush in the panel body. */
+    /* Code-tab sticky panel — code blocks sit flush in the panel body, and the
+       panel itself is the same height for every step (longer content scrolls
+       inside) so the viewport doesn't jump as you change steps. */
+    .code-panel-body {
+      height: 70vh;
+      min-height: 0;
+    }
     .code-panel-body .code-block:first-child { margin-top: 0; }
     .code-panel-body .code-block:last-child  { margin-bottom: 0; }
     .code-panel-body .terminal-block:first-child { margin-top: 0; }
