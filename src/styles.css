@@ -741,32 +741,24 @@
       margin-bottom: 10px;
     }
     .code-intro p strong { color: var(--pe-color-gray-800); }
-    .code-step { margin-bottom: 36px; scroll-margin-top: 90px; }
-    .code-step + .code-step { padding-top: 36px; border-top: 1px solid var(--pe-color-gray-200); }
-    .code-step h3 {
-      font-size: 1.2rem; font-weight: 700; color: var(--pe-color-gray-900);
-      letter-spacing: -0.02em; margin: 0 0 8px 0;
-      display: flex; align-items: baseline; gap: 12px;
-    }
-    .code-step h3 .step-tag {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 26px; height: 26px; border-radius: 50%;
-      background: transparent; border: 1.5px solid var(--accent);
-      font-size: 0.72rem; font-weight: 700; color: var(--accent);
-      flex-shrink: 0;
-    }
-    .code-step p {
-      font-size: 0.95rem; line-height: 1.7; color: var(--pe-color-gray-600);
-      margin-bottom: 12px;
-    }
-    .code-step p strong { color: var(--pe-color-gray-800); }
-    .code-step p code, .code-intro p code {
+
+    /* Inline `<code>` inside narrative prose (Methodology + Code tabs) and the
+       Code-tab intro paragraph. */
+    .code-intro p code,
+    .step-content p code,
+    .step-content li code {
       font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
       font-size: 0.84rem; background: var(--pe-color-gray-100);
       padding: 1px 6px; border-radius: 4px;
       color: var(--pe-color-primary-800);
       border: 1px solid var(--pe-color-border-light);
     }
+
+    /* Code-tab sticky panel — code blocks sit flush in the panel body. */
+    .code-panel-body .code-block:first-child { margin-top: 0; }
+    .code-panel-body .code-block:last-child  { margin-bottom: 0; }
+    .code-panel-body .terminal-block:first-child { margin-top: 0; }
+    .code-panel-body .terminal-block:last-child  { margin-bottom: 0; }
 
     .code-block {
       position: relative;
