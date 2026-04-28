@@ -41,11 +41,9 @@ export default function App() {
           aggregates from the OBR, and tax rules from PolicyEngine.
         </p>
         <p className="intro-text">
-          The four tabs below are designed to be read in order, but each one stands on its own. Start with{' '}
-          <strong>Example</strong> if you want to see the model in action on a real UK reform — it tells the
-          story in pictures. Read <strong>Methodology</strong> for an illustrated walkthrough of how the model
-          works. Open <strong>Code</strong> to see the few lines of Python that drive a full simulation. And
-          jump to <strong>OBR comparison</strong> if you want a side-by-side with the OBR’s new UK OLG model
+          Four tabs, each standing on its own: <strong>Example</strong> for the model in action on a worked
+          UK reform, <strong>Methodology</strong> for how it works, <strong>Code</strong> for the Python that
+          drives it, and <strong>OBR comparison</strong> for a side-by-side with the OBR’s UK OLG model
           (Brzezinski, Hantzsche &amp; Watson, OBR Working Paper No.&nbsp;22, April&nbsp;2025).
         </p>
 
