@@ -1082,7 +1082,7 @@
               <div class="sub-heading">Revenue and spending</div>
               <p>The government in OG-Core collects revenue from <strong>five tax instruments</strong>: individual income taxes, consumption taxes, wealth taxes, corporate income taxes, and bequest taxes. It spends on public goods, infrastructure, pensions, lump-sum transfers, and universal basic income. The difference is financed by issuing debt.</p>
               <div class="sub-heading">Income tax: Gouveia-Strauss functions</div>
-              <p>The income tax is the most complex instrument. OG-Core supports several functional forms for effective and marginal tax rates, estimated from detailed tax-benefit calculations. For OG-UK, we use the <strong>Gouveia-Strauss</strong> specification, which estimates the effective tax rate as a smooth, monotonically increasing function of income and derives the marginal tax rate analytically as its derivative. This is estimated from PolicyEngine UK output on Survey of Personal Incomes microdata.</p>
+              <p>The income tax is the most complex instrument. OG-Core supports several functional forms for effective and marginal tax rates, estimated from detailed tax-benefit calculations. For OG-UK, we use the <strong>Gouveia-Strauss</strong> specification, which estimates the effective tax rate as a smooth, monotonically increasing function of income and derives the marginal tax rate analytically. The estimation uses PolicyEngine-UK output on the <strong>Enhanced FRS</strong> &mdash; the Family Resources Survey enhanced with HMRC&rsquo;s Survey of Personal Incomes, the Living Costs and Food Survey, and the Wealth and Assets Survey.</p>
               <div class="sub-heading">Other tax instruments</div>
               <p>The <strong>wealth tax</strong> uses a progressive three-parameter function that can produce anything from zero taxation to smoothly increasing marginal rates. <strong>Consumption taxes</strong> are linear rates that can vary by good, capturing VAT and excise taxes. <strong>Corporate income taxes</strong> are flat rates by industry.</p>
               <div class="sub-heading">Fiscal closure rule</div>
@@ -1391,7 +1391,7 @@
               Both models are rational-expectations dynamic general equilibrium, but they solve different problems. <strong>OG-UK</strong> solves households' first-order conditions directly via Euler equations and iterates to a full <strong>year-by-year transition path</strong> (Time Path Iteration), so a reform shows up as a complete trajectory rather than a long-run snapshot. <strong>OBR UK OLG</strong> uses <strong>Value Function Iteration</strong> (Kirkby's VFI toolkit) and compares long-run steady states only; it does not model the adjustment path between them. As a consequence OG-UK's state space is continuous and its expectations run over the whole path, while the OBR model discretises assets and stochastic earnings on a grid and forms expectations within each steady state.
             </p>
             <p class="obr-lede">
-              Calibration differs mainly in data sources and anchors. <strong>OG-UK</strong> draws demographics from the UN World Population Prospects (country 826), age-earning profiles from microdata via its permanent ability types, and tax functions from PolicyEngine on SPI microdata; macro aggregates are anchored to ONS GDP levels, and fiscal targets and growth assumptions are configurable. <strong>OBR UK OLG</strong> uses ONS mortality statistics for demographics, ONS ASHE plus the HMRC earnings distribution for age-earnings profiles, and HMRC / GOV.UK parameters directly for taxes; it is pinned to the OBR March 2024 EFO &mdash; GDP per person of &pound;35,100 (scaling parameter S&nbsp;=&nbsp;19.81), population growth n&nbsp;=&nbsp;0.75%, productivity growth g&nbsp;=&nbsp;1.2%, and debt / GDP stabilised at 100%.
+              Calibration differs mainly in data sources and anchors. <strong>OG-UK</strong> draws demographics from the UN World Population Prospects (country 826), age-earning profiles from microdata via its permanent ability types, and tax functions from PolicyEngine-UK&rsquo;s Enhanced FRS (FRS enhanced with HMRC SPI, LCFS and WAS); macro aggregates are anchored to ONS GDP levels, and fiscal targets and growth assumptions are configurable. <strong>OBR UK OLG</strong> uses ONS mortality statistics for demographics, ONS ASHE plus the HMRC earnings distribution for age-earnings profiles, and HMRC / GOV.UK parameters directly for taxes; it is pinned to the OBR March 2024 EFO &mdash; GDP per person of &pound;35,100 (scaling parameter S&nbsp;=&nbsp;19.81), population growth n&nbsp;=&nbsp;0.75%, productivity growth g&nbsp;=&nbsp;1.2%, and debt / GDP stabilised at 100%.
             </p>
           </div>
 
@@ -1856,8 +1856,8 @@ const panelData = [
   ]},
   { title: 'UK calibration', badge: 'Step 7', sections: [
     { label: 'GS tax function', type: 'math', equations: [
-      { label: 'Effective tax rate', tex: '\\text{ETR}(y) = \\phi_0 - \\phi_1(Ay + B)^{-\\phi_2}' },
-      { label: 'Marginal (analytical)', tex: '\\text{MTR}(y) = \\frac{d}{dy}[y \\cdot \\text{ETR}(y)]' },
+      { label: 'Effective tax rate', tex: '\\text{ETR}(y) = \\phi_0\\Bigl[1 - \\bigl(1 + \\phi_2\\, y^{\\phi_1}\\bigr)^{-1/\\phi_1}\\Bigr]' },
+      { label: 'Marginal (analytical)', tex: '\\text{MTR}(y) = \\phi_0\\Bigl[1 - \\bigl(1 + \\phi_2\\, y^{\\phi_1}\\bigr)^{-(1+\\phi_1)/\\phi_1}\\Bigr]' },
     ]},
     { label: 'Data sources', type: 'output', lines: [
       { icon: '\\(\\to\\)', text: 'ONS: GDP, national accounts anchor', cls: 'info' },
