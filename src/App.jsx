@@ -30,16 +30,14 @@ export default function App() {
           the next question:{' '}
           <strong>what happens to the economy as a whole, year after year</strong>? If the basic rate of
           income tax goes up by a penny, do people work less? Save less? Does GDP grow more slowly? When does
-          tax revenue actually settle? Who across the generations bears the cost?
-        </p>
-        <p className="intro-text">
-          <strong>PolicyEngine Macro</strong> is built to answer those questions. It is the macroeconomic arm
-          of <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a>, powered by{' '}
-          <strong>OG-UK</strong> — the UK calibration of{' '}
+          tax revenue actually settle? Who across the generations bears the cost?{' '}
+          <strong>PolicyEngine Macro</strong> is built to answer those questions — the macroeconomic arm of{' '}
+          <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a>, powered by{' '}
+          <strong>OG-UK</strong>, the UK calibration of{' '}
           <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a>, an
           open-source framework maintained by the{' '}
-          <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a>. The
-          model is grounded in real UK data: demographics from the UN, national accounts from the ONS, fiscal
+          <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a>, and
+          grounded in real UK data: demographics from the UN, national accounts from the ONS, fiscal
           aggregates from the OBR, and tax rules from PolicyEngine.
         </p>
         <p className="intro-text">
