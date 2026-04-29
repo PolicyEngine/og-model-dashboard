@@ -27,16 +27,18 @@ export default function App() {
       <main className="main-content">
         <p className="intro-text">
           <strong>PolicyEngine Macro</strong> simulates the UK economy as it adjusts to a tax or benefit
-          reform. It is a{' '}
+          reform. Its engine is an open-source{' '}
+          <strong>overlapping-generations</strong> (OG) model maintained by the{' '}
           <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a>{' '}
-          (PSL) <strong>overlapping-generations</strong> (OG) model. In an OG model the population is split
-          into age cohorts that exist simultaneously; each cohort chooses how much to consume, work and save
-          over its lifetime, while firms hire labour and capital and the government collects taxes and pays
-          transfers. The model solves for the prices, wages and tax revenues that clear every market, year
-          by year, both under current policy and under any reform — so the output is a full transition path
-          for GDP, investment, interest rates and the public finances rather than a single long-run number.
-          The UK calibration uses demographics from the UN, national accounts from the ONS, fiscal
-          aggregates from the OBR, and tax rules from{' '}
+          (PSL); we calibrate it to the UK and connect it to PolicyEngine&rsquo;s tax-and-benefit
+          microsimulation. In an OG model the population is split into age cohorts that exist
+          simultaneously; each cohort chooses how much to consume, work and save over its lifetime, while
+          firms hire labour and capital and the government collects taxes and pays transfers. The model
+          solves for the prices, wages and tax revenues that clear every market, year by year, both under
+          current policy and under any reform — so the output is a full transition path for GDP,
+          investment, interest rates and the public finances rather than a single long-run number. The UK
+          calibration uses demographics from the UN, national accounts from the ONS, fiscal aggregates from
+          the OBR, and tax rules from{' '}
           <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a>.
         </p>
         <p className="intro-text">
