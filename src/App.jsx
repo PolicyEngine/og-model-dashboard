@@ -26,19 +26,20 @@ export default function App() {
 
       <main className="main-content">
         <p className="intro-text">
-          Most tax-and-benefit tools tell you what a reform does to <em>households today</em>. This one asks
-          the next question:{' '}
-          <strong>what happens to the economy as a whole, year after year</strong>? If the basic rate of
-          income tax goes up by a penny, do people work less? Save less? Does GDP grow more slowly? When does
-          tax revenue actually settle? Who across the generations bears the cost?{' '}
-          <strong>PolicyEngine Macro</strong> is built to answer those questions — the macroeconomic arm of{' '}
-          <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a>, powered by{' '}
-          <strong>OG-UK</strong>, the UK calibration of{' '}
-          <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a>, an
-          open-source framework maintained by the{' '}
-          <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a>, and
-          grounded in real UK data: demographics from the UN, national accounts from the ONS, fiscal
-          aggregates from the OBR, and tax rules from PolicyEngine.
+          <strong>PolicyEngine Macro</strong> simulates the UK economy as it adjusts to a tax or benefit
+          reform. It is built on <strong>OG-UK</strong>, the UK calibration of{' '}
+          <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a> — an{' '}
+          <em>overlapping-generations</em> (OG) model. In an OG model the population is split into age
+          cohorts that exist simultaneously; each cohort chooses how much to consume, work and save over its
+          lifetime, while firms hire labour and capital and the government collects taxes and pays transfers.
+          The model solves for the prices, wages and tax revenues that clear every market, year by year, both
+          under current policy and under any reform — so the output is a full transition path for GDP,
+          investment, interest rates and the public finances rather than a single long-run number. The UK
+          calibration uses demographics from the UN, national accounts from the ONS, fiscal aggregates from
+          the OBR, and tax rules from{' '}
+          <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a>; OG-Core is
+          maintained by the{' '}
+          <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a>.
         </p>
         <p className="intro-text">
           Four tabs, each standing on its own: <strong>Example</strong> for the model in action on a worked
