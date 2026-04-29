@@ -27,7 +27,7 @@ export default function App() {
       <main className="main-content">
         <p className="intro-text">
           <strong>PolicyEngine Macro</strong> simulates the UK economy as it adjusts to a tax or benefit
-          reform. Its engine is an open-source{' '}
+          reform. It is built on an open-source{' '}
           <strong>overlapping-generations</strong> (OG) model maintained by the{' '}
           <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a>{' '}
           (PSL); we calibrate it to the UK and connect it to PolicyEngine&rsquo;s tax-and-benefit
@@ -45,7 +45,7 @@ export default function App() {
           Four tabs, each standing on its own: <strong>Example</strong> for the model in action on a worked
           UK reform, <strong>Methodology</strong> for how it works, <strong>Code</strong> for the Python that
           drives it, and <strong>OBR comparison</strong> for a side-by-side with the OBR’s UK OLG model
-          (Brzezinski, Hantzsche &amp; Watson, OBR Working Paper No.&nbsp;22, April&nbsp;2025).
+          (OBR Working Paper No.&nbsp;22, April&nbsp;2025).
         </p>
 
         <nav className="tab-bar" role="tablist">
@@ -63,21 +63,17 @@ export default function App() {
           ))}
         </nav>
 
-        {TABS.map(({ id, Component }) => {
-          const isActive = id === activeTab;
-          return (
-            <section
-              key={id}
-              id={`tab-${id}`}
-              className={`tab-panel${isActive ? ' active' : ''}`}
-              role="tabpanel"
-              hidden={!isActive}
-              style={{ display: isActive ? 'block' : 'none' }}
-            >
-              <Component openModal={setModal} />
-            </section>
-          );
-        })}
+        {TABS.map(({ id, Component }) => (
+          <section
+            key={id}
+            id={`tab-${id}`}
+            className={`tab-panel${id === activeTab ? ' active' : ''}`}
+            role="tabpanel"
+            hidden={id !== activeTab}
+          >
+            <Component openModal={setModal} />
+          </section>
+        ))}
 
         <footer className="dashboard-footer">
           <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a> Macro · built

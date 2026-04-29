@@ -59,8 +59,8 @@ export default function ObrTab() {
             maintained by the{' '}
             <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a> —
             and the <strong>OBR UK OLG</strong> model described in{' '}
-            <a href="/papers/obr-working-paper-22.pdf" target="_blank" rel="noreferrer">Working Paper No.&nbsp;22</a>{' '}
-            (Brzezinski, Hantzsche &amp; Watson, April&nbsp;2025).
+            <a href="/papers/obr-working-paper-22.pdf" target="_blank" rel="noreferrer">OBR Working Paper No.&nbsp;22</a>{' '}
+            (April&nbsp;2025).
           </p>
           <p className="obr-lede">
             The sections below walk through how each model treats production, households, bequests, the tax
