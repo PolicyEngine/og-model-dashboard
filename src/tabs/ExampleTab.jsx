@@ -107,34 +107,50 @@ export default function ExampleTab() {
   return (
     <>
       <div className="results-headline">
-        <h2 className="section-heading">A worked example: what if the basic rate of income tax went up by 1&nbsp;p?</h2>
+        <h2 className="section-heading">What happens when you raise a tax?</h2>
         <p className="section-description">
-          A <strong>stylised illustration</strong>, not a forecast of any announced policy: from tax year{' '}
-          <strong>2027–28</strong>, the basic rate of UK income tax rises by one percentage point and stays
-          there. Every chart below tells the same story in a different way — <strong>solid lines</strong>{' '}
-          are the UK economy without the reform (history plus the OBR’s November&nbsp;2025 forecast), and{' '}
-          <strong>dashed lines</strong> are OG-UK’s reform path. The gap between them, from 2027 onwards, is
-          the model’s answer.
+          The day you raise the basic rate by a penny, every taxpayer pays a little more — that&rsquo;s the
+          static answer most tools give you. The real answer takes years to play out. People work less when
+          they keep less of their pay. They save less when after-tax returns fall. Firms invest less. The
+          economy that pays the tax in 2030 isn&rsquo;t the same one that paid it in 2027.
         </p>
-        <p className="section-description">Three views, from broadest to narrowest:</p>
+        <p className="section-description">
+          An <strong>overlapping-generations</strong> (OG) model tracks all of that. Instead of a single
+          number (&ldquo;this reform raises &pound;X bn&rdquo;), it gives you a <em>path</em>: how GDP,
+          wages, investment, debt and tax revenue evolve year by year as households and firms respond, and
+          how the cost is shared across generations.
+        </p>
+
+        <h2 className="section-heading" style={{ marginTop: '28px' }}>
+          The reform: 1&nbsp;p on the basic rate, from 2027–28
+        </h2>
+        <p className="section-description">
+          A <strong>stylised illustration</strong>, not a forecast of any announced policy. From tax year{' '}
+          <strong>2027–28</strong>, the basic rate of UK income tax rises from 20p to 21p and stays there — a
+          small, recognisable change so the model&rsquo;s behaviour is easy to read.
+        </p>
+        <p className="section-description">
+          In every chart below, <strong>solid lines</strong> are the UK economy without the reform (history
+          plus the OBR&rsquo;s November&nbsp;2025 forecast). <strong>Dashed lines</strong> are OG-UK&rsquo;s
+          reform path. The vertical gap between them, from 2027 onwards, is the model&rsquo;s answer.
+        </p>
+        <p className="section-description">Three views, broadest to narrowest:</p>
         <ul className="intro-list">
           <li>
-            <strong>The whole economy</strong> — the six headline numbers everyone knows: consumption,
-            investment, government spending, tax revenue, debt and GDP.
+            <strong>The whole economy</strong> — six headline national-accounts series: consumption,
+            investment, government spending, tax revenue, debt, GDP.
           </li>
           <li>
-            <strong>Industry by industry</strong> — how output, capital and labour move across the eight
-            sectors of the economy.
+            <strong>By industry</strong> — output, capital and labour for each of the eight UK sectors.
           </li>
           <li>
-            <strong>One sector at a time</strong> — the finest-grained view, for when you want to look at, say,
-            manufacturing investment in isolation.
+            <strong>One sector at a time</strong> — the finest-grained view, e.g. manufacturing investment
+            alone.
           </li>
         </ul>
         <p className="section-description">
-          Use the dropdowns inside each box to switch between series. The full transition path runs for
-          60&nbsp;periods, so you can see not just the long-run answer but how the economy moves from here to
-          there.
+          Use the dropdowns to switch series. The path runs for 60&nbsp;periods, so you see both the long-run
+          answer and how the economy moves from here to there.
         </p>
       </div>
 
