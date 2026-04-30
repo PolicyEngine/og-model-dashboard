@@ -798,11 +798,28 @@
       min-height: 0;
       max-height: none;
       scrollbar-gutter: stable;
+      /* Lay code/terminal blocks out as a column that fills the panel — so
+         a step with one block fills the whole body, a step with two blocks
+         splits the body in half, etc. The dark code boxes look the same
+         total size across every step. */
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: hidden;
     }
-    .code-panel-body .code-block:first-child { margin-top: 0; }
-    .code-panel-body .code-block:last-child  { margin-bottom: 0; }
-    .code-panel-body .terminal-block:first-child { margin-top: 0; }
-    .code-panel-body .terminal-block:last-child  { margin-bottom: 0; }
+    .code-panel-body > .code-block,
+    .code-panel-body > .terminal-block {
+      flex: 1 1 0;
+      min-height: 0;
+      margin: 0;
+      overflow: auto;
+    }
+    /* Allow inner <pre> to shrink below its natural size — without this the
+       fixed pre size would force the wrapping block to grow past flex:1. */
+    .code-panel-body .code-block pre,
+    .code-panel-body .terminal-block pre {
+      min-height: 0;
+    }
 
     /* Code-tab steps are short prose; the Methodology 90vh min-height
        leaves big empty gaps. Let each step size to its content with a
