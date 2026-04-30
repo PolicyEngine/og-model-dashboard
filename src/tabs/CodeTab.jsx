@@ -319,8 +319,8 @@ export default function CodeTab() {
           ))}
         </div>
 
-        <aside className="scrolly-sticky">
-          <div className="example-panel">
+        <aside className="scrolly-sticky code-sticky">
+          <div className="example-panel code-sticky-panel">
             <div className="example-header">
               <span className="example-title">Code</span>
               <span className="example-badge">Step {active + 1}</span>

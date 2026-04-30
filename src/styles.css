@@ -781,13 +781,23 @@
     }
 
     /* Code-tab sticky panel — every step's right-hand box is exactly the
-       same size; longer content scrolls inside. Pin all three dimensions
-       so neither short steps shrink it nor long ones grow it. */
+       same size; longer content scrolls inside. Pin the wrapping aside
+       and the panel so flex/grid contexts can't grow or shrink them, and
+       reserve scrollbar space so the body width does not jitter when a
+       step's content exceeds 70vh and triggers the inner scrollbar. */
+    .code-sticky { height: calc(70vh + 54px); }
+    .code-sticky-panel {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .code-sticky-panel .example-header { flex: 0 0 auto; }
     .code-panel-body {
-      height: 70vh;
-      min-height: 70vh;
-      max-height: 70vh;
-      flex-shrink: 0;
+      flex: 1 1 auto;
+      height: auto;
+      min-height: 0;
+      max-height: none;
+      scrollbar-gutter: stable;
     }
     .code-panel-body .code-block:first-child { margin-top: 0; }
     .code-panel-body .code-block:last-child  { margin-bottom: 0; }
