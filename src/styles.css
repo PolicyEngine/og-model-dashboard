@@ -780,46 +780,6 @@
       border: 1px solid var(--pe-color-border-light);
     }
 
-    /* Code-tab sticky panel — every step's right-hand box is exactly the
-       same size; longer content scrolls inside. Pin the wrapping aside
-       and the panel so flex/grid contexts can't grow or shrink them, and
-       reserve scrollbar space so the body width does not jitter when a
-       step's content exceeds 70vh and triggers the inner scrollbar. */
-    .code-sticky { height: calc(70vh + 54px); }
-    .code-sticky-panel {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-    .code-sticky-panel .example-header { flex: 0 0 auto; }
-    .code-panel-body {
-      flex: 1 1 auto;
-      height: auto;
-      min-height: 0;
-      max-height: none;
-      scrollbar-gutter: stable;
-      /* Lay code/terminal blocks out as a column that fills the panel — so
-         a step with one block fills the whole body, a step with two blocks
-         splits the body in half, etc. The dark code boxes look the same
-         total size across every step. */
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      overflow: hidden;
-    }
-    .code-panel-body > .code-block,
-    .code-panel-body > .terminal-block {
-      flex: 1 1 0;
-      min-height: 0;
-      margin: 0;
-      overflow: auto;
-    }
-    /* Allow inner <pre> to shrink below its natural size — without this the
-       fixed pre size would force the wrapping block to grow past flex:1. */
-    .code-panel-body .code-block pre,
-    .code-panel-body .terminal-block pre {
-      min-height: 0;
-    }
 
     /* Code-tab steps are short prose; the Methodology 90vh min-height
        leaves big empty gaps. Let each step size to its content with a
