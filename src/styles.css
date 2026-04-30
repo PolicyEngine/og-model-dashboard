@@ -707,8 +707,11 @@
       align-items: start;
     }
     .sector-side-by-side > .section-card { margin-bottom: 0; }
-    /* Half-width plots — shorter than the full-width macro plots above. */
+    /* Half-width plots — shorter than the default panel height. */
     .sector-side-by-side .panel-cell .plot { height: 340px; }
+    /* Macro card chart — keep it modest; the panel-grid default 460 px reads
+       as too tall for a single full-width plot. */
+    .macro-section .panel-cell .plot { height: 320px; }
 
     @media (max-width: 1100px) {
       .sector-side-by-side { grid-template-columns: 1fr; }

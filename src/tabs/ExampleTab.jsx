@@ -145,7 +145,7 @@ export default function ExampleTab() {
       </div>
 
       {/* Macro: 6 panels filtered to one */}
-      <div className="section-card">
+      <div className="section-card macro-section">
         <h2 className="section-heading">Macro aggregates — the whole economy</h2>
         <p className="section-description">
           Six headline series for the UK economy: <strong>consumption, investment, government consumption, tax
