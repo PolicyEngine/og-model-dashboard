@@ -135,7 +135,7 @@ export default function ExampleTab() {
           between them, from 2027 onwards, is the reform&rsquo;s modelled effect.
         </p>
         <p className="section-description">
-          Three views are available, broadest to narrowest: <strong>the whole economy</strong> — six
+          Three views are available: <strong>the whole economy</strong> — six
           national-accounts series (consumption, investment, government consumption, tax revenue, debt, GDP);{' '}
           <strong>by industry</strong> — output, capital and labour across the eight UK industry sectors;
           and <strong>one sector at a time</strong> — a single
