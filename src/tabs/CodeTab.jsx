@@ -295,7 +295,7 @@ export default function CodeTab() {
         <h2>From a few lines of Python to a full UK transition path</h2>
         <p>
           OG-UK is open source. The simulation that produced the charts in the <strong>Showcase</strong> tab —
-          and any other reform you might want to try — is fewer than fifty lines of Python. Scroll through the
+          and any other reform you might want to try — runs from the same short pipeline. Scroll through the
           seven steps below; the panel on the right shows the actual code from the{' '}
           <a href="https://github.com/PSLmodels/OG-UK" target="_blank" rel="noreferrer">OG-UK repository</a>{' '}
           for whichever step you’re reading.
