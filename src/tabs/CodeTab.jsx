@@ -181,7 +181,7 @@ const STEPS = [
         <p>
           The steady state tells you where the economy ends up. The <strong>transition path</strong> tells
           you how it gets there — year by year, 60&nbsp;periods by default (configurable). This is what
-          powers the dashed lines in the <strong>Example</strong> tab.
+          powers the dashed lines in the <strong>Showcase</strong> tab.
         </p>
         <p>
           Solving the transition is heavier (every cohort’s lifetime is solved under rational expectations),
@@ -217,7 +217,7 @@ const STEPS = [
           Pass <code>multi_sector=True</code> and the same call returns the breakdown across the eight UK
           industry sectors (energy, manufacturing, construction, trade &amp; transport, info &amp; finance,
           real estate, business services, public &amp; other) — the basis for the <em>industry by
-          industry</em> view in the Example tab.
+          industry</em> view in the Showcase tab.
         </p>
         <p>Sector-level output, capital and labour are returned alongside the macro aggregates.</p>
       </>
@@ -238,7 +238,7 @@ const STEPS = [
         <ul className="intro-list">
           <li><code>run_oguk.py</code> — the canonical full pipeline (steady state and TPI).</li>
           <li><code>run_oguk_fast_tpi.py</code> — a faster transition with reduced periods (T = 80).</li>
-          <li><code>run_oguk_fast_sector.py</code> — the 8-sector calibration that produces the Example-tab charts.</li>
+          <li><code>run_oguk_fast_sector.py</code> — the 8-sector calibration that produces the Showcase-tab charts.</li>
           <li><code>plot.py</code> — visualises the estimated tax functions in 3D.</li>
         </ul>
         <p>
@@ -294,7 +294,7 @@ export default function CodeTab() {
       <div className="code-intro">
         <h2>From a few lines of Python to a full UK transition path</h2>
         <p>
-          OG-UK is open source. The simulation that produced the charts in the <strong>Example</strong> tab —
+          OG-UK is open source. The simulation that produced the charts in the <strong>Showcase</strong> tab —
           and any other reform you might want to try — is fewer than fifty lines of Python. Scroll through the
           seven steps below; the panel on the right shows the actual code from the{' '}
           <a href="https://github.com/PSLmodels/OG-UK" target="_blank" rel="noreferrer">OG-UK repository</a>{' '}

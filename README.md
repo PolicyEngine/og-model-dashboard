@@ -4,7 +4,7 @@ A React + Vite dashboard explaining **OG-UK** — the UK calibration of [OG-Core
 
 The dashboard has four tabs:
 
-- **Example** — a worked +1 pp basic-rate-of-income-tax simulation with three views: macro aggregates, industry-by-industry impact, and any single sector × variable cell. Charts are generated from `src/data/tpiData.json` via Plotly.
+- **Showcase** — a worked +1 pp basic-rate-of-income-tax simulation with three views: macro aggregates, industry-by-industry impact, and any single sector × variable cell. Charts are generated from `src/data/tpiData.json` via Plotly.
 - **Methodology** — a scrollytelling walk-through of the eight core elements of OG-UK with a sticky right-hand panel that shows the formal structure (equations, tax instruments, solution algorithm) for each step as you scroll.
 - **Code** — a seven-step walkthrough of the Python you would actually run: install, define a reform with PolicyEngine, solve a steady state, run a transition path, map outputs to £bn, and the multi-sector option.
 - **OBR comparison** — a side-by-side comparison with the OBR's UK OLG model ([Working Paper No. 22](/papers/obr-working-paper-22.pdf), Brzezinski, Hantzsche & Watson, April 2025). Covers production, households, bequests, taxes, government, open economy, and solution method & calibration.

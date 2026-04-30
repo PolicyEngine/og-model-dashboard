@@ -96,7 +96,7 @@ export const STEPS = [
                 <li><strong>Reforms are step changes.</strong> A PolicyEngine reform sets parameter values from a start date and they hold thereafter. Phased introductions, sunset clauses or year-on-year indexation changes can be modelled but require explicit scripting; they are not the default.</li>
                 <li><strong>Truncated horizon.</strong> The default 60-period transition assumes the steady state is reached by year 60. Effects that play out over longer horizons collapse into the steady-state anchor.</li>
               </ul>
-              <p>None of these are model bugs &mdash; they are choices that make the macro accounting tractable. They are worth knowing when reading the Example tab&rsquo;s charts.</p>
+              <p>None of these are model bugs &mdash; they are choices that make the macro accounting tractable. They are worth knowing when reading the Showcase tab&rsquo;s charts.</p>
 `,
   },
 ];
