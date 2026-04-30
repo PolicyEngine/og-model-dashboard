@@ -129,30 +129,18 @@ export default function ExampleTab() {
         <p className="section-description">
           The reform shown below is a one-percentage-point increase in the basic rate of UK income tax, from
           20% to 21%, taking effect from tax year <strong>2027–28</strong> and held thereafter. It is a
-          stylised illustration, not a forecast of any announced policy — chosen because it is a single,
-          well-understood parameter change.
+          stylised illustration, not a forecast of any announced policy. In every chart,{' '}
+          <strong>solid lines</strong> are the UK economy under the OBR&rsquo;s November&nbsp;2025 baseline
+          (history plus forecast); <strong>dashed lines</strong> are the OG-UK reform path. The vertical gap
+          between them, from 2027 onwards, is the reform&rsquo;s modelled effect.
         </p>
         <p className="section-description">
-          In every chart, <strong>solid lines</strong> are the UK economy under the OBR&rsquo;s
-          November&nbsp;2025 baseline (history plus forecast). <strong>Dashed lines</strong> are the OG-UK
-          reform path. The vertical gap between them, from 2027 onwards, is the reform&rsquo;s modelled
-          effect.
-        </p>
-        <p className="section-description">Three views, broadest to narrowest:</p>
-        <ul className="intro-list">
-          <li>
-            <strong>The whole economy</strong> — six national-accounts series: consumption, investment,
-            government consumption, tax revenue, debt, GDP.
-          </li>
-          <li>
-            <strong>By industry</strong> — output, capital and labour across the eight UK industry sectors.
-          </li>
-          <li>
-            <strong>One sector at a time</strong> — a single sector&nbsp;&times;&nbsp;variable cell.
-          </li>
-        </ul>
-        <p className="section-description">
-          Use the dropdowns to switch series. The transition path runs for 60&nbsp;periods.
+          Three views are available, broadest to narrowest: <strong>the whole economy</strong> — six
+          national-accounts series (consumption, investment, government consumption, tax revenue, debt, GDP);{' '}
+          <strong>by industry</strong> — output, capital and labour across the eight UK industry sectors;
+          and <strong>one sector at a time</strong> — a single
+          sector&nbsp;&times;&nbsp;variable cell. Use the dropdowns to switch series. The transition path
+          runs for 60&nbsp;periods.
         </p>
       </div>
 
