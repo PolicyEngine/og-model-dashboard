@@ -7,8 +7,8 @@ import DiagramModal from './components/DiagramModal.jsx';
 
 const TABS = [
   { id: 'results', label: 'Showcase', Component: ExampleTab },
-  { id: 'methodology', label: 'Methodology', Component: MethodologyTab },
   { id: 'code', label: 'Code', Component: CodeTab },
+  { id: 'methodology', label: 'Methodology', Component: MethodologyTab },
   { id: 'obr', label: 'OBR comparison', Component: ObrTab },
 ];
 
@@ -40,8 +40,8 @@ export default function App() {
         </p>
         <p className="intro-text">
           Four tabs, each standing on its own: <strong>Showcase</strong> for the model in action on a worked
-          UK reform, <strong>Methodology</strong> for how it works, <strong>Code</strong> for the Python that
-          drives it, and <strong>OBR comparison</strong> for a side-by-side with the OBR’s UK OLG model
+          UK reform, <strong>Code</strong> for the Python that drives it, <strong>Methodology</strong> for
+          how it works, and <strong>OBR comparison</strong> for a side-by-side with the OBR’s UK OLG model
           (OBR Working Paper No.&nbsp;22, April&nbsp;2025).
         </p>
 
