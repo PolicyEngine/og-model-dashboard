@@ -32,9 +32,9 @@ export default function App() {
           <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a>{' '}
           (PSL), calibrated to the UK and wired into PolicyEngine&rsquo;s tax-and-benefit microsimulation.
           In an OG model age cohorts coexist; each chooses consumption, hours and savings over its lifetime,
-          firms hire labour and capital, and markets clear period by period. The output is a year-by-year
+          firms hire labour and capital, and markets clear period by period. The model returns a year-by-year
           path for GDP, investment, interest rates and the public finances — not a single long-run number.
-          UK calibration draws on UN demographics, ONS national accounts, OBR fiscal aggregates, and tax
+          The UK calibration draws on UN demographics, ONS national accounts, OBR fiscal aggregates, and tax
           rules from{' '}
           <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a>.
         </p>

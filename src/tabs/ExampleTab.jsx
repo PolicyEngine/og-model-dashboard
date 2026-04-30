@@ -110,29 +110,29 @@ export default function ExampleTab() {
         <h2 className="section-heading">What an OG model adds to a static analysis</h2>
         <p className="section-description">
           A static tax model holds the economy fixed and totals up who pays more or less under a reform. It
-          is a useful first answer, but it ignores how people and firms respond. When after-tax wages fall,
+          answers part of the question, but ignores how people and firms respond. When after-tax wages fall,
           households work less and save less. When the cost of capital rises, firms invest less. Tax
-          revenues, GDP and the public finances evolve over years as those adjustments work through.
+          revenues, GDP and the public finances move over years as those adjustments work through.
         </p>
         <p className="section-description">
           An <strong>overlapping-generations</strong> (OG) model captures those responses. Many age cohorts
           coexist; each chooses consumption, hours and savings over its lifetime; firms hire labour and rent
           capital; the government collects taxes and pays transfers; markets clear period by period. The
-          output is a year-by-year path for GDP, wages, interest rates, investment, debt and tax revenue
-          under the reform, alongside the same path without it. The difference between the two paths is the
-          reform&rsquo;s macroeconomic effect.
+          model returns a year-by-year path for GDP, wages, interest rates, investment, debt and tax revenue
+          under the reform, alongside the same path without it. The difference between the two paths gives
+          the reform&rsquo;s macroeconomic effect.
         </p>
 
         <h2 className="section-heading" style={{ marginTop: '28px' }}>
           The reform: 1&nbsp;pp on the basic rate, from 2027–28
         </h2>
         <p className="section-description">
-          The reform shown below is a one-percentage-point increase in the basic rate of UK income tax, from
-          20% to 21%, taking effect from tax year <strong>2027–28</strong> and held thereafter. It is a
-          stylised illustration, not a forecast of any announced policy. In every chart,{' '}
-          <strong>solid lines</strong> are the UK economy under the OBR&rsquo;s November&nbsp;2025 baseline
-          (history plus forecast); <strong>dashed lines</strong> are the OG-UK reform path. The vertical gap
-          between them, from 2027 onwards, is the reform&rsquo;s modelled effect.
+          The reform raises the basic rate of UK income tax by one percentage point, from 20% to 21%,
+          starting in tax year <strong>2027–28</strong> and holding thereafter. It serves as a stylised
+          illustration, not a forecast of any announced policy. In every chart,{' '}
+          <strong>solid lines</strong> show the UK economy under the OBR&rsquo;s November&nbsp;2025 baseline
+          (history plus forecast); <strong>dashed lines</strong> show the OG-UK reform path. The vertical
+          gap between them, from 2027 onwards, gives the reform&rsquo;s modelled effect.
         </p>
         <p className="section-description">
           Three views are available: <strong>the whole economy</strong> — six
@@ -149,10 +149,10 @@ export default function ExampleTab() {
         <h2 className="section-heading">Macro aggregates — the whole economy</h2>
         <p className="section-description">
           Six headline series for the UK economy: <strong>consumption, investment, government consumption, tax
-          revenue, debt and GDP</strong>. Flows are shown as a share of GDP (the natural scale for fiscal
-          aggregates); GDP itself is in £bn at current prices. Pick one from the dropdown — the vertical gap
-          between the solid baseline and the dashed reform path from 2027 onwards is the reform effect on that
-          series.
+          revenue, debt and GDP</strong>. Flows appear as a share of GDP (the natural scale for fiscal
+          aggregates); GDP itself sits in £bn at current prices. Pick one from the dropdown — the vertical
+          gap between the solid baseline and the dashed reform path from 2027 onwards gives the reform
+          effect on that series.
         </p>
         <div className="results-toolbar">
           <Select label="Show" options={MACRO_OPTS} value={macroVar} onChange={setMacroVar} />
@@ -176,9 +176,9 @@ export default function ExampleTab() {
         <h2 className="section-heading">Impact across sectors</h2>
         <p className="section-description">
           The reform&apos;s effect on the whole industry mix at once. Pick <strong>output, capital or
-          labour</strong> from the dropdown and the chart overlays all eight sectors, plotted as{' '}
-          <strong>percentage change from baseline</strong>. Positive values: the sector is larger under reform
-          than in the baseline. Negative values: smaller. A one-look answer to “which sectors move most?”
+          labour</strong> from the dropdown; the chart overlays all eight sectors as{' '}
+          <strong>percentage change from baseline</strong>. Positive values: the sector grows under the
+          reform. Negative values: it shrinks. A one-look answer to which sectors move most.
         </p>
         <div className="results-toolbar">
           <Select label="Show" options={SECTOR_VAR_OPTS} value={sectorVar} onChange={setSectorVar} />
@@ -201,7 +201,7 @@ export default function ExampleTab() {
         <h2 className="section-heading">One sector at a time</h2>
         <p className="section-description">
           The finest-grained view: any single <strong>sector × variable</strong> cell of the economy. Pick a
-          variable (output, capital or labour) and a sector, and the plot shows that cell&apos;s full path
+          variable (output, capital or labour) and a sector; the plot shows that cell&apos;s full path
           indexed to 2000&nbsp;=&nbsp;100. Solid = ONS outturn stitched to the OBR Nov&nbsp;2025 EFO baseline;
           dashed = OG-UK&apos;s +1&nbsp;pp basic-rate reform. History gives context for how far off-baseline
           the reform pushes that sector.
