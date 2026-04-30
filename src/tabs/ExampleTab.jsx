@@ -107,50 +107,52 @@ export default function ExampleTab() {
   return (
     <>
       <div className="results-headline">
-        <h2 className="section-heading">What happens when you raise a tax?</h2>
+        <h2 className="section-heading">What an OG model adds to a static analysis</h2>
         <p className="section-description">
-          The day you raise the basic rate by a penny, every taxpayer pays a little more — that&rsquo;s the
-          static answer most tools give you. The real answer takes years to play out. People work less when
-          they keep less of their pay. They save less when after-tax returns fall. Firms invest less. The
-          economy that pays the tax in 2030 isn&rsquo;t the same one that paid it in 2027.
+          A static tax model holds the economy fixed and totals up who pays more or less under a reform. It
+          is a useful first answer, but it ignores how people and firms respond. When after-tax wages fall,
+          households work less and save less. When the cost of capital rises, firms invest less. Tax
+          revenues, GDP and the public finances evolve over years as those adjustments work through.
         </p>
         <p className="section-description">
-          An <strong>overlapping-generations</strong> (OG) model tracks all of that. Instead of a single
-          number (&ldquo;this reform raises &pound;X bn&rdquo;), it gives you a <em>path</em>: how GDP,
-          wages, investment, debt and tax revenue evolve year by year as households and firms respond, and
-          how the cost is shared across generations.
+          An <strong>overlapping-generations</strong> (OG) model captures those responses. Many age cohorts
+          coexist; each chooses consumption, hours and savings over its lifetime; firms hire labour and rent
+          capital; the government collects taxes and pays transfers; markets clear period by period. The
+          output is a year-by-year path for GDP, wages, interest rates, investment, debt and tax revenue
+          under the reform, alongside the same path without it. The difference between the two paths is the
+          reform&rsquo;s macroeconomic effect.
         </p>
 
         <h2 className="section-heading" style={{ marginTop: '28px' }}>
-          The reform: 1&nbsp;p on the basic rate, from 2027–28
+          The reform: 1&nbsp;pp on the basic rate, from 2027–28
         </h2>
         <p className="section-description">
-          A <strong>stylised illustration</strong>, not a forecast of any announced policy. From tax year{' '}
-          <strong>2027–28</strong>, the basic rate of UK income tax rises from 20p to 21p and stays there — a
-          small, recognisable change so the model&rsquo;s behaviour is easy to read.
+          The reform shown below is a one-percentage-point increase in the basic rate of UK income tax, from
+          20% to 21%, taking effect from tax year <strong>2027–28</strong> and held thereafter. It is a
+          stylised illustration, not a forecast of any announced policy — chosen because it is a single,
+          well-understood parameter change.
         </p>
         <p className="section-description">
-          In every chart below, <strong>solid lines</strong> are the UK economy without the reform (history
-          plus the OBR&rsquo;s November&nbsp;2025 forecast). <strong>Dashed lines</strong> are OG-UK&rsquo;s
-          reform path. The vertical gap between them, from 2027 onwards, is the model&rsquo;s answer.
+          In every chart, <strong>solid lines</strong> are the UK economy under the OBR&rsquo;s
+          November&nbsp;2025 baseline (history plus forecast). <strong>Dashed lines</strong> are the OG-UK
+          reform path. The vertical gap between them, from 2027 onwards, is the reform&rsquo;s modelled
+          effect.
         </p>
         <p className="section-description">Three views, broadest to narrowest:</p>
         <ul className="intro-list">
           <li>
-            <strong>The whole economy</strong> — six headline national-accounts series: consumption,
-            investment, government spending, tax revenue, debt, GDP.
+            <strong>The whole economy</strong> — six national-accounts series: consumption, investment,
+            government consumption, tax revenue, debt, GDP.
           </li>
           <li>
-            <strong>By industry</strong> — output, capital and labour for each of the eight UK sectors.
+            <strong>By industry</strong> — output, capital and labour across the eight UK industry sectors.
           </li>
           <li>
-            <strong>One sector at a time</strong> — the finest-grained view, e.g. manufacturing investment
-            alone.
+            <strong>One sector at a time</strong> — a single sector&nbsp;&times;&nbsp;variable cell.
           </li>
         </ul>
         <p className="section-description">
-          Use the dropdowns to switch series. The path runs for 60&nbsp;periods, so you see both the long-run
-          answer and how the economy moves from here to there.
+          Use the dropdowns to switch series. The transition path runs for 60&nbsp;periods.
         </p>
       </div>
 
