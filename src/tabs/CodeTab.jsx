@@ -28,6 +28,8 @@ REFORM = Policy(
 
 const SS_PY = `from oguk import solve_steady_state, map_to_real_world
 
+from og_dashboard.reform import REFORM
+
 baseline = solve_steady_state(start_year=2026)
 reform   = solve_steady_state(start_year=2026, policy=REFORM)
 
@@ -60,6 +62,8 @@ const TERMINAL = [
 
 const TPI_PY = `from dask.distributed import Client
 from oguk import run_transition_path, map_transition_to_real_world
+
+from og_dashboard.reform import REFORM
 
 client = Client(n_workers=2, threads_per_worker=1, memory_limit="2GB")
 
@@ -103,11 +107,17 @@ const MULTI_PY = `base_tp, reform_tp = run_transition_path(
 )`;
 
 const LS_TERMINAL = [
-  [['$ ls examples/', 'term-em']],
-  'plot.py',
-  'run_oguk.py',
-  'run_oguk_fast_sector.py',
-  'run_oguk_fast_tpi.py',
+  [['$ tree python/', 'term-em']],
+  'python/',
+  '├── pyproject.toml',
+  '├── og_dashboard/',
+  '│   ├── __init__.py',
+  '│   └── reform.py',
+  '└── scripts/',
+  '    ├── 01_install.sh',
+  '    ├── 03_steady_state.py',
+  '    ├── 04_transition.py',
+  '    └── 06_multi_sector.py',
 ];
 
 const STEPS = [
@@ -150,7 +160,7 @@ const STEPS = [
         </p>
       </>
     ),
-    panel: [{ type: 'code', filename: 'examples/run_oguk.py', lang: 'py', content: REFORM_PY }],
+    panel: [{ type: 'code', filename: 'python/og_dashboard/reform.py', lang: 'py', content: REFORM_PY }],
   },
   {
     title: 'Solve the long-run steady state',
@@ -170,7 +180,7 @@ const STEPS = [
       </>
     ),
     panel: [
-      { type: 'code', filename: 'examples/run_oguk.py', lang: 'py', content: SS_PY },
+      { type: 'code', filename: 'python/scripts/03_steady_state.py', lang: 'py', content: SS_PY },
       { type: 'terminal', lines: TERMINAL },
     ],
   },
@@ -190,7 +200,7 @@ const STEPS = [
         </p>
       </>
     ),
-    panel: [{ type: 'code', filename: 'examples/run_oguk.py', lang: 'py', content: TPI_PY }],
+    panel: [{ type: 'code', filename: 'python/scripts/04_transition.py', lang: 'py', content: TPI_PY }],
   },
   {
     title: 'From abstract units to pounds',
@@ -222,27 +232,39 @@ const STEPS = [
         <p>Sector-level output, capital and labour are returned alongside the macro aggregates.</p>
       </>
     ),
-    panel: [{ type: 'code', filename: 'examples/run_oguk.py', lang: 'py', content: MULTI_PY }],
+    panel: [{ type: 'code', filename: 'python/scripts/06_multi_sector.py', lang: 'py', content: MULTI_PY }],
   },
   {
     title: 'Where to go next',
     prose: (
       <>
         <p>
-          The{' '}
-          <a href="https://github.com/PSLmodels/OG-UK/tree/main/examples" target="_blank" rel="noreferrer">
-            examples directory
-          </a>{' '}
-          in the OG-UK repo has more variations to copy:
+          Every step above ships as a runnable file in this repo&rsquo;s{' '}
+          <code>python/</code> folder — the panel on the right shows the layout. Pick the script that matches
+          the step you want and run it on its own:
         </p>
         <ul className="intro-list">
-          <li><code>run_oguk.py</code> — the canonical full pipeline (steady state and TPI).</li>
-          <li><code>run_oguk_fast_tpi.py</code> — a faster transition with reduced periods (T = 80).</li>
-          <li><code>run_oguk_fast_sector.py</code> — the 8-sector calibration that produces the Showcase-tab charts.</li>
-          <li><code>plot.py</code> — visualises the estimated tax functions in 3D.</li>
+          <li>
+            <code>scripts/03_steady_state.py</code> — fastest, prints a one-line £bn impact summary.
+          </li>
+          <li>
+            <code>scripts/04_transition.py</code> — heavier, produces the full year-by-year path.
+          </li>
+          <li>
+            <code>scripts/06_multi_sector.py</code> — the 8-sector calibration behind the Showcase-tab
+            industry views.
+          </li>
         </ul>
         <p>
-          Full API reference and theory documentation:{' '}
+          Edit <code>og_dashboard/reform.py</code> to swap the parameter, value or start date — every script
+          imports <code>REFORM</code> from there, so the rest of the pipeline stays unchanged. For more
+          variations, the upstream{' '}
+          <a href="https://github.com/PSLmodels/OG-UK/tree/main/examples" target="_blank" rel="noreferrer">
+            OG-UK examples
+          </a>{' '}
+          directory has additional pipelines (<code>run_oguk_fast_tpi.py</code>,{' '}
+          <code>run_oguk_fast_sector.py</code>, <code>plot.py</code>). Full API reference and theory
+          documentation:{' '}
           <a href="https://pslmodels.github.io/OG-UK" target="_blank" rel="noreferrer">
             pslmodels.github.io/OG-UK
           </a>
@@ -294,11 +316,12 @@ export default function CodeTab() {
       <div className="code-intro">
         <h2>From a few lines of Python to a full UK transition path</h2>
         <p>
-          OG-UK is open source. The simulation that produced the charts in the <strong>Showcase</strong> tab —
-          and any other reform you might want to try — runs from the same short pipeline. Scroll through the
-          seven steps below; the panel on the right shows the actual code from the{' '}
-          <a href="https://github.com/PSLmodels/OG-UK" target="_blank" rel="noreferrer">OG-UK repository</a>{' '}
-          for whichever step you’re reading.
+          OG-UK is open source, and every Code-tab step that has logic ships as a runnable file in this
+          repo&rsquo;s <code>python/</code> folder. Scroll through the seven steps below; the panel on the
+          right shows the code for whichever step you&rsquo;re reading, and the filename label tells you
+          where to find the same file on disk. Pick a step, run it on its own, swap the reform — full
+          context lives in{' '}
+          <a href="https://github.com/PSLmodels/OG-UK" target="_blank" rel="noreferrer">PSL&rsquo;s OG-UK repository</a>.
         </p>
       </div>
 

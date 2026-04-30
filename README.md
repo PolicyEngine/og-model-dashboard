@@ -6,7 +6,7 @@ The dashboard has four tabs:
 
 - **Showcase** — a worked +1 pp basic-rate-of-income-tax simulation with three views: macro aggregates, industry-by-industry impact, and any single sector × variable cell. Charts are generated from `src/data/tpiData.json` via Plotly.
 - **Methodology** — a scrollytelling walk-through of the eight core elements of OG-UK with a sticky right-hand panel that shows the formal structure (equations, tax instruments, solution algorithm) for each step as you scroll.
-- **Code** — a seven-step walkthrough of the Python you would actually run: install, define a reform with PolicyEngine, solve a steady state, run a transition path, map outputs to £bn, and the multi-sector option.
+- **Code** — a seven-step walkthrough of the Python you would actually run: install, define a reform with PolicyEngine, solve a steady state, run a transition path, map outputs to £bn, and the multi-sector option. Each runnable step ships as its own file under [`python/`](python/) so you can pick a step and run it on its own.
 - **OBR comparison** — a side-by-side comparison with the OBR's UK OLG model ([Working Paper No. 22](/papers/obr-working-paper-22.pdf), Brzezinski, Hantzsche & Watson, April 2025). Covers production, households, bequests, taxes, government, open economy, and solution method & calibration.
 
 ## Stack
@@ -64,6 +64,17 @@ bun run preview   # http://localhost:4173/
 ├── public/
 │   └── papers/
 │       └── obr-working-paper-22.pdf
+├── python/                   # runnable Python that mirrors the Code tab
+│   ├── pyproject.toml        # uv-managed environment
+│   ├── README.md
+│   ├── og_dashboard/
+│   │   ├── __init__.py
+│   │   └── reform.py         # Step 2 — shared REFORM Policy
+│   └── scripts/
+│       ├── 01_install.sh     # Step 1
+│       ├── 03_steady_state.py
+│       ├── 04_transition.py
+│       └── 06_multi_sector.py
 ├── vercel.json               # Vercel: vite framework, dist/ output
 ├── vite.config.js
 ├── package.json

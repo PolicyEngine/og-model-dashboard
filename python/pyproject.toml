@@ -1,0 +1,17 @@
+[project]
+name = "og-dashboard-examples"
+version = "0.1.0"
+description = "Runnable Python examples that mirror each step of the OG-UK dashboard's Code tab"
+requires-python = ">=3.11"
+dependencies = [
+    "oguk @ git+https://github.com/PSLmodels/OG-UK.git",
+    "policyengine>=4.1.0",
+    "dask[distributed]>=2024.1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["og_dashboard"]
