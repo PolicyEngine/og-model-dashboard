@@ -709,8 +709,13 @@
     .sector-side-by-side > .section-card { margin-bottom: 0; }
     /* Half-width plots — shorter than the default panel height. */
     .sector-side-by-side .panel-cell .plot { height: 340px; }
-    /* Macro card chart — keep it modest; the panel-grid default 460 px reads
-       as too tall for a single full-width plot. */
+    /* Macro card chart — keep it modest in both dimensions; full-width
+       reads as oversized for a single plot. */
+    .macro-section .panel-grid {
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
     .macro-section .panel-cell .plot { height: 320px; }
 
     @media (max-width: 1100px) {
