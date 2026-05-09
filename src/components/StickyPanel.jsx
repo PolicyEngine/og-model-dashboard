@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef } from 'react';
 import { renderTex, renderMathIn } from '../lib/katex.js';
 import { PANEL_DATA } from '../data/methodologyPanels.js';

@@ -1,3 +1,5 @@
+'use client';
+
 // Terminal-style output. `lines` is an array of arrays; each inner array is
 // a sequence of [text, className?] pairs that render as <span> chunks.
 // A line that is just a string renders as plain dimmed prompt text.

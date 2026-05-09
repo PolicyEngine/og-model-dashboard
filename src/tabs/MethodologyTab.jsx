@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { STEPS } from '../data/methodologyContent.js';
 import { DIAGRAMS, DIAGRAM_TITLES } from '../data/methodologyDiagrams.js';

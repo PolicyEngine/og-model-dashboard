@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from 'react';
 import { highlight } from '../lib/highlight.js';
 

@@ -1,9 +1,11 @@
+'use client';
+
 import { useState } from 'react';
-import ExampleTab from './tabs/ExampleTab.jsx';
-import MethodologyTab from './tabs/MethodologyTab.jsx';
-import CodeTab from './tabs/CodeTab.jsx';
-import ObrTab from './tabs/ObrTab.jsx';
-import DiagramModal from './components/DiagramModal.jsx';
+import ExampleTab from '@/tabs/ExampleTab.jsx';
+import MethodologyTab from '@/tabs/MethodologyTab.jsx';
+import CodeTab from '@/tabs/CodeTab.jsx';
+import ObrTab from '@/tabs/ObrTab.jsx';
+import DiagramModal from '@/components/DiagramModal.jsx';
 
 const TABS = [
   { id: 'results', label: 'Showcase', Component: ExampleTab },
@@ -12,9 +14,9 @@ const TABS = [
   { id: 'obr', label: 'OBR comparison', Component: ObrTab },
 ];
 
-export default function App() {
+export default function HomePage() {
   const [activeTab, setActiveTab] = useState('results');
-  const [modal, setModal] = useState(null); // { title, svgHtml } | null
+  const [modal, setModal] = useState(null);
 
   return (
     <div className="app-shell">
@@ -41,7 +43,7 @@ export default function App() {
         <p className="intro-text">
           Four tabs, each standing on its own: <strong>Showcase</strong> for the model in action on a worked
           UK reform, <strong>Code</strong> for the Python that drives it, <strong>Methodology</strong> for
-          how it works, and <strong>OBR comparison</strong> for a side-by-side with the OBR’s UK OLG model
+          how it works, and <strong>OBR comparison</strong> for a side-by-side with the OBR&rsquo;s UK OLG model
           (OBR Working Paper No.&nbsp;22, April&nbsp;2025).
         </p>
 

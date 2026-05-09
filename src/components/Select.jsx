@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
 
 // Custom single-select dropdown matching the static dashboard's look.
