@@ -21,5 +21,7 @@ yarn-error.log*
 bun-debug.log*
 
 # Build output
-dist/
-.vite/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts

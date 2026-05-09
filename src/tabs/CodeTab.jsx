@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import CodeBlock from '../components/CodeBlock.jsx';
 import TerminalBlock from '../components/TerminalBlock.jsx';

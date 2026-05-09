@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import data from '../data/tpiData.json';
 import PlotPanel from '../components/PlotPanel.jsx';
