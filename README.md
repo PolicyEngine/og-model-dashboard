@@ -89,6 +89,13 @@ Vercel auto-detects Vite and runs `bun install --frozen-lockfile` then `bun run 
 
 `.github/workflows/checks.yml` runs `bun run build` on every PR and push, verifies the built `dist/` references its bundle, checks that any `public/`-relative URL referenced from `src/` actually exists, and pings upstream `oguk/__init__.py` to make sure the API symbols cited in the Code tab are still exported.
 
+## Data provenance
+
+The figures in `src/data/tpiData.json` were generated on 28 April 2026 against OG-UK commit
+`3a16cff`. They predate OG-UK's July 2026 marginal-tax-rate fix, and the 8-sector transition path
+does not converge over its full horizon on current OG-UK. See
+[`src/data/PROVENANCE.md`](src/data/PROVENANCE.md) before citing the numbers.
+
 ## References
 
 - OG-Core: <https://github.com/PSLmodels/OG-Core>
