@@ -1,6 +1,6 @@
 # OG-UK Dashboard
 
-A React + Vite dashboard explaining **OG-UK** — the UK calibration of [OG-Core](https://github.com/PSLmodels/OG-Core), the open-source overlapping-generations dynamic general equilibrium framework maintained by the [Policy Simulation Library](https://pslmodels.org) (PSL).
+A Next.js dashboard explaining **OG-UK** — the UK calibration of [OG-Core](https://github.com/PSLmodels/OG-Core), the open-source overlapping-generations dynamic general equilibrium framework maintained by the [Policy Simulation Library](https://pslmodels.org) (PSL).
 
 The dashboard has four tabs:
 
@@ -11,83 +11,85 @@ The dashboard has four tabs:
 
 ## Stack
 
-- **React 18 + Vite 5** (JSX, plain CSS)
-- **Plotly 2.35** for the chart panels (loaded from CDN, kept out of the bundle)
-- **KaTeX 0.16** for equations (loaded from CDN)
+- **Next.js 16 (App Router) + React 19**, Tailwind 4 and `@policyengine/ui-kit`
+- **Plotly 2.35** for the chart panels and **KaTeX 0.16** for equations, both loaded from a CDN in `src/app/layout.tsx` and kept out of the bundle
+- **Vitest** for the data tests
 - **Bun** as the package manager
 
 ## Running locally
 
 ```bash
 bun install
-bun run dev
+bun run dev      # http://localhost:3000/
 ```
 
-Opens at <http://localhost:5173/>.
-
-To preview a production build:
+Production build, lint and tests:
 
 ```bash
 bun run build
-bun run preview   # http://localhost:4173/
+bun run start    # serves the build on http://localhost:3000/
+bun run lint
+bun run test     # vitest: identities and signs in src/data/tpiData.json
 ```
 
 ## Project structure
 
 ```
 .
-├── index.html                # Vite entry: loads CDN scripts and /src/main.jsx
 ├── src/
-│   ├── main.jsx              # React root mount
-│   ├── App.jsx               # shell + tab state + intro
-│   ├── styles.css            # all styles
+│   ├── app/
+│   │   ├── layout.tsx        # metadata + CDN scripts (Plotly, KaTeX)
+│   │   ├── page.jsx          # shell + tab state + intro
+│   │   └── globals.css
 │   ├── tabs/                 # one component per tab
-│   │   ├── ExampleTab.jsx
+│   │   ├── ExampleTab.jsx    # Showcase
 │   │   ├── MethodologyTab.jsx
 │   │   ├── CodeTab.jsx
 │   │   └── ObrTab.jsx
-│   ├── components/           # shared UI primitives
-│   │   ├── PlotPanel.jsx     # Plotly wrapper using a ref + useEffect
-│   │   ├── Select.jsx        # custom single-select dropdown
-│   │   ├── CodeBlock.jsx     # syntax-highlighted code block
-│   │   ├── TerminalBlock.jsx # terminal-style output block
-│   │   ├── StickyPanel.jsx   # Methodology tab freeze-box
-│   │   └── DiagramModal.jsx  # SVG zoom modal
+│   ├── components/           # PlotPanel, Select, CodeBlock, TerminalBlock, StickyPanel, DiagramModal
 │   ├── data/
 │   │   ├── tpiData.json      # chart data (macro6, sector3, sector24)
-│   │   ├── methodologyContent.js   # narrative text per step
-│   │   ├── methodologyDiagrams.js  # eight inline SVGs + titles
-│   │   └── methodologyPanels.js    # right-hand panel content per step
-│   └── lib/
-│       ├── highlight.js      # tiny dependency-free Python/bash highlighter
-│       └── katex.js          # CDN-KaTeX wrapper
-├── public/
-│   └── papers/
-│       └── obr-working-paper-22.pdf
-├── python/                   # runnable Python that mirrors the Code tab
-│   ├── pyproject.toml        # uv-managed environment
-│   ├── README.md
-│   ├── og_dashboard/
-│   │   ├── __init__.py
-│   │   └── reform.py         # Step 2 — shared REFORM Policy
-│   └── scripts/
-│       ├── 01_install.sh     # Step 1
-│       ├── 03_steady_state.py
-│       ├── 04_transition.py
-│       └── 06_multi_sector.py
-├── vercel.json               # Vercel: vite framework, dist/ output
-├── vite.config.js
-├── package.json
-└── .github/workflows/checks.yml
+│   │   ├── tpiData.test.js   # vitest checks on the committed data
+│   │   ├── methodologyContent.js
+│   │   ├── methodologyDiagrams.js
+│   │   └── methodologyPanels.js
+│   └── lib/                  # highlight.js, katex.js
+├── public/papers/obr-working-paper-22.pdf
+├── python/                   # runnable Python that mirrors the Code tab (see python/README.md)
+│   ├── og_dashboard/reform.py
+│   └── scripts/              # 01_install.sh, 03_steady_state.py, 04_transition.py,
+│                             # 06_multi_sector.py, 07_export_dashboard_json.py
+├── next.config.ts
+├── vercel.json               # framework nextjs, bun build
+└── .github/workflows/pr.yaml
 ```
+
+## Where the Showcase numbers come from
+
+`src/data/tpiData.json` is built by `python/scripts/07_export_dashboard_json.py`.
+The published file came from OG-UK `scripts/run_tpi_and_export.py` (reform from
+1 January 2027) and then `scripts/tpi_charts_plotly.py` on the OBR November 2025
+EFO; `07_export_dashboard_json.py --from-published` rebuilds it byte for byte.
+
+Known problems with the published numbers:
+
+- They predate OG-UK's July 2026 marginal-tax-rate fix, and the 8-sector
+  transition path does not converge over its full horizon on current OG-UK
+  (issue #2). A rerun is planned in issue #5.
+- **The debt baseline is not a published series.** It is built from ONS HF6X
+  (net debt excluding public sector banks, which includes the Bank of
+  England), and calendar years are mapped to fiscal years with weights the
+  wrong way round for a stock, so 2019-20 shows about 94% of GDP against
+  HF6X's 84.1% at end-March 2020. The 2026-30 path matches no OBR series.
+  See the verification comment on PR #4.
 
 ## Deployment
 
-Vercel auto-detects Vite and runs `bun install --frozen-lockfile` then `bun run build`, serving from `dist/`. Pushing to `main` triggers a production redeploy.
+Vercel (`vercel.json`: framework `nextjs`) runs `bun install --frozen-lockfile` then `bun run build`. Pushing to `main` triggers a production redeploy.
 
 ## CI
 
-`.github/workflows/checks.yml` runs `bun run build` on every PR and push, verifies the built `dist/` references its bundle, checks that any `public/`-relative URL referenced from `src/` actually exists, and pings upstream `oguk/__init__.py` to make sure the API symbols cited in the Code tab are still exported.
+`.github/workflows/pr.yaml` runs three jobs on every pull request to `main` and every push to `main`: build (`bun run build`), lint (`bun run lint`) and test (`bun run test`).
 
 ## References
 
