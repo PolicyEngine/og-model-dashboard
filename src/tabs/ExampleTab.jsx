@@ -117,7 +117,7 @@ export default function ExampleTab() {
           revenues, GDP and the public finances move over years as those adjustments work through.
         </p>
         <p className="section-description">
-          An <strong>overlapping-generations</strong> (OG) model captures those responses. Many age cohorts
+          An <strong>overlapping-generations</strong>{' '}(OG) model captures those responses. Many age cohorts
           coexist; each chooses consumption, hours and savings over its lifetime; firms hire labour and rent
           capital; the government collects taxes and pays transfers; markets clear period by period. The
           model returns a year-by-year path for GDP, wages, interest rates, investment, debt and tax revenue
@@ -130,17 +130,17 @@ export default function ExampleTab() {
         </h2>
         <p className="section-description">
           The reform raises the basic rate of UK income tax by one percentage point, from 20% to 21%,
-          starting in tax year <strong>2027–28</strong> and holding thereafter. It serves as a stylised
+          starting in tax year <strong>2027–28</strong>{' '}and holding thereafter. It serves as a stylised
           illustration, not a forecast of any announced policy. In every chart,{' '}
-          <strong>solid lines</strong> show the UK economy under the OBR&rsquo;s November&nbsp;2025 baseline
-          (history plus forecast); <strong>dashed lines</strong> show the OG-UK reform path. The vertical
+          <strong>solid lines</strong>{' '}show the UK economy under the OBR&rsquo;s November&nbsp;2025 baseline
+          (history plus forecast); <strong>dashed lines</strong>{' '}show the OG-UK reform path. The vertical
           gap between them, from 2027 onwards, gives the reform&rsquo;s modelled effect.
         </p>
         <p className="section-description">
-          Three views are available: <strong>the whole economy</strong> — six
+          Three views are available: <strong>the whole economy</strong>{' '}— six
           national-accounts series (consumption, investment, government consumption, tax revenue, debt, GDP);{' '}
-          <strong>by industry</strong> — output, capital and labour across the eight UK industry sectors;
-          and <strong>one sector at a time</strong> — a single
+          <strong>by industry</strong>{' '}— output, capital and labour across the eight UK industry sectors;
+          and <strong>one sector at a time</strong>{' '}— a single
           sector&nbsp;&times;&nbsp;variable cell. Use the dropdowns to switch series. The transition path
           runs for 60&nbsp;periods.
         </p>
@@ -188,7 +188,7 @@ export default function ExampleTab() {
         <h2 className="section-heading">Impact across sectors</h2>
         <p className="section-description">
           The reform&apos;s effect on the whole industry mix at once. Pick <strong>output, capital or
-          labour</strong> from the dropdown; the chart overlays all eight sectors as{' '}
+          labour</strong>{' '}from the dropdown; the chart overlays all eight sectors as{' '}
           <strong>percentage change from baseline</strong>. Positive values: the sector grows under the
           reform. Negative values: it shrinks. A one-look answer to which sectors move most.
         </p>
@@ -212,7 +212,7 @@ export default function ExampleTab() {
       <div className="section-card">
         <h2 className="section-heading">One sector at a time</h2>
         <p className="section-description">
-          The finest-grained view: any single <strong>sector × variable</strong> cell of the economy. Pick a
+          The finest-grained view: any single <strong>sector × variable</strong>{' '}cell of the economy. Pick a
           variable (output, capital or labour) and a sector; the plot shows that cell&apos;s full path
           in levels: £bn at current prices for output and capital, thousands of workers for labour. Solid = ONS outturn stitched to the OBR Nov&nbsp;2025 EFO baseline;
           dashed = OG-UK&apos;s +1&nbsp;pp basic-rate reform. History gives context for how far off-baseline

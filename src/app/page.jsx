@@ -28,8 +28,8 @@ export default function HomePage() {
 
       <main className="main-content">
         <p className="intro-text">
-          <strong>PolicyEngine Macro</strong> simulates the UK economy as it adjusts to a tax or benefit
-          reform. It builds on an open-source <strong>overlapping-generations</strong> (OG) model maintained
+          <strong>PolicyEngine Macro</strong>{' '}simulates the UK economy as it adjusts to a tax or benefit
+          reform. It builds on an open-source <strong>overlapping-generations</strong>{' '}(OG) model maintained
           by the{' '}
           <a href="https://pslmodels.org" target="_blank" rel="noreferrer">Policy Simulation Library</a>{' '}
           (PSL), calibrated to the UK and wired into PolicyEngine&rsquo;s tax-and-benefit microsimulation.
@@ -41,9 +41,9 @@ export default function HomePage() {
           <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a>.
         </p>
         <p className="intro-text">
-          Four tabs, each standing on its own: <strong>Showcase</strong> for the model in action on a worked
-          UK reform, <strong>Code</strong> for the Python that drives it, <strong>Methodology</strong> for
-          how it works, and <strong>OBR comparison</strong> for a side-by-side with the OBR&rsquo;s UK OLG model
+          Four tabs, each standing on its own: <strong>Showcase</strong>{' '}for the model in action on a worked
+          UK reform, <strong>Code</strong>{' '}for the Python that drives it, <strong>Methodology</strong>{' '}for
+          how it works, and <strong>OBR comparison</strong>{' '}for a side-by-side with the OBR&rsquo;s UK OLG model
           (OBR Working Paper No.&nbsp;22, April&nbsp;2025).
         </p>
 
@@ -75,7 +75,7 @@ export default function HomePage() {
         ))}
 
         <footer className="dashboard-footer">
-          <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a> Macro · built
+          <a href="https://policyengine.org" target="_blank" rel="noreferrer">PolicyEngine</a>{' '}Macro · built
           on <strong>OG-UK</strong>, the UK calibration of{' '}
           <a href="https://github.com/PSLmodels/OG-Core" target="_blank" rel="noreferrer">OG-Core</a>,
           maintained by the{' '}
