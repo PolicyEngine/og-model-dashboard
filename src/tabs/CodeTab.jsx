@@ -137,7 +137,7 @@ const STEPS = [
           to <code>policyengine/policyengine-uk-data</code>.
         </p>
         <p>
-          With that done, <code>uv run python scripts/03_steady_state.py</code> solves a baseline and a
+          With that done, <code>uv run python scripts/03_steady_state.py</code>{' '}solves a baseline and a
           reform steady state and prints the impact in £bn.
         </p>
       </>
@@ -152,7 +152,7 @@ const STEPS = [
     prose: (
       <>
         <p>
-          Reforms use the <strong>PolicyEngine</strong> API: pick a parameter from the UK tax-and-benefit
+          Reforms use the <strong>PolicyEngine</strong>{' '}API: pick a parameter from the UK tax-and-benefit
           rule book, give it a new value and a start date. Anything PolicyEngine can represent — rates,
           thresholds, allowance tapers, new benefits — flows straight through.
         </p>
@@ -169,14 +169,14 @@ const STEPS = [
     prose: (
       <>
         <p>
-          The fastest way to see what a reform does. <code>solve_steady_state</code> finds the long-run
+          The fastest way to see what a reform does. <code>solve_steady_state</code>{' '}finds the long-run
           equilibrium of the UK economy under a given policy: the prices, quantities and tax revenues that
           emerge once the economy has fully adjusted. Run it once for the baseline, once for the reform; the
           difference gives the answer.
         </p>
         <p>
           A typical run takes a couple of minutes on a laptop. The terminal output on the right is{' '}
-          <em>illustrative</em> — the format matches <code>03_steady_state.py</code>, but the numbers depend
+          <em>illustrative</em>{' '}— the format matches <code>03_steady_state.py</code>, but the numbers depend
           on the calibration date and your data release.
         </p>
       </>
@@ -191,14 +191,14 @@ const STEPS = [
     prose: (
       <>
         <p>
-          The steady state tells you where the economy ends up. The <strong>transition path</strong> tells
+          The steady state tells you where the economy ends up. The <strong>transition path</strong>{' '}tells
           you how it gets there — year by year, 60&nbsp;periods by default (configurable). This is what
-          powers the dashed lines in the <strong>Showcase</strong> tab.
+          powers the dashed lines in the <strong>Showcase</strong>{' '}tab.
         </p>
         <p>
           The transition costs more compute — the model solves every cohort&rsquo;s lifetime under rational
           expectations — so OG-UK uses{' '}
-          <a href="https://www.dask.org/" target="_blank" rel="noreferrer">Dask</a> to parallelise across CPU
+          <a href="https://www.dask.org/" target="_blank" rel="noreferrer">Dask</a>{' '}to parallelise across CPU
           cores.
         </p>
       </>
@@ -227,10 +227,10 @@ const STEPS = [
     prose: (
       <>
         <p>
-          Pass <code>multi_sector=True</code> and the same call returns the breakdown across the eight UK
+          Pass <code>multi_sector=True</code>{' '}and the same call returns the breakdown across the eight UK
           industry sectors (energy, manufacturing, construction, trade &amp; transport, info &amp; finance,
           real estate, business services, public &amp; other) — the basis for the <em>industry by
-          industry</em> view in the Showcase tab.
+          industry</em>{' '}view in the Showcase tab.
         </p>
         <p>The same call returns sector-level output, capital and labour alongside the macro aggregates.</p>
       </>
@@ -243,24 +243,24 @@ const STEPS = [
       <>
         <p>
           Every step above ships as a runnable file in this repo&rsquo;s{' '}
-          <code>python/</code> folder — the panel on the right shows the layout. Pick the script that matches
+          <code>python/</code>{' '}folder — the panel on the right shows the layout. Pick the script that matches
           the step you want and run it on its own:
         </p>
         <ul className="intro-list">
           <li>
-            <code>scripts/03_steady_state.py</code> — fastest, prints a one-line £bn impact summary.
+            <code>scripts/03_steady_state.py</code>{' '}— fastest, prints a one-line £bn impact summary.
           </li>
           <li>
-            <code>scripts/04_transition.py</code> — heavier, produces the full year-by-year path.
+            <code>scripts/04_transition.py</code>{' '}— heavier, produces the full year-by-year path.
           </li>
           <li>
-            <code>scripts/06_multi_sector.py</code> — the 8-sector calibration behind the Showcase-tab
+            <code>scripts/06_multi_sector.py</code>{' '}— the 8-sector calibration behind the Showcase-tab
             industry views.
           </li>
         </ul>
         <p>
-          Edit <code>og_dashboard/reform.py</code> to swap the parameter, value or start date. Every script
-          imports <code>REFORM</code> from there, so the rest of the pipeline stays unchanged. For more
+          Edit <code>og_dashboard/reform.py</code>{' '}to swap the parameter, value or start date. Every script
+          imports <code>REFORM</code>{' '}from there, so the rest of the pipeline stays unchanged. For more
           variations, the upstream{' '}
           <a href="https://github.com/PSLmodels/OG-UK/tree/main/examples" target="_blank" rel="noreferrer">
             OG-UK examples
@@ -320,7 +320,7 @@ export default function CodeTab() {
         <h2>From a few lines of Python to a full UK transition path</h2>
         <p>
           OG-UK is open source, and every Code-tab step that carries logic ships as a runnable file in this
-          repo&rsquo;s <code>python/</code> folder. Scroll through the seven steps below; the panel on the
+          repo&rsquo;s <code>python/</code>{' '}folder. Scroll through the seven steps below; the panel on the
           right shows the code for whichever step you are reading, and the filename label points to the same
           file on disk. Pick a step, run it on its own, swap the reform. Full context lives in{' '}
           <a href="https://github.com/PSLmodels/OG-UK" target="_blank" rel="noreferrer">PSL&rsquo;s OG-UK repository</a>.
