@@ -14,8 +14,13 @@ python/
     ├── 01_install.sh            # Step 1
     ├── 03_steady_state.py       # Step 3
     ├── 04_transition.py         # Step 4
-    └── 06_multi_sector.py       # Step 6
+    ├── 06_multi_sector.py       # Step 6
+    └── 07_export_dashboard_json.py  # builds src/data/tpiData.json
 ```
+
+`07_export_dashboard_json.py` rebuilds the Showcase data. Its docstring records how the
+published file was produced (OG-UK `scripts/run_tpi_and_export.py`, then
+`scripts/tpi_charts_plotly.py` on the OBR November 2025 EFO) and how to rerun it.
 
 Steps 5 (the `map_transition_to_real_world` field reference) and 7 (links and follow-up) are documentation-only and live in the dashboard's Code tab.
 
