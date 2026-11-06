@@ -126,6 +126,67 @@ describe('debt baseline (PSND ex BoE, end-March)', () => {
   });
 });
 
+// GDP, consumption and investment before 2008-09 (OBR tables 1.2 and 1.4 start there) are
+// ONS quarterly national accounts summed April-March: fiscal year t-(t+1) = t Q2..Q4 + (t+1) Q1.
+const ONS_Q = (() => {
+  const lines = readFileSync(new URL('../../python/data/ons_national_accounts_quarterly.csv', import.meta.url), 'utf8')
+    .split('\n')
+    .filter((l) => l && !l.startsWith('#'));
+  const cols = lines[0].split(',').slice(1);
+  const out = Object.fromEntries(cols.map((c) => [c, {}]));
+  for (const l of lines.slice(1)) {
+    const [period, ...vals] = l.split(',');
+    cols.forEach((c, i) => (out[c][period] = Number(vals[i])));
+  }
+  return out;
+})();
+const fySum = (cdid, y) => ['Q2', 'Q3', 'Q4'].reduce((s, q) => s + ONS_Q[cdid][`${y} ${q}`], 0) + ONS_Q[cdid][`${y + 1} Q1`];
+
+describe('pre-2008-09 backfill (ONS quarterly, April-March)', () => {
+  const gdp = series('GDP (£bn)', 0);
+  const c = series('Consumption (% GDP)', 0);
+  const inv = series('Investment (% GDP)', 0);
+
+  it('hand-checked fiscal years: GDP is the sum of BKTL for April-March', () => {
+    // 2000-01: 2000 Q2..Q4 + 2001 Q1 = 271,219 + 276,934 + 283,620 + 281,437 = £1,113,210m
+    expect(gdp[2000]).toBeCloseTo(1113.21, 9);
+    // 2004-05: 324,319 + 334,919 + 341,532 + 339,373 = £1,340,143m
+    expect(gdp[2004]).toBeCloseTo(1340.143, 9);
+    // 2007-08: 376,817 + 394,299 + 399,747 + 396,093 = £1,566,956m
+    expect(gdp[2007]).toBeCloseTo(1566.956, 9);
+  });
+
+  it('hand-checked 2007-08 shares: C = ABJQ + HAYE, I = NPQS', () => {
+    // C: (234,862 + 240,447 + 240,955 + 245,731) + (7,397 + 7,481 + 7,634 + 7,758) = 992,265
+    expect(c[2007]).toBeCloseTo((992265 / 1566956) * 100, 9);
+    // I: 73,457 + 70,990 + 76,720 + 74,126 = 295,293
+    expect(inv[2007]).toBeCloseTo((295293 / 1566956) * 100, 9);
+  });
+
+  it('matches the ONS April-March sums in every backfilled year, not a calendar-year blend', () => {
+    for (let y = 2000; y <= 2007; y++) {
+      const g = fySum('bktl', y);
+      expect(gdp[y]).toBeCloseTo(g / 1000, 9);
+      expect(c[y]).toBeCloseTo(((fySum('abjq', y) + fySum('haye', y)) / g) * 100, 9);
+      expect(inv[y]).toBeCloseTo((fySum('npqs', y) / g) * 100, 9);
+    }
+    // The old 0.25*t + 0.75*(t+1) blend gave £1,589.6bn for 2007-08, almost the 2008-09 level.
+    expect(gdp[2007]).toBeLessThan(1580);
+  });
+
+  it('joins the OBR series at 2008-09 without a step', () => {
+    expect(Math.abs(c[2008] - c[2007])).toBeLessThan(0.5); // was 1.6pp with C = GDP - I - G
+    expect(Math.abs(inv[2008] - inv[2007])).toBeLessThan(1);
+    const growth = gdp[2008] / gdp[2007] - 1;
+    expect(growth).toBeGreaterThan(0);
+    expect(growth).toBeLessThan(0.05);
+  });
+
+  it('leaves the reform paths alone: they start in 2026-27, after the backfill', () => {
+    for (const p of data.macro6) expect(p.traces[1].x[0]).toBeGreaterThan(2007);
+  });
+});
+
 describe('sectors', () => {
   it('sector3 overlays all eight sectors', () => {
     for (const p of data.sector3) expect(p.traces).toHaveLength(8);

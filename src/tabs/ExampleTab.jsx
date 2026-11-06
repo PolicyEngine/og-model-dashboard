@@ -57,7 +57,7 @@ function MacroLegend() {
   return (
     <div className="plot-legend">
       <div className="legend-group">
-        <span className="legend-item"><span className="legend-line" />OBR outturn / forecast</span>
+        <span className="legend-item"><span className="legend-line" />Baseline: ONS and OBR outturn, OBR forecast</span>
         <span className="legend-item"><span className="legend-line dashed" />Reform&nbsp;+1&nbsp;pp basic rate</span>
       </div>
       <div className="legend-group">
@@ -158,7 +158,11 @@ export default function ExampleTab() {
           so it is about half of total public spending. Years on the horizontal axis are fiscal years by
           their start year (2027 = 2027&ndash;28). Debt is public sector net debt excluding the Bank of
           England (PSND ex BoE) at the end of each fiscal year: ONS outturn to 2023&ndash;24 (series CPOA,
-          end-March), then the OBR November&nbsp;2025 EFO (table&nbsp;6.13) from 2024&ndash;25. Pick one from the dropdown — the vertical
+          end-March), then the OBR November&nbsp;2025 EFO (table&nbsp;6.13) from 2024&ndash;25; ONS&rsquo;s
+          provisional end-March 2026 figure is 89.0%, against the 91.3% OBR forecast shown for 2025&ndash;26.
+          GDP, consumption and investment before 2008&ndash;09, where the OBR tables start, are ONS quarterly
+          national accounts summed April to March (consumption is households plus non-profit institutions,
+          as in the OBR series). Pick one from the dropdown — the vertical
           gap between the solid baseline and the dashed reform path from 2027 onwards gives the reform
           effect on that series.
         </p>
