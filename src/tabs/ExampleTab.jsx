@@ -8,7 +8,7 @@ import Select from '../components/Select.jsx';
 const MACRO_VAR_MAP = {
   'consumption': 'consumption',
   'investment': 'investment',
-  'gov. consumption': 'government',
+  'government consumption': 'government',
   'tax revenue': 'tax_revenue',
   'debt': 'debt',
   'gdp': 'gdp',
@@ -16,7 +16,7 @@ const MACRO_VAR_MAP = {
 const MACRO_OPTS = [
   { value: 'consumption', label: 'Consumption' },
   { value: 'investment', label: 'Investment' },
-  { value: 'government', label: 'Government' },
+  { value: 'government', label: 'Government consumption' },
   { value: 'tax_revenue', label: 'Tax revenue' },
   { value: 'debt', label: 'Debt' },
   { value: 'gdp', label: 'GDP' },
@@ -152,7 +152,11 @@ export default function ExampleTab() {
         <p className="section-description">
           Six headline series for the UK economy: <strong>consumption, investment, government consumption, tax
           revenue, debt and GDP</strong>. Flows appear as a share of GDP (the natural scale for fiscal
-          aggregates); GDP itself sits in £bn at current prices. Pick one from the dropdown — the vertical
+          aggregates), with the reform path divided by reform-scenario GDP; GDP itself sits in £bn at current
+          prices. Government consumption is government spending on goods and services (OBR table&nbsp;1.2),
+          the national-accounts concept behind the model&rsquo;s G; it excludes transfers and debt interest,
+          so it is about half of total public spending. Years on the horizontal axis are fiscal years by
+          their start year (2027 = 2027&ndash;28). Pick one from the dropdown — the vertical
           gap between the solid baseline and the dashed reform path from 2027 onwards gives the reform
           effect on that series.
         </p>
@@ -204,7 +208,7 @@ export default function ExampleTab() {
         <p className="section-description">
           The finest-grained view: any single <strong>sector × variable</strong> cell of the economy. Pick a
           variable (output, capital or labour) and a sector; the plot shows that cell&apos;s full path
-          indexed to 2000&nbsp;=&nbsp;100. Solid = ONS outturn stitched to the OBR Nov&nbsp;2025 EFO baseline;
+          in levels: £bn at current prices for output and capital, thousands of workers for labour. Solid = ONS outturn stitched to the OBR Nov&nbsp;2025 EFO baseline;
           dashed = OG-UK&apos;s +1&nbsp;pp basic-rate reform. History gives context for how far off-baseline
           the reform pushes that sector.
         </p>
