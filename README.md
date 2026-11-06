@@ -84,7 +84,9 @@ Known problems with the published numbers:
   transition path does not converge over its full horizon on current OG-UK
   (issue #2). A rerun is planned in issue #5.
 - The ONS and OBR debt vintages differ at the seam: ONS now has 87.5% at
-  end-March 2025, against 88.1% in the OBR table used for 2024-25.
+  end-March 2025, against 88.1% in the OBR table used for 2024-25. ONS also
+  has a provisional 89.0% for end-March 2026, against the OBR forecast of
+  91.3% shown for 2025-26.
 - Before Nov 2026 the debt panel used OG-UK's `_fy_debt` (ONS HF6X, which
   includes the BoE, with calendar years blended the wrong way round): 2019-20
   showed 94.3% against 76.1% ex BoE (84.1% with the BoE) at end-March 2020.
