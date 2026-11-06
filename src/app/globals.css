@@ -42,7 +42,7 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       background: var(--pe-color-gray-50);
@@ -100,12 +100,12 @@
 
     /* Tab bar */
     .tab-bar {
-      display: flex; flex-wrap: wrap;
-      border-bottom: 2px solid var(--pe-color-gray-200);
+      display: flex; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; max-width: 100%;
+      box-shadow: inset 0 -2px 0 var(--pe-color-gray-200);
       margin: 24px 0 28px; width: fit-content;
     }
     .tab-button {
-      margin-bottom: -2px; border: none;
+      border: none;
       border-bottom: 2px solid transparent; background: transparent;
       padding: 14px 22px; font-size: 1.05rem; font-weight: 500;
       color: var(--pe-color-gray-500);
@@ -251,7 +251,7 @@
       position: absolute; bottom: 10px; right: 14px;
       background: var(--accent); color: #fff;
       padding: 4px 10px; border-radius: 5px;
-      font-size: 0.65rem;
+      font-size: 0.72rem;
       font-weight: 500; opacity: 0; transition: opacity 0.2s; pointer-events: none;
     }
     .step-content p {
@@ -283,7 +283,7 @@
     .example-badge {
       background: var(--accent); color: #fff;
       padding: 4px 11px; border-radius: 6px;
-      font-size: 0.68rem; font-weight: 600;
+      font-size: 0.72rem; font-weight: 600;
     }
     .example-body {
       padding: 18px 22px 22px;
@@ -322,7 +322,7 @@
     }
     .math-block-dark .katex { color: var(--text-dark); font-size: 1rem; }
     .math-label {
-      font-size: 0.65rem; font-weight: 600; color: var(--accent);
+      font-size: 0.72rem; font-weight: 600; color: var(--accent);
       text-transform: uppercase; letter-spacing: 0.08em;
       margin-bottom: 6px; text-align: left;
     }
@@ -377,7 +377,7 @@
       padding: 10px 20px 12px;
       border-bottom: 2px solid var(--pe-color-gray-800);
       background: transparent;
-      font-size: 0.68rem; font-weight: 600;
+      font-size: 0.72rem; font-weight: 600;
       text-transform: uppercase; letter-spacing: 0.09em;
     }
     .comparison-table th:first-child { width: 24%; color: var(--pe-color-gray-400); }
@@ -443,7 +443,7 @@
       padding-top: 4px;
     }
     .obr-toc-label {
-      font-size: 0.65rem; font-weight: 600; color: var(--pe-color-gray-500);
+      font-size: 0.72rem; font-weight: 600; color: var(--pe-color-gray-500);
       text-transform: uppercase; letter-spacing: 0.08em;
       margin-bottom: 12px; padding-left: 14px;
     }
@@ -647,9 +647,6 @@
       background: var(--accent-light);
       color: var(--accent); font-weight: 600;
     }
-    .select-option[aria-selected="true"]::after {
-      content: "\2713"; font-size: 0.78rem;
-    }
 
     /* Static per-section legend (sits below the panel grid, outside Plotly) */
     .plot-legend {
@@ -675,12 +672,12 @@
     .legend-line {
       display: inline-block; width: 24px; height: 0;
       border-top-width: 2.5px; border-top-style: solid;
-      border-top-color: #4B5563;
+      border-top-color: var(--chart-1);
       vertical-align: middle;
     }
     .legend-line.dashed { border-top-style: dashed; }
     .legend-line.dotted { border-top-style: dotted; border-top-width: 1.8px; }
-    .legend-line.grey   { border-top-color: #95a5a6; }
+    .legend-line.grey   { border-top-color: #64748B; } /* --chart-5 */
     .legend-line.gold   { border-top-color: #b8860b; }
 
     /* Plotly panel grid — always a single big panel fills the card */
@@ -891,7 +888,40 @@
       .title-row-inner { padding: 12px 16px; }
       .main-content { padding: 24px 16px 32px; }
       .section-card { padding: 20px; border-radius: 18px; }
-      .tab-button { padding: 12px 14px; font-size: 0.9rem; }
+      .tab-button { padding: 12px 12px; font-size: 0.9rem; }
       .phases-row { grid-template-columns: 1fr 1fr; gap: 18px; }
       .unique-grid { grid-template-columns: 1fr; }
     }
+
+/* Results caveat, chart frames (title, units, takeaway, source) */
+.results-notice {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--pe-color-primary-600);
+  background: var(--muted);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 0 0 28px;
+  font-size: 0.95rem; line-height: 1.65; color: var(--pe-color-gray-700);
+}
+.results-notice-title { font-size: 1.05rem; font-weight: 700; color: var(--pe-color-gray-900); margin: 0 0 8px; }
+.results-notice-subtitle { font-size: 0.95rem; font-weight: 600; color: var(--pe-color-gray-900); margin: 14px 0 6px; }
+.results-notice ul { padding-left: 20px; }
+.results-notice li { margin-bottom: 4px; }
+.chart-frame { margin: 8px 0 0; }
+.chart-head { margin-bottom: 6px; }
+.chart-title { font-size: 1.05rem; font-weight: 600; color: var(--pe-color-gray-900); margin: 0; }
+.chart-subtitle { font-size: 0.85rem; color: var(--pe-color-gray-500); margin: 2px 0 8px; }
+.chart-takeaway { font-size: 0.95rem; color: var(--pe-color-gray-800); margin: 0; }
+.chart-source { font-size: 0.78rem; color: var(--pe-color-gray-500); margin-top: 14px; line-height: 1.5; }
+.legend-line.reform { border-top-color: #285E61; } /* --chart-3 */
+.data-notes { margin-top: 18px; }
+.data-notes summary {
+  cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--pe-color-primary-700);
+  margin-bottom: 10px;
+}
+@media (max-width: 768px) {
+  .results-notice { padding: 14px 16px; font-size: 0.9rem; }
+  .panel-cell .plot { height: 340px; }
+  .plot-legend { gap: 8px 20px; justify-content: flex-start; }
+  .legend-group + .legend-group::before { display: none; }
+}

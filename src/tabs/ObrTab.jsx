@@ -10,7 +10,7 @@ const TOC = [
   { id: 'obr-4', label: 'Tax system' },
   { id: 'obr-5', label: 'Government' },
   { id: 'obr-6', label: 'Open economy' },
-  { id: 'obr-7', label: 'Solution & calibration' },
+  { id: 'obr-7', label: 'Solution and calibration' },
 ];
 
 function useScrollspy(ids, offset = 140) {
@@ -66,7 +66,7 @@ export default function ObrTab() {
           </p>
           <p className="obr-lede">
             The sections below walk through how each model treats production, households, bequests, the tax
-            system, government, the open economy, and the solution method &amp; calibration — so you can see
+            system, government, the open economy, and the solution method and calibration — so you can see
             where the two approaches agree, where they differ, and when to reach for one over the other. The
             two models occupy complementary niches: OG-UK carries more structural detail and traces full
             year-by-year transition paths; OBR UK OLG calibrates tightly to UK fiscal institutions and
@@ -76,8 +76,8 @@ export default function ObrTab() {
             <thead>
               <tr>
                 <th>Dimension</th>
-                <th>OG-UK strength</th>
-                <th>OBR UK OLG strength</th>
+                <th>OG-UK</th>
+                <th>OBR UK OLG</th>
               </tr>
             </thead>
             <tbody>
@@ -217,7 +217,7 @@ export default function ObrTab() {
 
         {/* 7. Solution & calibration */}
         <div className="section-card" id="obr-7">
-          <div className="obr-head"><h3>Solution method &amp; calibration</h3></div>
+          <div className="obr-head"><h3>Solution method and calibration</h3></div>
           <p className="obr-lede">
             Both models are rational-expectations dynamic general equilibrium, but they solve different
             problems. <strong>OG-UK</strong>{' '}solves households’ first-order conditions directly via Euler

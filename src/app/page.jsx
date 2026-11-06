@@ -46,6 +46,15 @@ export default function HomePage() {
           how it works, and <strong>OBR comparison</strong>{' '}for a side-by-side with the OBR&rsquo;s UK OLG model
           (OBR Working Paper No.&nbsp;22, April&nbsp;2025).
         </p>
+        <p className="intro-text">
+          The Showcase results come from an OG-UK run made before a July&nbsp;2026 fix to the model&rsquo;s
+          marginal tax rates; they await a rerun (
+          <a href="https://github.com/PolicyEngine/og-model-dashboard/issues/5" target="_blank" rel="noreferrer">
+            issue #5
+          </a>
+          ). The model has no observed outturn to check a reform against: it matches its calibration
+          targets by construction and shows what its assumptions imply.
+        </p>
 
         <nav className="tab-bar" role="tablist">
           {TABS.map((t) => (
