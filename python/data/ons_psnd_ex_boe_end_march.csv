@@ -1,0 +1,33 @@
+# ONS CPOA: Public Sector: PSND (ex PS banks ex BoE) as a % GDP: NSA (dataset PUSF).
+# Source: https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/timeseries/cpoa/pusf
+# Release 21-10-2026. End-March (fiscal year-end) values; fiscal_year is the start year (2019 = 2019-20, end-March 2020).
+fiscal_year,end_march,psnd_ex_boe_pct_gdp
+1997,1998 MAR,36.7
+1998,1999 MAR,35.3
+1999,2000 MAR,32.6
+2000,2001 MAR,28.4
+2001,2002 MAR,28.2
+2002,2003 MAR,29.9
+2003,2004 MAR,31.1
+2004,2005 MAR,33.6
+2005,2006 MAR,34.5
+2006,2007 MAR,35.2
+2007,2008 MAR,35.7
+2008,2009 MAR,50.4
+2009,2010 MAR,63.7
+2010,2011 MAR,70.3
+2011,2012 MAR,74.2
+2012,2013 MAR,75.8
+2013,2014 MAR,76.4
+2014,2015 MAR,78.7
+2015,2016 MAR,78.4
+2016,2017 MAR,76.7
+2017,2018 MAR,73.1
+2018,2019 MAR,71.5
+2019,2020 MAR,76.1
+2020,2021 MAR,85.3
+2021,2022 MAR,80.8
+2022,2023 MAR,82.0
+2023,2024 MAR,85.3
+2024,2025 MAR,87.5
+2025,2026 MAR,89.0

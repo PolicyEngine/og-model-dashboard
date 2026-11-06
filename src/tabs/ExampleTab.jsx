@@ -156,9 +156,9 @@ export default function ExampleTab() {
           prices. Government consumption is government spending on goods and services (OBR table&nbsp;1.2),
           the national-accounts concept behind the model&rsquo;s G; it excludes transfers and debt interest,
           so it is about half of total public spending. Years on the horizontal axis are fiscal years by
-          their start year (2027 = 2027&ndash;28). Read debt for the reform gap only: its baseline level
-          does not match a published ONS or OBR series (2019&ndash;20 shows about 94% of GDP against an
-          outturn of 84%). Pick one from the dropdown — the vertical
+          their start year (2027 = 2027&ndash;28). Debt is public sector net debt excluding the Bank of
+          England (PSND ex BoE) at the end of each fiscal year: ONS outturn to 2023&ndash;24 (series CPOA,
+          end-March), then the OBR November&nbsp;2025 EFO (table&nbsp;6.13) from 2024&ndash;25. Pick one from the dropdown — the vertical
           gap between the solid baseline and the dashed reform path from 2027 onwards gives the reform
           effect on that series.
         </p>

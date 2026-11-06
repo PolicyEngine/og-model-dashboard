@@ -1,5 +1,6 @@
 // Sanity checks on the Showcase data (src/data/tpiData.json). The file is
 // built by python/scripts/07_export_dashboard_json.py.
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import data from './tpiData.json';
 
@@ -74,6 +75,54 @@ describe('macro6', () => {
       expect(taxR[y]).toBeGreaterThan(taxB[y]);
       expect(cR[y] * gdpR[y]).toBeLessThan(cB[y] * gdpB[y]); // consumption level falls
     }
+  });
+});
+
+// Debt is PSND ex BoE at the end of each fiscal year (end-March): ONS CPOA
+// outturn to 2023-24, then OBR November 2025 EFO table 6.13 from 2024-25.
+const ONS_CPOA = Object.fromEntries(
+  readFileSync(new URL('../../python/data/ons_psnd_ex_boe_end_march.csv', import.meta.url), 'utf8')
+    .split('\n')
+    .filter((l) => /^\d{4},/.test(l))
+    .map((l) => {
+      const [fy, , pct] = l.split(',');
+      return [Number(fy), Number(pct)];
+    }),
+);
+// OBR Nov 2025 EFO, table 6.13 "Public sector net debt ex BoE (a-c=d)", % of GDP.
+const OBR_PSND_EX_BOE = {
+  2024: 88.10663761008254,
+  2025: 91.30956933690936,
+  2026: 92.7638425262273,
+  2027: 94.15428671008492,
+  2028: 95.18697557838794,
+  2029: 95.32084843360164,
+  2030: 95.32263559235795,
+};
+
+describe('debt baseline (PSND ex BoE, end-March)', () => {
+  const debt = series('Debt (% GDP)', 0);
+
+  it('uses end-March 2020 for 2019-20 (76.1% ex BoE; HF6X with the BoE is 84.1%), not a calendar blend', () => {
+    expect(debt[2019]).toBe(76.1);
+    expect(debt[2008]).toBe(50.4); // end-March 2009
+    expect(debt[2023]).toBe(85.3); // end-March 2024, last ONS year used
+  });
+
+  it('matches ONS CPOA end-March outturn for every year to 2023-24', () => {
+    for (let y = 2008; y <= 2023; y++) expect(debt[y]).toBeCloseTo(ONS_CPOA[y], 9);
+  });
+
+  it('matches OBR Nov 2025 EFO table 6.13 from 2024-25', () => {
+    for (const [y, v] of Object.entries(OBR_PSND_EX_BOE)) expect(debt[y]).toBeCloseTo(v, 9);
+  });
+
+  it('reform debt keeps the model response: reform/baseline ratio as published in PR #4', () => {
+    // (1 + %chg debt) / (1 + %chg GDP), recovered from the 28 Apr 2026 run. Independent of
+    // the baseline level, so the debt fix must leave it unchanged.
+    const RATIO = { 2027: 1.0019745709198213, 2028: 1.002423694217998, 2029: 1.0015061529422122, 2030: 1.000570617544705 };
+    const ref = series('Debt (% GDP)', 1);
+    for (const [y, r] of Object.entries(RATIO)) expect(ref[y] / debt[y]).toBeCloseTo(r, 12);
   });
 });
 
