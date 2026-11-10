@@ -71,6 +71,8 @@ The published file came from OG-UK `scripts/run_tpi_and_export.py` (reform from
 1 January 2027) and then `scripts/tpi_charts_plotly.py` on the OBR November 2025
 EFO. `07_export_dashboard_json.py --from-published` rebuilds the committed file
 byte for byte from that 28 Apr 2026 file, with no network and no model run.
+The model run's date, OG-UK commit and caveats are in
+[`src/data/PROVENANCE.md`](src/data/PROVENANCE.md); read it before citing the numbers.
 
 Debt is public sector net debt excluding the Bank of England (PSND ex BoE) as a
 % of GDP at end-March: ONS series CPOA to 2023-24 (snapshot
@@ -109,13 +111,6 @@ Vercel (`vercel.json`: framework `nextjs`) runs `bun install --frozen-lockfile` 
 ## CI
 
 `.github/workflows/pr.yaml` runs three jobs on every pull request to `main` and every push to `main`: build (`bun run build`), lint (`bun run lint`) and test (`bun run test`).
-
-## Data provenance
-
-The figures in `src/data/tpiData.json` were generated on 28 April 2026 against OG-UK commit
-`3a16cff`. They predate OG-UK's July 2026 marginal-tax-rate fix, and the 8-sector transition path
-does not converge over its full horizon on current OG-UK. See
-[`src/data/PROVENANCE.md`](src/data/PROVENANCE.md) before citing the numbers.
 
 ## References
 
