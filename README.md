@@ -110,6 +110,13 @@ Vercel (`vercel.json`: framework `nextjs`) runs `bun install --frozen-lockfile` 
 
 `.github/workflows/pr.yaml` runs three jobs on every pull request to `main` and every push to `main`: build (`bun run build`), lint (`bun run lint`) and test (`bun run test`).
 
+## Data provenance
+
+The figures in `src/data/tpiData.json` were generated on 28 April 2026 against OG-UK commit
+`3a16cff`. They predate OG-UK's July 2026 marginal-tax-rate fix, and the 8-sector transition path
+does not converge over its full horizon on current OG-UK. See
+[`src/data/PROVENANCE.md`](src/data/PROVENANCE.md) before citing the numbers.
+
 ## References
 
 - OG-Core: <https://github.com/PSLmodels/OG-Core>
