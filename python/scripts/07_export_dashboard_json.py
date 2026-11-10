@@ -21,6 +21,24 @@ corrects two things in the macro panels:
 * The government panel uses OBR government final consumption (table 1.2),
   the concept OG-Core's G stands for, so C + I + G is coherent with GDP.
 * Reform-path shares divide by reform GDP, not baseline GDP.
+* The debt baseline is public sector net debt excluding the Bank of England
+  (PSND ex BoE), as a % of GDP at the end of each fiscal year (end-March):
+  ONS CPOA outturn to 2023-24 (snapshot in ``python/data``), then OBR
+  November 2025 EFO table 6.13 ("Public sector net debt ex BoE") from
+  2024-25. OG-UK's ``_fy_debt`` used ONS HF6X, which *includes* the BoE, and
+  blended calendar-year values 0.25/0.75 the wrong way round, so 2019-20
+  showed 94.3% against 76.1% (CPOA) or 84.1% (HF6X) at end-March 2020; its
+  2024-25 to 2030-31 path matched no OBR table.
+* GDP, consumption and investment before 2008-09 (where the OBR tables
+  start) come from ONS quarterly national accounts (snapshot in
+  ``python/data``), summed over April-March: fiscal year t-(t+1) is t Q2 + t Q3
+  + t Q4 + (t+1) Q1. GDP is BKTL (NSA, as OBR table 1.4); consumption is
+  households + NPISH (ABJQ + HAYE) and investment is GFCF (NPQS), both SA as
+  OBR table 1.2, so the shares join the OBR series on the same basis. OG-UK's
+  ``_ons_backfill`` blended calendar years as 0.25*t + 0.75*(t+1), which puts
+  three quarters of the weight on the wrong year (a fiscal year is three
+  quarters calendar year t), and took consumption as GDP - I - G, which
+  folds net exports into consumption and left a 1.8pp step at 2008-09.
 
 Usage
 -----
@@ -39,8 +57,11 @@ Full rebuild after a fresh OG-UK run (see GitHub issue for the rerun plan)::
 
 ``--obr-data`` must hold ``obr_efo_november_2025_economy.xlsx`` (and, for a
 full rebuild, the expenditure and receipts workbooks) from
-https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/. A full rebuild
-also fetches ONS series (debt, pre-2008 history) over the network.
+https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/. The ONS
+debt outturn and the pre-2008-09 national accounts are read from committed
+snapshots in ``python/data``, so ``--from-published`` needs no network (a full
+rebuild still runs OG-UK's HMRC and ONS fetches, whose pre-2008 rows are
+then replaced).
 """
 
 from __future__ import annotations
@@ -55,6 +76,13 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUT = REPO_ROOT / "src" / "data" / "tpiData.json"
+
+ONS_DEBT_CSV = REPO_ROOT / "python" / "data" / "ons_psnd_ex_boe_end_march.csv"
+ONS_NA_CSV = REPO_ROOT / "python" / "data" / "ons_national_accounts_quarterly.csv"
+BACKFILL_FIRST = 2000  # first fiscal year shown for GDP, C and I (2000-01)
+OBR_MACRO_FIRST = 2008  # first fiscal year in OBR tables 1.2 and 1.4 (2008-09)
+OBR_DEBT_FIRST = 2024  # first fiscal year taken from OBR table 6.13 (2024-25)
+DEBT_FIRST = 2008  # first fiscal year shown (2008-09), as for the other fiscal panels
 
 REFORM_START = 2027  # first fiscal year of the reform (2027-28)
 OUTTURN_LAST = 2023  # last full-outturn fiscal year (2023-24)
@@ -194,22 +222,98 @@ def obr_gov_cons(tc) -> dict[int, float]:
     return {fy_int(fy): float(v) for fy, v in macro["gov_cons"].dropna().items()}
 
 
-def baseline_from_published(tc, shares: dict) -> dict[str, dict[int, float]]:
-    """£bn baselines: published series (reproduced exactly from OBR), plus OBR G."""
-    gdp = shares["gdp"]
-    out = {"gdp": dict(gdp)}
-    for key in ("consumption", "investment", "tax_revenue", "debt"):
-        out[key] = {y: s / 100 * gdp[y] for y, s in shares[key].items() if y in gdp}
-    out["gov_cons"] = {y: v for y, v in obr_gov_cons(tc).items() if y in gdp}
+def ons_debt_pct(path: Path = ONS_DEBT_CSV) -> dict[int, float]:
+    """ONS CPOA, PSND ex BoE % GDP at end-March, keyed by fiscal start year."""
+    out = {}
+    for line in path.read_text().splitlines():
+        if line.startswith("#") or line.startswith("fiscal_year"):
+            continue
+        fy, _, pct = line.split(",")
+        out[int(fy)] = float(pct)
     return out
 
 
-def baseline_from_obr(tc) -> dict[str, dict[int, float]]:
+def obr_debt_pct(obr_data: Path) -> dict[int, float]:
+    """OBR Nov 2025 EFO table 6.13, "Public sector net debt ex BoE" (% GDP centred end-March)."""
+    import openpyxl
+
+    wb = openpyxl.load_workbook(obr_data / "obr_efo_november_2025_aggregates.xlsx", read_only=True, data_only=True)
+    rows = [[c for c in r if c is not None] for r in wb["6.13"].iter_rows(values_only=True)]
+    years = next(r for r in rows if r and str(r[0]).strip() == "2024-25")
+    row = next(r for r in rows if r and str(r[0]).strip().startswith("Public sector net debt ex BoE"))
+    return {fy_int(fy): float(v) for fy, v in zip(years, row[1:])}
+
+
+def ons_quarterly(path: Path = ONS_NA_CSV) -> dict[str, dict[tuple[int, int], float]]:
+    """ONS quarterly £m by CDID (lower case), keyed by (calendar year, quarter)."""
+    rows = [l for l in path.read_text().splitlines() if l and not l.startswith("#")]
+    cols = rows[0].split(",")[1:]
+    out: dict[str, dict[tuple[int, int], float]] = {c: {} for c in cols}
+    for line in rows[1:]:
+        period, *vals = line.split(",")
+        y, q = period.split(" Q")
+        for c, v in zip(cols, vals):
+            out[c][(int(y), int(q))] = float(v)
+    return out
+
+
+def fiscal_year_sum(quarters: dict[tuple[int, int], float], fy: int) -> float:
+    """Flow over fiscal year fy-(fy+1), April fy to March fy+1."""
+    return sum(quarters[k] for k in ((fy, 2), (fy, 3), (fy, 4), (fy + 1, 1)))
+
+
+def ons_backfill(path: Path = ONS_NA_CSV) -> dict[str, dict[int, float]]:
+    """GDP, private consumption and investment, £bn, fiscal years before OBR's 2008-09."""
+    q = ons_quarterly(path)
+    years = range(BACKFILL_FIRST, OBR_MACRO_FIRST)
+    fy = lambda cdid, y: fiscal_year_sum(q[cdid], y) / 1000  # noqa: E731
+    return {
+        "gdp": {y: fy("bktl", y) for y in years},
+        "consumption": {y: fy("abjq", y) + fy("haye", y) for y in years},
+        "investment": {y: fy("npqs", y) for y in years},
+    }
+
+
+def with_backfill(out: dict[str, dict[int, float]]) -> dict[str, dict[int, float]]:
+    """Replace pre-2008-09 GDP, C and I with the ONS April-March sums."""
+    for key, vals in ons_backfill().items():
+        out[key] = {**vals, **{y: v for y, v in out[key].items() if y >= OBR_MACRO_FIRST}}
+    return out
+
+
+def debt_pct(obr_data: Path) -> dict[int, float]:
+    """PSND ex BoE % GDP, end of fiscal year: ONS outturn, then OBR from 2024-25."""
+    ons = {y: v for y, v in ons_debt_pct().items() if DEBT_FIRST <= y < OBR_DEBT_FIRST}
+    obr = {y: v for y, v in obr_debt_pct(obr_data).items() if y >= OBR_DEBT_FIRST}
+    return {**ons, **obr}
+
+
+def debt_bn(obr_data: Path, gdp: dict[int, float]) -> dict[int, float]:
+    return {y: p / 100 * gdp[y] for y, p in debt_pct(obr_data).items() if y in gdp}
+
+
+def baseline_from_published(tc, shares: dict, obr_data: Path) -> dict[str, dict[int, float]]:
+    """£bn baselines: published series (reproduced exactly from OBR), plus OBR G and PSND ex BoE."""
+    gdp = shares["gdp"]
+    out = {"gdp": dict(gdp)}
+    for key in ("consumption", "investment", "tax_revenue"):
+        out[key] = {y: s / 100 * gdp[y] for y, s in shares[key].items() if y in gdp}
+    out = with_backfill(out)
+    out["gov_cons"] = {y: v for y, v in obr_gov_cons(tc).items() if y in out["gdp"]}
+    out["debt"] = debt_bn(obr_data, out["gdp"])
+    return out
+
+
+def baseline_from_obr(tc, obr_data: Path) -> dict[str, dict[int, float]]:
     bl = tc.fetch_obr_baseline()
     out = {}
-    for key in ("gdp", "consumption", "investment", "tax_revenue", "debt"):
+    for key in ("gdp", "consumption", "investment", "tax_revenue"):
         out[key] = {fy_int(fy): float(v) for fy, v in bl[key].dropna().items()}
+    # Not OG-UK's _ons_backfill for GDP, C and I before 2008-09: see the module docstring.
+    out = with_backfill(out)
     out["gov_cons"] = {y: v for y, v in obr_gov_cons(tc).items() if y in out["gdp"]}
+    # Not OG-UK's _fy_debt: see the module docstring.
+    out["debt"] = debt_bn(obr_data, out["gdp"])
     return out
 
 
@@ -311,10 +415,10 @@ def main() -> None:
 
     if args.from_published:
         pct, shares = pct_from_published(published)
-        baseline = baseline_from_published(tc, shares)
+        baseline = baseline_from_published(tc, shares, args.obr_data)
         out = {"macro6": build_macro6(baseline, pct), "sector3": published["sector3"], "sector24": published["sector24"]}
     else:
-        baseline = baseline_from_obr(tc)
+        baseline = baseline_from_obr(tc, args.obr_data)
         pct = pct_from_tpi_results(args.tpi_results)
         sector3, sector24 = build_sectors(tc, args.tpi_results, baseline["gdp"])
         out = {"macro6": build_macro6(baseline, pct), "sector3": sector3, "sector24": sector24}

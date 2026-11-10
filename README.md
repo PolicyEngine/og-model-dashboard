@@ -69,19 +69,38 @@ bun run test     # vitest: identities and signs in src/data/tpiData.json
 `src/data/tpiData.json` is built by `python/scripts/07_export_dashboard_json.py`.
 The published file came from OG-UK `scripts/run_tpi_and_export.py` (reform from
 1 January 2027) and then `scripts/tpi_charts_plotly.py` on the OBR November 2025
-EFO; `07_export_dashboard_json.py --from-published` rebuilds it byte for byte.
+EFO. `07_export_dashboard_json.py --from-published` rebuilds the committed file
+byte for byte from that 28 Apr 2026 file, with no network and no model run.
+
+Debt is public sector net debt excluding the Bank of England (PSND ex BoE) as a
+% of GDP at end-March: ONS series CPOA to 2023-24 (snapshot
+`python/data/ons_psnd_ex_boe_end_march.csv`, release 21 Oct 2026), then OBR
+November 2025 EFO table 6.13 from 2024-25. The reform line applies the model's
+% changes to this baseline.
 
 Known problems with the published numbers:
 
 - They predate OG-UK's July 2026 marginal-tax-rate fix, and the 8-sector
   transition path does not converge over its full horizon on current OG-UK
   (issue #2). A rerun is planned in issue #5.
-- **The debt baseline is not a published series.** It is built from ONS HF6X
-  (net debt excluding public sector banks, which includes the Bank of
-  England), and calendar years are mapped to fiscal years with weights the
-  wrong way round for a stock, so 2019-20 shows about 94% of GDP against
-  HF6X's 84.1% at end-March 2020. The 2026-30 path matches no OBR series.
-  See the verification comment on PR #4.
+- The ONS and OBR debt vintages differ at the seam: ONS now has 87.5% at
+  end-March 2025, against 88.1% in the OBR table used for 2024-25. ONS also
+  has a provisional 89.0% for end-March 2026, against the OBR forecast of
+  91.3% shown for 2025-26.
+- Before Nov 2026 the debt panel used OG-UK's `_fy_debt` (ONS HF6X, which
+  includes the BoE, with calendar years blended the wrong way round): 2019-20
+  showed 94.3% against 76.1% ex BoE (84.1% with the BoE) at end-March 2020.
+- Before Nov 2026 the pre-2008-09 GDP, consumption and investment came from
+  OG-UK's `_ons_backfill`: the same reversed calendar-year blend, and
+  consumption as GDP - I - G (net exports included). They are now ONS
+  quarterly national accounts summed April to March (snapshot
+  `python/data/ons_national_accounts_quarterly.csv`, release 30 Sep 2026):
+  GDP BKTL, consumption ABJQ + HAYE, investment NPQS. 2000-01 GDP moved from
+  £1,139.1bn to £1,113.2bn. This ONS vintage is newer than the OBR's at the
+  2008-09 join: ONS now has £1,589.4bn for 2008-09 GDP, against £1,593.3bn in
+  OBR table 1.4.
+- OG-UK's `_fy_from_calendar`, `_ons_backfill` and `_fy_debt` are unchanged
+  upstream; this repo no longer uses their output.
 
 ## Deployment
 
