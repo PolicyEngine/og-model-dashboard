@@ -2,34 +2,39 @@
 
 import { useEffect, useRef } from 'react';
 
-const FALLBACK_PALETTE = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6'];
+// PolicyEngine chart tokens (ui-kit theme.css), by hex because Plotly cannot read CSS vars.
+export const BASELINE_COLOR = '#319795'; // --chart-1
+export const REFORM_COLOR = '#285E61'; // --chart-3
+// Eight distinguishable sector colours: the five chart tokens, then three
+// AA-legible extras (amber-600, violet-600, pink-600) for the remaining sectors.
+export const SECTOR_PALETTE = ['#319795', '#0EA5E9', '#285E61', '#026AA2', '#64748B', '#D97706', '#7C3AED', '#DB2777'];
 
-function baseLayout(title) {
+function baseLayout(title, narrow) {
   return {
-    margin: { l: 86, r: 18, t: 18, b: 44 },
+    margin: { l: narrow ? 52 : 72, r: narrow ? 20 : 18, t: 12, b: 40 },
     paper_bgcolor: '#ffffff',
     plot_bgcolor: '#ffffff',
-    font: { family: 'Inter, Roboto, sans-serif', size: 10, color: '#4B5563' },
+    font: { family: 'Inter, sans-serif', size: 12, color: '#475569' },
     xaxis: {
       showgrid: true,
       gridcolor: '#ececec',
       zeroline: false,
       color: '#6B7280',
       ticks: 'outside',
-      tickfont: { size: 10 },
+      tickfont: { size: 12 },
       linecolor: '#E2E8F0',
     },
     yaxis: {
       title: {
         text: title,
-        font: { size: 13, color: '#1F2937', family: 'Inter, Roboto, sans-serif' },
-        standoff: 14,
+        font: { size: 12, color: '#344054', family: 'Inter, sans-serif' },
+        standoff: 10,
       },
       showgrid: true,
       gridcolor: '#ececec',
       zeroline: false,
-      color: '#6B7280',
-      tickfont: { size: 10 },
+      color: '#64748B',
+      tickfont: { size: 12 },
       linecolor: '#E2E8F0',
       automargin: true,
     },
@@ -49,7 +54,8 @@ function buildShapes(rawShapes) {
     y0: 0,
     y1: 1,
     line: {
-      color: s.color || '#95a5a6',
+      // Outturn/forecast boundary: data says #95a5a6; draw it in slate (--chart-5) so it reads on white.
+      color: s.color === '#95a5a6' ? '#64748B' : s.color || '#64748B',
       width: s.width || 1,
       dash: s.dash || 'dot',
     },
@@ -58,7 +64,10 @@ function buildShapes(rawShapes) {
 
 // `firstNames` is the trace-name list from panel index 0 of this group; later
 // panels inherit any empty names by position (Plotly subplot pattern).
-export default function PlotPanel({ panel, firstNames = [], visible = true }) {
+// `yTitle` overrides the axis title (the data titles double as chart names);
+// `colors` overrides trace colours by index; `nameFor` maps a trace name to a
+// display label. None of these touch the plotted values.
+export default function PlotPanel({ panel, firstNames = [], visible = true, yTitle, colors, nameFor = (n) => n }) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -67,7 +76,7 @@ export default function PlotPanel({ panel, firstNames = [], visible = true }) {
     if (!el) return;
 
     const traces = panel.traces.map((t, i) => {
-      const name = t.name || firstNames[i] || '';
+      const name = nameFor(t.name || firstNames[i] || '');
       return {
         x: t.x,
         y: t.y,
@@ -75,7 +84,7 @@ export default function PlotPanel({ panel, firstNames = [], visible = true }) {
         type: 'scatter',
         name,
         line: {
-          color: t.color || FALLBACK_PALETTE[i % FALLBACK_PALETTE.length],
+          color: (colors && colors[i % colors.length]) || t.color || SECTOR_PALETTE[i % SECTOR_PALETTE.length],
           width: t.width || 2,
           dash: t.dash || 'solid',
         },
@@ -83,7 +92,8 @@ export default function PlotPanel({ panel, firstNames = [], visible = true }) {
       };
     });
 
-    const layout = baseLayout(panel.title);
+    const narrow = window.innerWidth < 640;
+    const layout = baseLayout(yTitle || panel.title, narrow);
     layout.shapes = buildShapes(panel.shapes);
     layout.showlegend = false;
 
@@ -96,7 +106,7 @@ export default function PlotPanel({ panel, firstNames = [], visible = true }) {
         /* ignore */
       }
     };
-  }, [panel, firstNames]);
+  }, [panel, firstNames, yTitle, colors, nameFor]);
 
   // Resize when becoming visible (e.g. tab switch or filter changes).
   useEffect(() => {

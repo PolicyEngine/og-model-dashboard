@@ -5,7 +5,10 @@ Importable so every later script reuses the same Policy object::
     from og_dashboard.reform import REFORM
 
 The reform raises the basic rate of UK income tax from 20% to 21% from
-calendar year 2026 (which the dashboard charts label as fiscal year 2027–28).
+1 January 2027, as in the published Showcase run (OG-UK
+``scripts/run_tpi_and_export.py``). OG-UK labels model year ``y`` as fiscal
+year ``y``–``y+1``, so the reform first applies in 2027–28, the first year the
+dashed reform path leaves the baseline.
 """
 
 from datetime import datetime
@@ -21,7 +24,7 @@ REFORM = Policy(
         ParameterValue(
             parameter=basic_rate,
             value=0.21,
-            start_date=datetime(2026, 1, 1),
+            start_date=datetime(2027, 1, 1),
         ),
     ],
 )
