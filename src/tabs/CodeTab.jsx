@@ -176,8 +176,10 @@ const STEPS = [
         </p>
         <p>
           A typical run takes a couple of minutes on a laptop. The terminal output on the right is{' '}
-          <em>illustrative</em>{' '}— the format matches <code>03_steady_state.py</code>, but the numbers depend
-          on the calibration date and your data release.
+          <em>illustrative</em>: it was committed in April 2026, before OG-UK&rsquo;s July 2026
+          marginal-tax-rate fix, and is laid out as a table. <code>03_steady_state.py</code>{' '}prints a
+          four-line summary (GDP, tax revenue, investment, interest rate), and its numbers depend on the
+          OG-UK version and your data release.
         </p>
       </>
     ),
