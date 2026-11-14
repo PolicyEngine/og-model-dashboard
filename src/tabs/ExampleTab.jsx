@@ -113,7 +113,7 @@ function sector3Takeaway(panel, variable, names) {
   const pos = end.filter((e) => e.v >= 0);
   const lo = Math.min(...neg.map((e) => e.v));
   const hi = Math.max(...neg.map((e) => e.v));
-  let text = `By ${year}, ${variable} is below baseline in ${neg.length} of ${end.length} sectors`;
+  let text = `By ${fy(year)}, ${variable} is below baseline in ${neg.length} of ${end.length} sectors`;
   if (neg.length) text += ` (${signed(hi, 2)}% to ${signed(lo, 2)}%)`;
   if (pos.length) text += `; ${pos.map((e) => `${e.name.toLowerCase()} is ${signed(e.v, 2)}%`).join(', ')}`;
   return `${text}.`;
@@ -123,7 +123,7 @@ function sector24Takeaway(panel, sectorLabel, variable) {
   const meta = SECTOR_VAR_META[variable];
   const { year, b, r } = lastPair(panel);
   const lvl = (v) => (meta.unit === 'gbp' ? `£${fmt(v)}bn` : `${fmt(v, 0)} thousand workers`);
-  return `${sectorLabel} ${variable} in ${year}: ${lvl(r)} on the reform path against ${lvl(b)} on the baseline (${signed((r / b - 1) * 100, 2)}%).`;
+  return `${sectorLabel} ${variable} in ${fy(year)}: ${lvl(r)} on the reform path against ${lvl(b)} on the baseline (${signed((r / b - 1) * 100, 2)}%).`;
 }
 
 const RUN_SOURCE =
@@ -150,7 +150,12 @@ function PreFixNotice() {
       <p>
         Every reform path on this tab comes from {RUN_SOURCE}. Some results from that run do not look
         right: GDP rises slightly in the first reform year, and debt as a share of GDP ends higher under
-        the tax rise in every year. A rerun on the fixed model is planned in{' '}
+        the tax rise in every year. Separately, reproducing this 8-sector run on current OG-UK fails to
+        converge over the full transition path (
+        <a href="https://github.com/PolicyEngine/og-model-dashboard/issues/2" target="_blank" rel="noreferrer">
+          issue #2
+        </a>
+        ). A rerun on the fixed model is planned in{' '}
         <a href="https://github.com/PolicyEngine/og-model-dashboard/issues/5" target="_blank" rel="noreferrer">
           issue #5
         </a>
@@ -278,7 +283,7 @@ export default function ExampleTab() {
           const meta = MACRO_META[macroVar];
           return (
             <ChartFrame
-              title={`${meta.name}, baseline and reform, 2000–01 to 2030–31`}
+              title={`${meta.name}, baseline and reform, ${fy(panel.traces[0].x[0])} to ${fy(panel.traces[0].x.at(-1))}`}
               subtitle={`${meta.yTitle}; fiscal years by start year (2027 = 2027–28)`}
               takeaway={macroTakeaway(panel, macroVar)}
               source={`baseline from ONS national accounts and the OBR November 2025 Economic and fiscal outlook; reform path from ${RUN_SOURCE}.`}
@@ -338,7 +343,7 @@ export default function ExampleTab() {
           return (
             <ChartFrame
               title={`${label} by sector, change from baseline`}
-              subtitle="% change from baseline, by year"
+              subtitle="% change from baseline; fiscal years by start year (2027 = 2027–28)"
               takeaway={sector3Takeaway(panel, sectorVar, sector3FirstNames)}
               source={`${RUN_SOURCE}, multi-sector solution.`}
             >
@@ -386,7 +391,7 @@ export default function ExampleTab() {
               title={`${sectorLabel}: ${varLabel}, baseline and reform`}
               subtitle={`Levels, ${SECTOR_VAR_META[detailVar].units}`}
               takeaway={sector24Takeaway(panel, sectorLabel, detailVar)}
-              source={`baseline from ONS outturn stitched to the OBR November 2025 EFO; reform path from ${RUN_SOURCE}.`}
+              source={`baseline history as entered in OG-UK (not checked against ONS releases), projected from the last outturn year with OBR November 2025 nominal GDP growth, including jobs (issue #10); reform path from ${RUN_SOURCE}.`}
             >
               <div className="panel-grid cols-4 sector24">
                 {data.sector24.map((panel, i) => {
@@ -406,7 +411,7 @@ export default function ExampleTab() {
               </div>
               <div className="plot-legend">
                 <div className="legend-group">
-                  <span className="legend-item"><span className="legend-line" />Baseline: ONS outturn, OBR forecast</span>
+                  <span className="legend-item"><span className="legend-line" />Baseline: history, then grown with OBR nominal GDP</span>
                   <span className="legend-item"><span className="legend-line dashed reform" />Reform: +1&nbsp;pp basic rate</span>
                 </div>
                 <div className="legend-group">
