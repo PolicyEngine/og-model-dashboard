@@ -127,7 +127,7 @@ function sector24Takeaway(panel, sectorLabel, variable) {
 }
 
 const RUN_SOURCE =
-  'one OG-UK transition-path run, 28 April 2026 (OG-UK 3a16cff), before the July 2026 marginal-tax-rate fix';
+  'one OG-UK transition-path run, generated 19 March 2026 (results committed in OG-UK a314659), before the July 2026 marginal-tax-rate fix';
 
 function ChartFrame({ title, subtitle, takeaway, source, children }) {
   return (
