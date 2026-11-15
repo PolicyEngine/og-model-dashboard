@@ -40,6 +40,14 @@ corrects two things in the macro panels:
   quarters calendar year t), and took consumption as GDP - I - G, which
   folds net exports into consumption and left a 1.8pp step at 2008-09.
 
+Sector levels (``sector24``): OG-UK's ``fig_sector_real`` grows every
+sector's last outturn year with OBR nominal GDP, jobs included, which put
+total jobs up 30% from 2023-24 to 2030-31 against 6.3% OBR employment growth
+(issue #10). This script regrows the eight labour panels with OBR employment
+(November 2025 EFO table 1.6, LFS employment 16+, fiscal years) and keeps the
+model % change in each year, so only the levels change. Output and capital
+still grow with nominal GDP.
+
 Usage
 -----
 Rebuild the macro panels from the 28 Apr 2026 file, with no model run (the
@@ -244,6 +252,53 @@ def obr_debt_pct(obr_data: Path) -> dict[int, float]:
     return {fy_int(fy): float(v) for fy, v in zip(years, row[1:])}
 
 
+def obr_employment(obr_data: Path) -> dict[int, float]:
+    """OBR Nov 2025 EFO table 1.6, employment 16+ (millions), keyed by fiscal start year."""
+    import openpyxl
+
+    wb = openpyxl.load_workbook(obr_data / "obr_efo_november_2025_economy.xlsx", read_only=True, data_only=True)
+    rows = [[c for c in r if c is not None] for r in wb["1.6"].iter_rows(values_only=True)]
+    header = next(r for r in rows if r and str(r[0]).startswith("Employment (16+, millions)"))
+    assert header[0] == "Employment (16+, millions)", header[0]
+    out = {}
+    for r in rows:
+        label = str(r[0]).strip() if r else ""
+        if len(label) == 7 and label[4] == "-" and label[:4].isdigit():
+            out[fy_int(label)] = float(r[1])
+    return out
+
+
+def labour_with_employment(sector24: list[dict], employment: dict[int, float]) -> list[dict]:
+    """Regrow the labour panels' projected baseline with OBR employment (issue #10).
+
+    The history (years up to OUTTURN_LAST) is kept. Each later baseline year is
+    the last history value x employment[year] / employment[last history year].
+    The reform line keeps the model % change, recovered from its published
+    baseline/reform pair, on the new baseline. Other panels are returned as is.
+    """
+    out = []
+    for panel in sector24:
+        if not panel["title"].endswith("Labour"):
+            out.append(panel)
+            continue
+        base, ref = panel["traces"][:2]
+        old = dict(zip(base["x"], base["y"]))
+        last = max(x for x in base["x"] if x <= OUTTURN_LAST)
+        new = {x: (y if x <= last else old[last] * employment[x] / employment[last]) for x, y in old.items()}
+        ref_y = [new[x] * (y / old[x]) for x, y in zip(ref["x"], ref["y"])]
+        out.append(
+            {
+                **panel,
+                "traces": [
+                    {**base, "y": [new[x] for x in base["x"]]},
+                    {**ref, "y": ref_y},
+                    *panel["traces"][2:],
+                ],
+            }
+        )
+    return out
+
+
 def ons_quarterly(path: Path = ONS_NA_CSV) -> dict[str, dict[tuple[int, int], float]]:
     """ONS quarterly £m by CDID (lower case), keyed by (calendar year, quarter)."""
     rows = [l for l in path.read_text().splitlines() if l and not l.startswith("#")]
@@ -416,11 +471,13 @@ def main() -> None:
     if args.from_published:
         pct, shares = pct_from_published(published)
         baseline = baseline_from_published(tc, shares, args.obr_data)
-        out = {"macro6": build_macro6(baseline, pct), "sector3": published["sector3"], "sector24": published["sector24"]}
+        sector24 = labour_with_employment(published["sector24"], obr_employment(args.obr_data))
+        out = {"macro6": build_macro6(baseline, pct), "sector3": published["sector3"], "sector24": sector24}
     else:
         baseline = baseline_from_obr(tc, args.obr_data)
         pct = pct_from_tpi_results(args.tpi_results)
         sector3, sector24 = build_sectors(tc, args.tpi_results, baseline["gdp"])
+        sector24 = labour_with_employment(sector24, obr_employment(args.obr_data))
         out = {"macro6": build_macro6(baseline, pct), "sector3": sector3, "sector24": sector24}
 
     args.out.write_text(json.dumps(out))
