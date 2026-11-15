@@ -67,7 +67,7 @@ describe('macro6', () => {
     const cR = series('Consumption (% GDP)', 1);
     for (let y = REFORM_START; y <= 2030; y++) {
       const dGdp = gdpR[y] / gdpB[y] - 1;
-      // The 28 Apr 2026 run has GDP +0.07% in 2027-28, the first reform year. That run
+      // The published run (generated 19 Mar 2026) has GDP +0.07% in 2027-28, the first reform year. That run
       // predates OG-UK's MTR fix (issue #2), under which most earners faced a zero labour
       // MTR, so only the income effect of the tax rise operated. Check the sign from 2028.
       if (y > REFORM_START) expect(dGdp).toBeLessThan(0);
@@ -118,7 +118,7 @@ describe('debt baseline (PSND ex BoE, end-March)', () => {
   });
 
   it('reform debt keeps the model response: reform/baseline ratio as published in PR #4', () => {
-    // (1 + %chg debt) / (1 + %chg GDP), recovered from the 28 Apr 2026 run. Independent of
+    // (1 + %chg debt) / (1 + %chg GDP), recovered from the published run. Independent of
     // the baseline level, so the debt fix must leave it unchanged.
     const RATIO = { 2027: 1.0019745709198213, 2028: 1.002423694217998, 2029: 1.0015061529422122, 2030: 1.000570617544705 };
     const ref = series('Debt (% GDP)', 1);
