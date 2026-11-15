@@ -16,7 +16,7 @@
 
 In the 19 March 2026 run, Public & Other was the last industry: OG-Core's industry M, which produces
 the government consumption and capital goods and whose price is the numeraire. From OG-UK `7452eef`
-(19 March 2026), Manufacturing is last. In this run the reform raises the government consumption
+(19 March 2026, after the results were committed in `a314659`), Manufacturing is last. In this run the reform raises the government consumption
 share of GDP from the first model year, 2026-27, so Public & Other moves in 2026-27, before the tax
 rise (issue #11).
 
@@ -49,7 +49,7 @@ See PolicyEngine/og-model-dashboard#2 for the full diagnostic trace.
 ## Regenerating
 
 `python/scripts/07_export_dashboard_json.py` builds this file. Its docstring gives both modes:
-`--from-published` (rebuild the macro panels from the 28 April 2026 run, no model run) and
+`--from-published` (rebuild the macro panels from the published 19 March 2026 run, copied into the dashboard on 28 April 2026; no model run) and
 `--tpi-results` (full rebuild after a fresh OG-UK run; the rerun plan is
 PolicyEngine/og-model-dashboard#5).
 
