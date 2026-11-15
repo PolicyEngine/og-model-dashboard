@@ -9,7 +9,7 @@
 | Horizon shown | 2026–2030 |
 | Model run | OG-UK `scripts/run_tpi_and_export.py` (`multi_sector=True`, `start_year=2026`, basic rate 21% from 1 Jan 2027), then `scripts/tpi_charts_plotly.py` on the OBR November 2025 EFO |
 | Macro panels rebuilt | November 2026 by `python/scripts/07_export_dashboard_json.py --from-published` (same model % changes; government consumption, PSND ex BoE debt and pre-2008-09 ONS baselines corrected; see the script docstring) |
-| Sector labour levels rebuilt | November 2026 by the same script: the eight `sector24` labour panels grow from 2023-24 with OBR November 2025 EFO table 1.6 employment (16+), not nominal GDP (issue #10). Same model % changes; output and capital still grow with nominal GDP |
+| Sector labour levels rebuilt | November 2026 by the same script: the eight `sector24` labour panels grow from 2023-24 with OBR November 2025 EFO table 1.6 employment (16+), not nominal GDP (issue #10). Only the growth rate is borrowed: OBR employment counts people, while the sector history counts jobs. Same model % changes; output and capital still grow with nominal GDP |
 
 ## Known caveats
 

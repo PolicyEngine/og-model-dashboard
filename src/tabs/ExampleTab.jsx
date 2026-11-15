@@ -391,7 +391,7 @@ export default function ExampleTab() {
               title={`${sectorLabel}: ${varLabel}, baseline and reform`}
               subtitle={`Levels, ${SECTOR_VAR_META[detailVar].units}`}
               takeaway={sector24Takeaway(panel, sectorLabel, detailVar)}
-              source={`baseline history as entered in OG-UK (not checked against ONS releases), projected from the last outturn year with ${detailVar === 'labour' ? 'OBR November 2025 employment growth (table 1.6)' : 'OBR November 2025 nominal GDP growth'} (issue #10); reform path from ${RUN_SOURCE}.`}
+              source={`baseline history as entered in OG-UK (not checked against ONS releases), projected from the last outturn year at the whole-economy ${detailVar === 'labour' ? 'OBR November 2025 employment growth rate (table 1.6)' : 'OBR November 2025 nominal GDP growth rate'}, so every sector grows at the same rate (issue #10); reform path from ${RUN_SOURCE}.`}
             >
               <div className="panel-grid cols-4 sector24">
                 {data.sector24.map((panel, i) => {
@@ -411,7 +411,7 @@ export default function ExampleTab() {
               </div>
               <div className="plot-legend">
                 <div className="legend-group">
-                  <span className="legend-item"><span className="legend-line" />Baseline: history, then grown with {detailVar === 'labour' ? 'OBR employment' : 'OBR nominal GDP'}</span>
+                  <span className="legend-item"><span className="legend-line" />Baseline: history, then grown at the OBR {detailVar === 'labour' ? 'employment' : 'nominal GDP'} growth rate</span>
                   <span className="legend-item"><span className="legend-line dashed reform" />Reform: +1&nbsp;pp basic rate</span>
                 </div>
                 <div className="legend-group">
