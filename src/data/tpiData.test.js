@@ -196,4 +196,14 @@ describe('sectors', () => {
     expect(data.sector24).toHaveLength(24);
     for (const p of data.sector24) for (const tr of p.traces) for (const y of tr.y) expect(y).toBeGreaterThan(0);
   });
+
+  it('sector jobs grow with OBR employment, not nominal GDP (issue #10)', () => {
+    // OBR November 2025 EFO table 1.6, employment 16+ (millions), fiscal years.
+    const employment = { 2023: 33.3535, 2030: 35.460164425 };
+    const labour = data.sector24.filter((p) => p.title.endsWith('Labour'));
+    expect(labour).toHaveLength(8);
+    const total = (year) =>
+      labour.reduce((sum, p) => sum + p.traces[0].y[p.traces[0].x.indexOf(year)], 0);
+    expect(total(2030) / total(2023)).toBeCloseTo(employment[2030] / employment[2023], 6);
+  });
 });
